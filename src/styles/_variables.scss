@@ -1,0 +1,129 @@
+// Material Design Colors (extracted from material-colors/dist/colors.less)
+$md-grey-300: #e0e0e0;
+$md-grey-400: #bdbdbd;
+$md-light-blue-600: #039be5;
+$md-blue-50: #e3f2fd;
+$md-green-50: #e8f5e9;
+$md-grey-600: #757575;
+$md-grey-100: #f5f5f5;
+$md-grey-700: #616161;
+$md-red-600: #e53935;
+$md-light-blue-100: #b3e5fc;
+$md-orange-600: #fb8c00;
+
+// Easing Functions (extracted from easings-css/easings.less)
+$ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+$ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+$ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+/**
+ * Variables
+ */
+
+$treeselect-font-size: 1em;
+$treeselect-font-size-sm: 12px;
+$treeselect-padding: 5px;
+$treeselect-border-radius-lg: 5px;
+$treeselect-border-radius-sm: 2px;
+$treeselect-narrow-cell-width: 20px;
+$treeselect-wide-cell-width: 100%;
+$treeselect-icon-size: 12px;
+$treeselect-transition-duration: 200ms;
+$treeselect-transition-duration-slow: 400ms;
+$treeselect-max-level: 8;
+
+$treeselect-control-height: 36px;
+$treeselect-control-border-width: 1px;
+$treeselect-control-inner-height: $treeselect-control-height - $treeselect-control-border-width * 2;
+$treeselect-control-border-color: #ddd;
+$treeselect-control-border-color-hover: #cfcfcf;
+$treeselect-control-border-color-active: $treeselect-control-border-color-hover;
+$treeselect-control-border-color-focus: $md-light-blue-600;
+$treeselect-control-border-radius: $treeselect-border-radius-lg;
+$treeselect-control-bg: #fff;
+$treeselect-control-box-shadow-focus: 0 0 0 3px rgba($treeselect-control-border-color-focus, 0.1);
+$treeselect-control-bg-disabled: #f9f9f9;
+
+$treeselect-placeholder-font-color: $md-grey-400;
+$treeselect-single-value-font-color: #333;
+$treeselect-single-value-font-color-focused: $treeselect-placeholder-font-color;
+$treeselect-multi-value-margin-x: 0;
+$treeselect-multi-value-margin-y: 2px;
+$treeselect-multi-value-padding-x: $treeselect-padding;
+$treeselect-multi-value-padding-y: 0;
+$treeselect-multi-value-font-size: $treeselect-font-size-sm;
+$treeselect-multi-value-font-color: $md-light-blue-600;
+$treeselect-multi-value-item-bg: $md-blue-50;
+$treeselect-multi-value-item-bg-new: $md-green-50;
+$treeselect-multi-value-item-border-width: 1px;
+$treeselect-multi-value-item-border-color: transparent;
+$treeselect-multi-value-font-color-hover: $treeselect-multi-value-font-color;
+$treeselect-multi-value-item-bg-hover: $treeselect-multi-value-item-bg;
+$treeselect-multi-value-item-bg-new-hover: $treeselect-multi-value-item-bg-new;
+$treeselect-multi-value-font-color-disabled: $md-grey-600;
+$treeselect-multi-value-item-bg-disabled: $md-grey-100;
+$treeselect-multi-value-item-font-color-control-disabled: #555;
+$treeselect-multi-value-item-bg-control-disabled: #fff;
+$treeselect-multi-value-item-border-color-control-disabled: #e5e5e5;
+$treeselect-multi-value-remove-color: $treeselect-multi-value-font-color;
+$treeselect-multi-value-remove-color-hover: $md-red-600;
+$treeselect-multi-value-remove-size: 6px;
+$treeselect-multi-value-divider-color: #fff;
+$treeselect-limit-tip-font-color: $md-grey-400;
+$treeselect-limit-tip-font-size: $treeselect-multi-value-font-size;
+$treeselect-limit-tip-font-weight: 600;
+$treeselect-single-input-font-size: inherit;
+$treeselect-multi-input-font-size: $treeselect-multi-value-font-size;
+
+$treeselect-menu-bg: #fff;
+$treeselect-menu-padding-y: $treeselect-padding;
+$treeselect-menu-line-height: 180%;
+$treeselect-menu-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+$treeselect-control-menu-divider-color: #f2f2f2;
+
+$treeselect-arrow-size: 9px;
+$treeselect-arrow-color: #ccc;
+$treeselect-arrow-color-hover: $md-grey-700;
+$treeselect-arrow-transition-timing-function: $ease-out-expo;
+
+$treeselect-x-size: 8px;
+$treeselect-x-color: $treeselect-arrow-color;
+$treeselect-x-color-hover: $md-red-600;
+
+$treeselect-option-bg-highlight: $md-grey-100;
+$treeselect-option-selected-bg: $md-blue-50;
+$treeselect-option-selected-bg-hover: $treeselect-option-selected-bg;
+$treeselect-checkbox-size: $treeselect-icon-size;
+$treeselect-checkbox-border-radius: $treeselect-border-radius-sm;
+$treeselect-checkbox-color: $md-grey-300;
+$treeselect-checkbox-color-highlight: $md-light-blue-600;
+$treeselect-checkbox-border-color: $treeselect-checkbox-color;
+$treeselect-checkbox-bg: #fff;
+$treeselect-checkbox-border-color-hover: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-bg-hover: $treeselect-checkbox-bg;
+$treeselect-checkbox-indeterminate-border-color: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-indeterminate-bg: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-indeterminate-icon: "./assets/checkbox-indeterminate.png";
+$treeselect-checkbox-indeterminate-border-color-hover: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-indeterminate-bg-hover: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-checked-border-color: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-checked-bg: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-checked-icon: "./assets/checkbox-checked.png";
+$treeselect-checkbox-checked-border-color-hover: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-checked-bg-hover: $treeselect-checkbox-color-highlight;
+$treeselect-checkbox-disabled-border-color: $treeselect-checkbox-border-color;
+$treeselect-checkbox-disabled-bg-color: darken($treeselect-checkbox-bg, 3%);
+$treeselect-checkbox-disabled-indeterminate-icon: "./assets/checkbox-indeterminate-disabled.png";
+$treeselect-checkbox-disabled-checked-icon: "./assets/checkbox-checked-disabled.png";
+$treeselect-option-label-color: inherit;
+$treeselect-option-label-color-disabled: rgba(0, 0, 0, 0.25);
+
+$treeselect-loader-color-dark: $md-light-blue-600;
+$treeselect-loader-color-light: $md-light-blue-100;
+$treeselect-loader-animation-duration: 1.6s;
+$treeselect-warning-icon-bg: $md-orange-600;
+$treeselect-error-icon-bg: $md-red-600;
+$treeselect-tip-color: $md-grey-600;
+$treeselect-tip-font-size: $treeselect-font-size-sm;
+$treeselect-retry-text-color: $md-light-blue-600;

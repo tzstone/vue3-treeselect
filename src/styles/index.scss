@@ -1,0 +1,824 @@
+@import './variables';
+@import './mixins';
+@import './animations';
+
+
+/**
+ * Namespace
+ */
+
+.vue-treeselect {
+  position: relative;
+  text-align: left;
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
+  div,
+  span {
+    box-sizing: border-box;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+}
+
+
+/**
+ * Control
+ */
+
+.vue-treeselect__control {
+  @include row;
+
+  height: $treeselect-control-height;
+  border: $treeselect-control-border-width solid $treeselect-control-border-color;
+  border-radius: $treeselect-control-border-radius;
+  background: $treeselect-control-bg;
+  transition-duration: $treeselect-transition-duration;
+  transition-property: border-color, box-shadow, width, height, background-color, opacity;
+  transition-timing-function: $ease-out-cubic;
+
+  .vue-treeselect:not(.vue-treeselect--disabled):not(.vue-treeselect--focused) &:hover {
+    border-color: $treeselect-control-border-color-hover;
+  }
+
+  .vue-treeselect--focused:not(.vue-treeselect--open) & {
+    border-color: $treeselect-control-border-color-focus;
+    box-shadow: $treeselect-control-box-shadow-focus;
+  }
+
+  .vue-treeselect--disabled & {
+    background-color: $treeselect-control-bg-disabled;
+  }
+
+  .vue-treeselect--open & {
+    border-color: $treeselect-control-border-color-active;
+  }
+
+  .vue-treeselect--open.vue-treeselect--open-below & {
+    @include border-radius-bottom(0);
+  }
+
+  .vue-treeselect--open.vue-treeselect--open-above & {
+    @include border-radius-top(0);
+  }
+}
+
+.vue-treeselect__value-container,
+.vue-treeselect__multi-value {
+  width: 100%;
+  vertical-align: middle;
+}
+
+.vue-treeselect__value-container {
+  display: table-cell;
+  position: relative;
+
+  .vue-treeselect--searchable:not(.vue-treeselect--disabled) & {
+    // The real input is small and not covering the whole control.
+    // We show an I-shape cursor to give user a hint that
+    // clicking anywhere in the control will make the input focused.
+    @include inputtable;
+  }
+}
+
+.vue-treeselect__multi-value {
+  display: inline-block;
+
+  .vue-treeselect--has-value & {
+    margin-bottom: $treeselect-padding;
+  }
+}
+
+.vue-treeselect__placeholder,
+.vue-treeselect__single-value {
+  @include text-truncate;
+  @include horizontal-padding($treeselect-padding);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  line-height: $treeselect-control-inner-height;
+  user-select: none;
+  pointer-events: none;
+}
+
+.vue-treeselect__placeholder {
+  color: $treeselect-placeholder-font-color;
+}
+
+.vue-treeselect__single-value {
+  color: $treeselect-single-value-font-color;
+
+  .vue-treeselect--focused.vue-treeselect--searchable & {
+    color: $treeselect-single-value-font-color-focused;
+  }
+
+  .vue-treeselect--disabled & {
+    // #274 Fix for IE
+    position: static;
+  }
+}
+
+.vue-treeselect__multi-value-item-container {
+  display: inline-block;
+  padding-top: $treeselect-padding;
+  padding-right: $treeselect-padding;
+  vertical-align: top;
+
+  [dir="rtl"] & {
+    padding-right: 0;
+    padding-left: $treeselect-padding;
+  }
+}
+
+.vue-treeselect__multi-value-item {
+  @include clickable;
+
+  display: inline-table;
+  background: $treeselect-multi-value-item-bg;
+  // Table elements do not have margin, so we set at the container element.
+  padding: $treeselect-multi-value-margin-y $treeselect-multi-value-margin-x;
+  border: $treeselect-multi-value-item-border-width solid $treeselect-multi-value-item-border-color;
+  border-radius: $treeselect-border-radius-sm;
+  color: $treeselect-multi-value-font-color;
+  font-size: $treeselect-multi-value-font-size;
+  vertical-align: top; // stylelint-disable-line plugin/declaration-block-no-ignored-properties
+
+  .vue-treeselect:not(.vue-treeselect--disabled) &:not(.vue-treeselect__multi-value-item-disabled):hover &:not(.vue-treeselect__multi-value-item-new) &:not(.vue-treeselect__multi-value-item-new):hover {
+    @include clickable;
+
+    background: $treeselect-multi-value-item-bg-hover;
+    color: $treeselect-multi-value-font-color-hover;
+  }
+
+  &.vue-treeselect__multi-value-item-disabled {
+    @include reset-cursor;
+
+    background: $treeselect-multi-value-item-bg-disabled;
+    color: $treeselect-multi-value-font-color-disabled;
+  }
+
+  .vue-treeselect--disabled & {
+    @include reset-cursor;
+
+    background: $treeselect-multi-value-item-bg-control-disabled;
+    border-color: $treeselect-multi-value-item-border-color-control-disabled;
+    color: $treeselect-multi-value-item-font-color-control-disabled;
+  }
+
+  &.vue-treeselect__multi-value-item-new {
+    background: $treeselect-multi-value-item-bg-new;
+    &:hover {
+      background: $treeselect-multi-value-item-bg-new;
+    }
+  }
+}
+
+.vue-treeselect__value-remove,
+.vue-treeselect__multi-value-label {
+  display: table-cell;
+  padding: $treeselect-multi-value-padding-y $treeselect-multi-value-padding-x;
+  vertical-align: middle;
+}
+
+.vue-treeselect__value-remove {
+  color: $treeselect-multi-value-remove-color;
+  padding-left: $treeselect-multi-value-padding-x;
+  border-left: 1px solid $treeselect-multi-value-divider-color;
+  line-height: 0;
+
+  [dir="rtl"] & {
+    border-left: 0 none;
+    border-right: 1px solid $treeselect-multi-value-divider-color;
+  }
+
+  .vue-treeselect__multi-value-item:hover & {
+    color: $treeselect-multi-value-remove-color-hover;
+  }
+
+  .vue-treeselect--disabled &,
+  .vue-treeselect__multi-value-item-disabled & {
+    display: none;
+  }
+
+  > svg {
+    width: $treeselect-multi-value-remove-size;
+    height: $treeselect-multi-value-remove-size;
+  }
+}
+
+.vue-treeselect__multi-value-label {
+  padding-right: $treeselect-multi-value-padding-x;
+  white-space: pre-line;
+  user-select: none;
+}
+
+.vue-treeselect__limit-tip {
+  display: inline-block;
+  padding-top: $treeselect-padding;
+  padding-right: $treeselect-padding;
+  vertical-align: top;
+
+  [dir="rtl"] & {
+    padding-right: 0;
+    padding-left: $treeselect-padding;
+  }
+}
+
+.vue-treeselect__limit-tip-text {
+  @include reset-cursor;
+
+  display: block;
+  margin: $treeselect-multi-value-margin-y $treeselect-multi-value-margin-x;
+  padding: ($treeselect-multi-value-padding-y + $treeselect-multi-value-item-border-width) 0;
+  color: $treeselect-limit-tip-font-color;
+  font-size: $treeselect-limit-tip-font-size;
+  font-weight: $treeselect-limit-tip-font-weight;
+}
+
+.vue-treeselect__input-container {
+  display: block;
+  max-width: 100%;
+  outline: none;
+
+  .vue-treeselect--single & {
+    font-size: $treeselect-single-input-font-size;
+    height: 100%;
+  }
+
+  .vue-treeselect--multi & {
+    display: inline-block;
+    font-size: $treeselect-multi-input-font-size;
+    vertical-align: top;
+  }
+
+  .vue-treeselect--searchable & {
+    @include horizontal-padding($treeselect-padding);
+  }
+
+  .vue-treeselect--searchable.vue-treeselect--multi.vue-treeselect--has-value & {
+    padding-top: $treeselect-padding;
+    padding-left: 0;
+
+    [dir="rtl"] & {
+      padding-left: $treeselect-padding;
+      padding-right: 0;
+    }
+  }
+
+  .vue-treeselect--disabled & {
+    display: none;
+  }
+}
+
+.vue-treeselect__input,
+.vue-treeselect__sizer {
+  margin: 0;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.vue-treeselect__input {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  box-sizing: content-box;
+  box-shadow: none;
+  background: none transparent;
+  line-height: 1;
+  vertical-align: middle;
+
+  &::-ms-clear {
+    display: none;
+  }
+
+  .vue-treeselect--single & {
+    width: 100%;
+    height: 100%;
+  }
+
+  .vue-treeselect--multi & {
+    @include vertical-padding($treeselect-multi-value-margin-y + $treeselect-multi-value-item-border-width);
+  }
+
+  .vue-treeselect--has-value & {
+    line-height: inherit;
+    vertical-align: top;
+  }
+}
+
+.vue-treeselect__sizer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: scroll;
+  white-space: pre;
+}
+
+.vue-treeselect__x-container {
+  @include narrow-cell;
+  @include clickable;
+
+  color: $treeselect-x-color;
+  animation: $treeselect-transition-duration vue-treeselect-animation-fade-in $ease-out-circ;
+
+  &:hover {
+    color: $treeselect-x-color-hover;
+  }
+}
+
+.vue-treeselect__x {
+  width: $treeselect-x-size;
+  height: $treeselect-x-size;
+}
+
+.vue-treeselect__control-arrow-container {
+  @include narrow-cell;
+  @include clickable;
+
+  .vue-treeselect--disabled & {
+    @include reset-cursor;
+  }
+}
+
+.vue-treeselect__control-arrow {
+  width: $treeselect-arrow-size;
+  height: $treeselect-arrow-size;
+  color: $treeselect-arrow-color;
+
+  .vue-treeselect:not(.vue-treeselect--disabled) .vue-treeselect__control-arrow-container:hover & {
+    color: $treeselect-arrow-color-hover;
+  }
+
+  .vue-treeselect--disabled & {
+    opacity: 0.35;
+  }
+}
+
+.vue-treeselect__control-arrow--rotated {
+  transform: rotateZ(180deg);
+}
+
+
+/**
+ * Menu
+ */
+
+.vue-treeselect__menu-container {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  transition: 0s;
+
+  .vue-treeselect--open-below:not(.vue-treeselect--append-to-body) & {
+    top: 100%;
+  }
+
+  .vue-treeselect--open-above:not(.vue-treeselect--append-to-body) & {
+    bottom: 100%;
+  }
+}
+
+.vue-treeselect__menu {
+  @include reset-cursor; // set to normal cursor since text is unselectable
+  @include vertical-padding($treeselect-menu-padding-y);
+
+  display: block;
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // IE9 does not properly handle `width: 100%` with scrollbar when `box-sizing: border-box`
+  width: auto;
+  border: 1px solid $treeselect-control-border-color-active;
+  background: $treeselect-menu-bg;
+  line-height: $treeselect-menu-line-height;
+  // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
+  -webkit-overflow-scrolling: touch;
+
+  .vue-treeselect--open-below & {
+    @include border-radius-bottom($treeselect-border-radius-lg);
+
+    top: 0;
+    margin-top: (-$treeselect-control-border-width);
+    border-top-color: $treeselect-control-menu-divider-color;
+    box-shadow: $treeselect-menu-box-shadow;
+  }
+
+  .vue-treeselect--open-above & {
+    @include border-radius-top($treeselect-border-radius-lg);
+
+    bottom: 0;
+    margin-bottom: (-$treeselect-control-border-width);
+    border-bottom-color: $treeselect-control-menu-divider-color;
+  }
+}
+
+@for $i from 0 through $treeselect-max-level {
+  .vue-treeselect__indent-level-#{$i} {
+    .vue-treeselect__option {
+      padding-left: $treeselect-padding + $i * $treeselect-narrow-cell-width;
+
+      [dir="rtl"] & {
+        padding-left: $treeselect-padding;
+        padding-right: $treeselect-padding + $i * $treeselect-narrow-cell-width;
+      }
+    }
+
+    .vue-treeselect__tip {
+      padding-left: $treeselect-padding + ($i + 1) * $treeselect-narrow-cell-width;
+
+      [dir="rtl"] & {
+        padding-left: $treeselect-padding;
+        padding-right: $treeselect-padding + ($i + 1) * $treeselect-narrow-cell-width;
+      }
+    }
+  }
+}
+
+.vue-treeselect__option {
+  @include row;
+}
+
+.vue-treeselect__option--highlight {
+  background: $treeselect-option-bg-highlight;
+}
+
+.vue-treeselect__option--selected {
+  // note that these should override `.vue-treeselect__option--highlight`
+  .vue-treeselect--single & {
+    background: $treeselect-option-selected-bg;
+    font-weight: 600;
+
+    &:hover {
+      background: $treeselect-option-selected-bg-hover;
+    }
+  }
+}
+
+.vue-treeselect__option--hide {
+  display: none;
+}
+
+.vue-treeselect__option-arrow-container,
+.vue-treeselect__option-arrow-placeholder {
+  @include narrow-cell;
+}
+
+.vue-treeselect__option-arrow-container {
+  @include clickable;
+}
+
+.vue-treeselect__option-arrow {
+  display: inline-block;
+  width: $treeselect-arrow-size;
+  height: $treeselect-arrow-size;
+  color: $treeselect-arrow-color;
+  vertical-align: middle;
+  transition: $treeselect-transition-duration transform $treeselect-arrow-transition-timing-function;
+  transform: rotateZ(-90deg);
+
+  [dir="rtl"] & {
+    transform: rotateZ(90deg);
+  }
+
+  .vue-treeselect__option-arrow-container:hover &,
+  .vue-treeselect--branch-nodes-disabled .vue-treeselect__option:hover & {
+    color: $treeselect-arrow-color-hover;
+  }
+}
+
+.vue-treeselect__option-arrow--rotated {
+  transform: rotateZ(0);
+
+  [dir="rtl"] & {
+    transform: rotateZ(0);
+  }
+
+  &.vue-treeselect__option-arrow--prepare-enter {
+    transform: rotateZ(-90deg) !important; // stylelint-disable-line declaration-no-important
+
+    [dir="rtl"] & {
+      transform: rotateZ(90deg) !important; // stylelint-disable-line declaration-no-important
+    }
+  }
+}
+
+.vue-treeselect__label-container {
+  @include cell;
+  @include clickable;
+
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  color: $treeselect-option-label-color;
+
+  .vue-treeselect__option--disabled & {
+    @include forbidden;
+
+    color: $treeselect-option-label-color-disabled;
+  }
+}
+
+.vue-treeselect__checkbox-container {
+  display: table-cell;
+  width: $treeselect-narrow-cell-width;
+  min-width: $treeselect-narrow-cell-width;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.vue-treeselect__checkbox {
+  display: block;
+  margin: auto;
+  width: $treeselect-checkbox-size;
+  height: $treeselect-checkbox-size;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: $treeselect-border-radius-sm;
+  position: relative;
+  transition: $treeselect-transition-duration all $ease-out-circ;
+}
+
+.vue-treeselect__check-mark,
+.vue-treeselect__minus-mark {
+  display: block;
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: $treeselect-transition-duration all ease;
+}
+
+.vue-treeselect__minus-mark {
+  width: 12px;
+  height: 12px;
+  // Svg icons are rendered differently in different browsers thus unacceptable.
+  // Png provides the best consistency with a drawback that
+  // its color can't be controlled by CSS.
+  @include retina($treeselect-checkbox-indeterminate-icon, 3);
+  background-size: 12px 12px;
+
+  .vue-treeselect__checkbox--indeterminate > & {
+    opacity: 1;
+  }
+
+  .vue-treeselect__checkbox--disabled & {
+    @include retina($treeselect-checkbox-disabled-indeterminate-icon, 3);
+  }
+}
+
+.vue-treeselect__check-mark {
+  width: 12px;
+  height: 12px;
+  @include retina($treeselect-checkbox-checked-icon, 3);
+  background-size: 12px 12px;
+  // Set initial height to 1px.
+  transform: scaleY(1 / 12);
+
+  .vue-treeselect__checkbox--checked > & {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .vue-treeselect__checkbox--disabled & {
+    @include retina($treeselect-checkbox-disabled-checked-icon, 3);
+  }
+}
+
+.vue-treeselect__checkbox--unchecked {
+  border-color: $treeselect-checkbox-border-color;
+  background: $treeselect-checkbox-bg;
+
+  .vue-treeselect__label-container:hover & {
+    border-color: $treeselect-checkbox-border-color-hover;
+    background: $treeselect-checkbox-bg-hover;
+  }
+}
+
+.vue-treeselect__checkbox--indeterminate {
+  border-color: $treeselect-checkbox-indeterminate-border-color;
+  background: $treeselect-checkbox-indeterminate-bg;
+
+  .vue-treeselect__label-container:hover & {
+    border-color: $treeselect-checkbox-indeterminate-border-color-hover;
+    background: $treeselect-checkbox-indeterminate-bg-hover;
+  }
+}
+
+.vue-treeselect__checkbox--checked {
+  border-color: $treeselect-checkbox-checked-border-color;
+  background: $treeselect-checkbox-checked-bg;
+
+  .vue-treeselect__label-container:hover & {
+    border-color: $treeselect-checkbox-checked-border-color-hover;
+    background: $treeselect-checkbox-checked-bg-hover;
+  }
+}
+
+.vue-treeselect__checkbox--disabled {
+  border-color: $treeselect-checkbox-disabled-border-color;
+  background-color: $treeselect-checkbox-disabled-bg-color;
+
+  .vue-treeselect__label-container:hover & {
+    border-color: $treeselect-checkbox-disabled-border-color;
+    background-color: $treeselect-checkbox-disabled-bg-color;
+  }
+}
+
+
+.vue-treeselect__label {
+  @include text-truncate;
+
+  display: table-cell;
+  padding-left: $treeselect-padding;
+  max-width: 100%;
+  vertical-align: middle;
+  cursor: inherit; // override user agent style
+
+  [dir="rtl"] & {
+    padding-left: 0;
+    padding-right: $treeselect-padding;
+  }
+}
+
+.vue-treeselect__count {
+  margin-left: $treeselect-padding;
+  font-weight: 400;
+  opacity: 0.6;
+
+  [dir="rtl"] & {
+    margin-left: 0;
+    margin-right: $treeselect-padding;
+  }
+}
+
+.vue-treeselect__tip {
+  @include row;
+
+  color: $treeselect-tip-color;
+}
+
+.vue-treeselect__tip-text {
+  @include wide-cell;
+
+  font-size: $treeselect-tip-font-size;
+}
+
+.vue-treeselect__retry {
+  .vue-treeselect__error-tip & {
+    @include clickable;
+
+    margin-left: $treeselect-padding;
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: none;
+    color: $treeselect-retry-text-color;
+
+    [dir="rtl"] & {
+      margin-left: 0;
+      margin-right: $treeselect-padding;
+    }
+  }
+}
+
+.vue-treeselect__icon-container {
+  @include narrow-cell;
+
+  .vue-treeselect--single & {
+    padding-left: $treeselect-padding;
+
+    [dir="rtl"] & {
+      padding-left: 0;
+      padding-right: $treeselect-padding;
+    }
+  }
+}
+
+.vue-treeselect__icon-warning {
+  @include icon;
+  @include rounded;
+
+  position: relative;
+  width: $treeselect-icon-size;
+  height: $treeselect-icon-size;
+  background: $treeselect-warning-icon-bg;
+
+  &::after {
+    display: block;
+    position: absolute;
+    content: "";
+    left: 5px;
+    top: 2.5px;
+    width: 2px;
+    height: 1px;
+    border: 0 solid #fff;
+    border-top-width: 5px;
+    border-bottom-width: 1px;
+  }
+}
+
+.vue-treeselect__icon-error {
+  @include icon;
+  @include rounded;
+
+  $stroke-length: 6px;
+
+  position: relative;
+  width: $treeselect-icon-size;
+  height: $treeselect-icon-size;
+  background: $treeselect-error-icon-bg;
+
+  &::before,
+  &::after {
+    display: block;
+    position: absolute;
+    content: "";
+    background: #fff;
+    transform: rotate(45deg);
+  }
+
+  &::before {
+    width: $stroke-length;
+    height: 2px;
+    left: 3px;
+    top: 5px;
+  }
+
+  &::after {
+    width: 2px;
+    height: $stroke-length;
+    left: 5px;
+    top: 3px;
+  }
+}
+
+.vue-treeselect__icon-loader {
+  @include icon;
+
+  position: relative;
+  width: $treeselect-icon-size;
+  height: $treeselect-icon-size;
+  text-align: center;
+  animation: $treeselect-loader-animation-duration vue-treeselect-animation-rotate linear infinite;
+
+  &::before,
+  &::after {
+    @include rounded;
+
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    animation: $treeselect-loader-animation-duration vue-treeselect-animation-bounce ease-in-out infinite;
+  }
+
+  &::before {
+    background: $treeselect-loader-color-dark;
+  }
+
+  &::after {
+    background: $treeselect-loader-color-light;
+    animation-delay: -($treeselect-loader-animation-duration / 2);
+  }
+}
+
+
+/**
+ * Menu Portal
+ */
+
+.vue-treeselect__menu-placeholder {
+  display: none;
+}
+
+.vue-treeselect__portal-target {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  box-sizing: border-box;
+}

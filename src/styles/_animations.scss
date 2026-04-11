@@ -1,0 +1,94 @@
+/**
+ * Helpers
+ */
+
+.vue-treeselect-helper-hide {
+  display: none;
+}
+
+.vue-treeselect-helper-zoom-effect-off {
+  transform: none !important; // stylelint-disable-line declaration-no-important
+}
+
+
+/**
+ * Animations
+ */
+
+@keyframes vue-treeselect-animation-fade-in {
+  0% {
+    opacity: 0;
+  }
+}
+
+@keyframes vue-treeselect-animation-bounce {
+  0%, 100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vue-treeselect-animation-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/**
+ * Transitions
+ */
+
+.vue-treeselect__multi-value-item--transition {
+  &-enter-active,
+  &-leave-active {
+    transition-duration: $treeselect-transition-duration;
+    transition-property: transform, opacity;
+  }
+
+  &-enter-active {
+    transition-timing-function: $ease-out-circ;
+  }
+
+  &-leave-active {
+    transition-timing-function: $ease-out-cubic;
+    // trigger animation when element is removed
+    position: absolute;
+  }
+
+  &-enter,
+  &-leave-to {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  &-move {
+    transition: $treeselect-transition-duration transform $ease-out-quart;
+  }
+}
+
+.vue-treeselect__menu--transition {
+  &-enter-active,
+  &-leave-active {
+    // to be overriden
+  }
+
+  &-enter,
+  &-leave-to {
+    // to be overriden
+  }
+}
+
+.vue-treeselect__list--transition {
+  &-enter-active,
+  &-leave-active {
+    // to be overriden
+  }
+
+  &-enter,
+  &-leave-to {
+    // to be overriden
+  }
+}
