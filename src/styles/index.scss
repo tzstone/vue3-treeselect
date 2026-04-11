@@ -1,7 +1,6 @@
-@import './variables';
-@import './mixins';
-@import './animations';
-
+@import "./variables";
+@import "./mixins";
+@import "./animations";
 
 /**
  * Namespace
@@ -25,7 +24,6 @@
   }
 }
 
-
 /**
  * Control
  */
@@ -34,14 +32,17 @@
   @include row;
 
   height: $treeselect-control-height;
-  border: $treeselect-control-border-width solid $treeselect-control-border-color;
+  border: $treeselect-control-border-width solid
+    $treeselect-control-border-color;
   border-radius: $treeselect-control-border-radius;
   background: $treeselect-control-bg;
   transition-duration: $treeselect-transition-duration;
-  transition-property: border-color, box-shadow, width, height, background-color, opacity;
+  transition-property:
+    border-color, box-shadow, width, height, background-color, opacity;
   transition-timing-function: $ease-out-cubic;
 
-  .vue-treeselect:not(.vue-treeselect--disabled):not(.vue-treeselect--focused) &:hover {
+  .vue-treeselect:not(.vue-treeselect--disabled):not(.vue-treeselect--focused)
+    &:hover {
     border-color: $treeselect-control-border-color-hover;
   }
 
@@ -144,13 +145,17 @@
   background: $treeselect-multi-value-item-bg;
   // Table elements do not have margin, so we set at the container element.
   padding: $treeselect-multi-value-margin-y $treeselect-multi-value-margin-x;
-  border: $treeselect-multi-value-item-border-width solid $treeselect-multi-value-item-border-color;
+  border: $treeselect-multi-value-item-border-width solid
+    $treeselect-multi-value-item-border-color;
   border-radius: $treeselect-border-radius-sm;
   color: $treeselect-multi-value-font-color;
   font-size: $treeselect-multi-value-font-size;
   vertical-align: top; // stylelint-disable-line plugin/declaration-block-no-ignored-properties
 
-  .vue-treeselect:not(.vue-treeselect--disabled) &:not(.vue-treeselect__multi-value-item-disabled):hover &:not(.vue-treeselect__multi-value-item-new) &:not(.vue-treeselect__multi-value-item-new):hover {
+  .vue-treeselect:not(.vue-treeselect--disabled)
+    &:not(.vue-treeselect__multi-value-item-disabled):hover
+    &:not(.vue-treeselect__multi-value-item-new)
+    &:not(.vue-treeselect__multi-value-item-new):hover {
     @include clickable;
 
     background: $treeselect-multi-value-item-bg-hover;
@@ -236,7 +241,11 @@
 
   display: block;
   margin: $treeselect-multi-value-margin-y $treeselect-multi-value-margin-x;
-  padding: ($treeselect-multi-value-padding-y + $treeselect-multi-value-item-border-width) 0;
+  padding: (
+      $treeselect-multi-value-padding-y +
+        $treeselect-multi-value-item-border-width
+    )
+    0;
   color: $treeselect-limit-tip-font-color;
   font-size: $treeselect-limit-tip-font-size;
   font-weight: $treeselect-limit-tip-font-weight;
@@ -262,7 +271,8 @@
     @include horizontal-padding($treeselect-padding);
   }
 
-  .vue-treeselect--searchable.vue-treeselect--multi.vue-treeselect--has-value & {
+  .vue-treeselect--searchable.vue-treeselect--multi.vue-treeselect--has-value
+    & {
     padding-top: $treeselect-padding;
     padding-left: 0;
 
@@ -307,7 +317,10 @@
   }
 
   .vue-treeselect--multi & {
-    @include vertical-padding($treeselect-multi-value-margin-y + $treeselect-multi-value-item-border-width);
+    @include vertical-padding(
+      $treeselect-multi-value-margin-y +
+        $treeselect-multi-value-item-border-width
+    );
   }
 
   .vue-treeselect--has-value & {
@@ -331,7 +344,8 @@
   @include clickable;
 
   color: $treeselect-x-color;
-  animation: $treeselect-transition-duration vue-treeselect-animation-fade-in $ease-out-circ;
+  animation: $treeselect-transition-duration vue-treeselect-animation-fade-in
+    $ease-out-circ;
 
   &:hover {
     color: $treeselect-x-color-hover;
@@ -357,7 +371,9 @@
   height: $treeselect-arrow-size;
   color: $treeselect-arrow-color;
 
-  .vue-treeselect:not(.vue-treeselect--disabled) .vue-treeselect__control-arrow-container:hover & {
+  .vue-treeselect:not(.vue-treeselect--disabled)
+    .vue-treeselect__control-arrow-container:hover
+    & {
     color: $treeselect-arrow-color-hover;
   }
 
@@ -369,7 +385,6 @@
 .vue-treeselect__control-arrow--rotated {
   transform: rotateZ(180deg);
 }
-
 
 /**
  * Menu
@@ -437,11 +452,15 @@
     }
 
     .vue-treeselect__tip {
-      padding-left: $treeselect-padding + ($i + 1) * $treeselect-narrow-cell-width;
+      padding-left: $treeselect-padding +
+        ($i + 1) *
+        $treeselect-narrow-cell-width;
 
       [dir="rtl"] & {
         padding-left: $treeselect-padding;
-        padding-right: $treeselect-padding + ($i + 1) * $treeselect-narrow-cell-width;
+        padding-right: $treeselect-padding +
+          ($i + 1) *
+          $treeselect-narrow-cell-width;
       }
     }
   }
@@ -486,7 +505,8 @@
   height: $treeselect-arrow-size;
   color: $treeselect-arrow-color;
   vertical-align: middle;
-  transition: $treeselect-transition-duration transform $treeselect-arrow-transition-timing-function;
+  transition: $treeselect-transition-duration transform
+    $treeselect-arrow-transition-timing-function;
   transform: rotateZ(-90deg);
 
   [dir="rtl"] & {
@@ -507,10 +527,14 @@
   }
 
   &.vue-treeselect__option-arrow--prepare-enter {
-    transform: rotateZ(-90deg) !important; // stylelint-disable-line declaration-no-important
+    transform: rotateZ(
+      -90deg
+    ) !important; // stylelint-disable-line declaration-no-important
 
     [dir="rtl"] & {
-      transform: rotateZ(90deg) !important; // stylelint-disable-line declaration-no-important
+      transform: rotateZ(
+        90deg
+      ) !important; // stylelint-disable-line declaration-no-important
     }
   }
 }
@@ -556,46 +580,76 @@
 .vue-treeselect__minus-mark {
   display: block;
   position: absolute;
-  left: 1px;
-  top: 1px;
-  background-repeat: no-repeat;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   opacity: 0;
   transition: $treeselect-transition-duration all ease;
 }
 
 .vue-treeselect__minus-mark {
-  width: 12px;
-  height: 12px;
-  // Svg icons are rendered differently in different browsers thus unacceptable.
-  // Png provides the best consistency with a drawback that
-  // its color can't be controlled by CSS.
-  @include retina($treeselect-checkbox-indeterminate-icon, 3);
-  background-size: 12px 12px;
+  width: 8px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 1px;
 
   .vue-treeselect__checkbox--indeterminate > & {
     opacity: 1;
   }
 
-  .vue-treeselect__checkbox--disabled & {
-    @include retina($treeselect-checkbox-disabled-indeterminate-icon, 3);
+  .vue-treeselect__checkbox--disabled > & {
+    background-color: $md-grey-400;
   }
 }
 
 .vue-treeselect__check-mark {
-  width: 12px;
-  height: 12px;
-  @include retina($treeselect-checkbox-checked-icon, 3);
-  background-size: 12px 12px;
-  // Set initial height to 1px.
-  transform: scaleY(1 / 12);
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  transition: $treeselect-transition-duration all ease;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    border-radius: 1px;
+  }
+
+  // Left part of checkmark
+  &::before {
+    width: 2px;
+    height: 4px;
+    left: 2px;
+    top: 3px;
+    transform: rotate(-45deg);
+    transform-origin: bottom center;
+  }
+
+  // Right part of checkmark
+  &::after {
+    width: 2px;
+    height: 8px;
+    left: 1px;
+    top: -1px;
+    transform: rotate(45deg);
+    transform-origin: bottom center;
+  }
 
   .vue-treeselect__checkbox--checked > & {
     opacity: 1;
-    transform: scaleY(1);
+
+    &::before,
+    &::after {
+      background-color: #fff;
+    }
   }
 
-  .vue-treeselect__checkbox--disabled & {
-    @include retina($treeselect-checkbox-disabled-checked-icon, 3);
+  .vue-treeselect__checkbox--disabled > & {
+    &::before,
+    &::after {
+      background-color: $md-grey-400;
+    }
   }
 }
 
@@ -638,7 +692,6 @@
     background-color: $treeselect-checkbox-disabled-bg-color;
   }
 }
-
 
 .vue-treeselect__label {
   @include text-truncate;
@@ -773,7 +826,8 @@
   width: $treeselect-icon-size;
   height: $treeselect-icon-size;
   text-align: center;
-  animation: $treeselect-loader-animation-duration vue-treeselect-animation-rotate linear infinite;
+  animation: $treeselect-loader-animation-duration
+    vue-treeselect-animation-rotate linear infinite;
 
   &::before,
   &::after {
@@ -787,7 +841,8 @@
     width: 100%;
     height: 100%;
     opacity: 0.6;
-    animation: $treeselect-loader-animation-duration vue-treeselect-animation-bounce ease-in-out infinite;
+    animation: $treeselect-loader-animation-duration
+      vue-treeselect-animation-bounce ease-in-out infinite;
   }
 
   &::before {
@@ -799,7 +854,6 @@
     animation-delay: -($treeselect-loader-animation-duration / 2);
   }
 }
-
 
 /**
  * Menu Portal
