@@ -338,7 +338,7 @@ export interface TreeselectEmits {
   /** Emitted when the menu opens */
   (event: 'open', instanceId: string | number): void
   /** Emitted when the menu closes */
-  (event: 'close', instanceId: string | number): void
+  (event: 'close', value: any, instanceId: string | number): void
 }
 
 // =============================================================================
