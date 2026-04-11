@@ -9,3 +9,4 @@ dist-demo
 coverage
 *.tsbuildinfo
 .sisyphus
+.playwright-mcp

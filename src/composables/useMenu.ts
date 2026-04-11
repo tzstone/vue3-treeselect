@@ -141,13 +141,22 @@ export function useMenu(
     return node
   }
 
-  let handleClickOutside: ((evt: MouseEvent) => void) | null = null
+  function toggleClickOutsideEvent(enabled: boolean): void {
+    if (handleClickOutside) {
+      if (enabled) {
+        document.addEventListener('mousedown', handleClickOutside, false)
+      } else {
+        document.removeEventListener('mousedown', handleClickOutside, false)
+      }
+    }
+  }
 
-  function setupClickOutsideHandler(wrapperEl: HTMLElement): void {
-    handleClickOutside = (evt: MouseEvent) => {
-      if (wrapperEl && !wrapperEl.contains(evt.target as Node)) {
-        // blurInput and closeMenu will be called from the main composable
-        _clickOutsideTriggered = true
+  let handleClickOutside: ((evt: MouseEvent) => void) | null = (evt: MouseEvent) => {
+    const wrapperEl = getControl()
+    if (wrapperEl && !wrapperEl.contains(evt.target as Node)) {
+      if (menu.isOpen) {
+        closeMenu()
+        blurInput()
       }
     }
   }
@@ -160,12 +169,13 @@ export function useMenu(
     return val
   }
 
-  function toggleClickOutsideEvent(enabled: boolean): void {
-    if (handleClickOutside) {
-      if (enabled) {
-        document.addEventListener('mousedown', handleClickOutside, false)
-      } else {
-        document.removeEventListener('mousedown', handleClickOutside, false)
+  function setupClickOutsideHandler(wrapperEl: HTMLElement): void {
+    handleClickOutside = (evt: MouseEvent) => {
+      if (wrapperEl && !wrapperEl.contains(evt.target as Node)) {
+        if (menu.isOpen) {
+          closeMenu()
+          blurInput()
+        }
       }
     }
   }
