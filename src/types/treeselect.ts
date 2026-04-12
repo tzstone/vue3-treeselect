@@ -6,6 +6,8 @@
  */
 
 import type { InjectionKey, ComputedRef } from 'vue'
+import type { ForestState, LocalSearchState } from '../composables/useForest'
+import type { AsyncOptionsStates } from '../composables/useTreeselect'
 
 // =============================================================================
 // Core Option and Node Types
@@ -436,15 +438,8 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
   multiple: boolean
   /** Whether any branch node exists */
   hasBranchNodes: boolean
-  /** Map of node ID to checked state (multi-select mode) */
-  checkedStateMap: Record<string | number, number>
   /** Local search state */
-  localSearch: {
-    /** Whether search is active */
-    active: boolean
-    /** Map of node ID to count of matched children */
-    countMap: Record<string | number, CountMap>
-  }
+  localSearch: LocalSearchState
   /** Whether to show children count next to the label */
   showCount: boolean
   /** Which type of count to display */
@@ -516,19 +511,9 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
   /** Whether using async search mode */
   async: boolean
   /** Root options loading state */
-  rootOptionsStates: {
-    /** Whether root options have been loaded */
-    isLoaded: boolean
-    /** Whether root options are currently being loaded */
-    isLoading: boolean
-    /** Error message if loading failed */
-    loadingError: string
-  }
+  rootOptionsStates: AsyncOptionsStates
   /** Forest state with normalized options */
-  forest: {
-    /** Normalized options array */
-    normalizedOptions: TreeselectNode[]
-  }
+  forest: ForestState
   /** Remote search entries cache */
   remoteSearch: Record<string, {
     /** Whether search results have been loaded */

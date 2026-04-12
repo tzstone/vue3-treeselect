@@ -21,10 +21,22 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     single: true,
     multiple: false,
     hasBranchNodes: false,
-    checkedStateMap: {},
     localSearch: {
       active: false,
+      noResults: true,
       countMap: {},
+    },
+    forest: {
+      normalizedOptions: [],
+      nodeMap: {},
+      checkedStateMap: {},
+      selectedNodeIds: [],
+      selectedNodeMap: {},
+    },
+    rootOptionsStates: {
+      isLoaded: false,
+      isLoading: false,
+      loadingError: '',
     },
     showCount: false,
     showCountOf: 'ALL_CHILDREN',
@@ -94,9 +106,6 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     setup: vi.fn(),
     onMount: vi.fn(),
     onUnmount: vi.fn(),
-    forest: {
-      normalizedOptions: [],
-    },
     remoteSearch: {},
     noOptionsText: 'No options available.',
     noResultsText: 'No results found.',

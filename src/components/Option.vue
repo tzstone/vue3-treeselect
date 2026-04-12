@@ -44,7 +44,7 @@ const shouldShow = computed(() => {
 })
 
 const checkedState = computed(() => {
-  return instance.value.checkedStateMap[props.node.id]
+  return instance.value.forest.checkedStateMap[props.node.id]
 })
 
 const shouldShowCount = computed(() => {

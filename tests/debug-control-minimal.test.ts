@@ -39,10 +39,22 @@ describe('Task 8: Control import test', () => {
       single: true,
       multiple: false,
       hasBranchNodes: false,
-      checkedStateMap: {},
       localSearch: {
         active: false,
+        noResults: true,
         countMap: {},
+      },
+      forest: {
+        normalizedOptions: [],
+        nodeMap: {},
+        checkedStateMap: {},
+        selectedNodeIds: [],
+        selectedNodeMap: {},
+      },
+      rootOptionsStates: {
+        isLoaded: false,
+        isLoading: false,
+        loadingError: '',
       },
       showCount: false,
       showCountOf: 'ALL_CHILDREN',
@@ -112,9 +124,6 @@ describe('Task 8: Control import test', () => {
       setup: vi.fn(),
       onMount: vi.fn(),
       onUnmount: vi.fn(),
-      forest: {
-        normalizedOptions: [],
-      },
       remoteSearch: {},
       noOptionsText: 'No options available.',
       noResultsText: 'No results found.',
