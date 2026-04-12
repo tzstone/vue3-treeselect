@@ -1,4 +1,4 @@
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 
 import type { TreeselectProps, TreeselectNode } from '../types'
 import { scrollIntoView } from '../utils'
@@ -129,15 +129,15 @@ export function useMenu(
 
     if (nextState && !node.childrenStates.isLoaded) {
       // loadChildrenOptions will be handled by useTreeselect
-      _pendingLoadChildren = node
+      _pendingLoadChildren.value = node
     }
   }
 
-  let _pendingLoadChildren: TreeselectNode | null = null
+  const _pendingLoadChildren = ref<TreeselectNode | null>(null)
 
   function consumePendingLoadChildren(): TreeselectNode | null {
-    const node = _pendingLoadChildren
-    _pendingLoadChildren = null
+    const node = _pendingLoadChildren.value
+    _pendingLoadChildren.value = null
     return node
   }
 
@@ -256,6 +256,7 @@ export function useMenu(
     setupClickOutsideHandler,
     consumeClickOutside,
     consumePendingLoadChildren,
+    pendingLoadChildren: _pendingLoadChildren,
     visibleOptionIds,
     hasVisibleOptions,
     getMenu,

@@ -386,6 +386,12 @@ export function useTreeselect(
   // Watchers
   // =========================================================================
 
+  watch(() => menuComposable.pendingLoadChildren.value, (node) => {
+    if (node) {
+      loadChildrenOptions(node)
+    }
+  })
+
   watch(() => props.alwaysOpen, (newValue) => {
     if (newValue) menuComposable.openMenu()
     else menuComposable.closeMenu()
