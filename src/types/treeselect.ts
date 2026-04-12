@@ -259,7 +259,7 @@ export interface TreeselectProps {
   /** Used for dynamically loading options */
   loadOptions?: (args: {
     action: string
-    callback: (err?: Error | string) => void
+    callback: (err?: Error | string, result?: unknown) => void
     parentNode?: TreeselectNode
     instanceId: string | number
   }) => void

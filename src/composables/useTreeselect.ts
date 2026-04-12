@@ -281,15 +281,15 @@ export function useTreeselect(
       instanceId: getInstanceId(),
       action: params.action,
       ...params.args,
-      callback: (err?: Error | string) => {
-        callback(err ?? null)
+      callback: (err?: Error | string, result?: unknown) => {
+        callback(err ?? null, result)
       },
     }
     const result = props.loadOptions(loadArgs as Parameters<NonNullable<typeof props.loadOptions>>[0])
 
     if (isPromise(result)) {
-      result.then(() => {
-        callback(null)
+      result.then((options) => {
+        callback(null, options)
       }, (err: Error | string) => {
         callback(err)
       }).catch((err: Error) => {
