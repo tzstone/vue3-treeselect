@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import { Treeselect } from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Basic Usage</h2>
     <p class="example-description">
-      The most basic usage of vue3-treeselect. Click the control to open the menu,
-      then select an option.
+      The most basic usage of vue3-treeselect. Click the control to open the
+      menu, then select an option.
     </p>
     <div class="example-content">
       <Treeselect
@@ -21,7 +21,7 @@ const value = ref<string | null>(null)
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>

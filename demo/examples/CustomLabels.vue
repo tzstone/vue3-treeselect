@@ -1,39 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
-import { customLabelOptions } from '../data'
+import { ref } from "vue";
+import { Treeselect } from "vue3-treeselect";
+import { customLabelOptions } from "../data";
 
-const value = ref<string | null>(null)
-
-// Custom label formatter
-function formatLabel(node: { label: string }) {
-  return `👤 ${node.label}`
-}
-
-// Custom value formatter
-function formatValue(value: string, node: { label: string }) {
-  return node.label
-}
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Custom Labels</h2>
-    <p class="example-description">
-      Use the <code>formatLabel</code> prop to customize how option labels are displayed.
-      This is useful for adding prefixes, suffixes, or other formatting.
-    </p>
+    <p class="example-description"></p>
     <div class="example-content">
       <Treeselect
         v-model="value"
         :options="customLabelOptions"
-        :format-label="formatLabel"
-        :format-value="formatValue"
         placeholder="Select a person..."
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -61,7 +46,7 @@ function formatValue(value: string, node: { label: string }) {
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 13px;
   color: #e83e8c;
 }
