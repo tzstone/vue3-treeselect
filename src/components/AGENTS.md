@@ -5,15 +5,16 @@
 **Branch:** (current)
 
 ## OVERVIEW
+
 15 Vue components organized by function with icons subdirectory.
 
 ## STRUCTURE
+
 ```
 src/components/
 ├── Treeselect.vue           # Root orchestrator
 ├── icons/                   # Arrow.vue, Delete.vue
 ├── Control.vue              # Click area
-├── ControlSimple.vue        # Read-only display
 ├── Input.vue                # Search input
 ├── SingleValue.vue          # Selected value (single)
 ├── MultiValue.vue           # Value container
@@ -27,16 +28,18 @@ src/components/
 ```
 
 ## WHERE TO LOOK
-| Task | Location | Notes |
-|------|----------|-------|
-| Modify dropdown | Menu.vue, MenuPortal.vue | MenuPortal handles teleport |
-| Change selection | SingleValue.vue, MultiValueItem.vue | Tag behavior |
-| Add icon | icons/ | SVG components |
-| Adjust search | Input.vue | Search input component |
-| Custom slots | All components | Named slots via parent |
-| Expose methods | Treeselect.vue | defineExpose pattern |
+
+| Task             | Location                            | Notes                       |
+| ---------------- | ----------------------------------- | --------------------------- |
+| Modify dropdown  | Menu.vue, MenuPortal.vue            | MenuPortal handles teleport |
+| Change selection | SingleValue.vue, MultiValueItem.vue | Tag behavior                |
+| Add icon         | icons/                              | SVG components              |
+| Adjust search    | Input.vue                           | Search input component      |
+| Custom slots     | All components                      | Named slots via parent      |
+| Expose methods   | Treeselect.vue                      | defineExpose pattern        |
 
 ## CONVENTIONS
+
 - **Recursive rendering**: Option.vue renders itself for children
 - **Slot naming**: kebab-case for consistency
 - **defineExpose**: Public methods via Treeselect.vue
