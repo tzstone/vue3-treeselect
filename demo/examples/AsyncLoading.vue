@@ -1,48 +1,81 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
-import type { TreeselectOption } from '../data'
+import { ref } from "vue";
+import { Treeselect } from "vue3-treeselect";
+import type { TreeselectOption } from "../data";
 
 interface AsyncNode extends TreeselectOption {
-  children?: AsyncNode[]
-  loadChildren?: boolean
+  children?: AsyncNode[];
+  loadChildren?: boolean;
 }
 
-const isLoading = ref(false)
-const value = ref<string | null>(null)
+const isLoading = ref(false);
+const value = ref<string | null>(null);
 
 const asyncRootOptions: AsyncNode[] = [
   {
-    id: 'region-1',
-    label: 'Region 1',
-    isBranch: true,
+    id: "success",
+    label: "With children",
+    // Declare an unloaded branch node.
     children: null,
-    loadChildren: true,
   },
   {
-    id: 'region-2',
-    label: 'Region 2',
-    isBranch: true,
+    id: "no-children",
+    label: "With no children",
     children: null,
-    loadChildren: true,
   },
-]
+  {
+    id: "failure",
+    label: "Demonstrates error handling",
+    children: null,
+  },
+];
 
-async function loadOptions({ action, parentNode, callback }: { action: string; parentNode: any; callback: () => void }) {
-  if (action === 'LOAD_CHILDREN_OPTIONS' && parentNode.loadChildren) {
-    isLoading.value = true
-    await new Promise(resolve => setTimeout(resolve, 1000))
+async function loadOptions({
+  action,
+  parentNode,
+  callback,
+}: {
+  action: string;
+  parentNode: any;
+  callback: () => void;
+}) {
+  if (action === "LOAD_CHILDREN_OPTIONS") {
+    isLoading.value = true;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const children = [
-      { id: `${parentNode.id}-child-1`, label: `${parentNode.label} - Child 1` },
-      { id: `${parentNode.id}-child-2`, label: `${parentNode.label} - Child 2` },
-      { id: `${parentNode.id}-child-3`, label: `${parentNode.label} - Child 3` },
-    ]
+    switch (parentNode.id) {
+      case "success": {
+        const children = [
+          {
+            id: `${parentNode.id}-child-1`,
+            label: `${parentNode.label} - Child 1`,
+          },
+          {
+            id: `${parentNode.id}-child-2`,
+            label: `${parentNode.label} - Child 2`,
+          },
+          {
+            id: `${parentNode.id}-child-3`,
+            label: `${parentNode.label} - Child 3`,
+          },
+        ];
 
-    parentNode.children = children
-    parentNode.loadChildren = false
-    isLoading.value = false
-    callback()
+        parentNode.children = children;
+        isLoading.value = false;
+        callback();
+        break;
+      }
+      case "no-children": {
+        parentNode.children = [];
+        callback();
+        break;
+      }
+      case "failure": {
+        callback(new Error("Failed to load options: network error."));
+        break;
+      }
+      default: /* empty */
+    }
   }
 }
 </script>
@@ -51,8 +84,9 @@ async function loadOptions({ action, parentNode, callback }: { action: string; p
   <div class="example">
     <h2 class="example-title">Async Loading</h2>
     <p class="example-description">
-      Demonstrates lazy loading of child options. Click the arrow to expand a node
-      and the children will be loaded asynchronously with a simulated 1-second delay.
+      Demonstrates lazy loading of child options. Click the arrow to expand a
+      node and the children will be loaded asynchronously with a simulated
+      1-second delay.
     </p>
     <div class="example-content">
       <Treeselect
@@ -64,7 +98,7 @@ async function loadOptions({ action, parentNode, callback }: { action: string; p
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
       <span v-if="isLoading" class="loading-indicator"> (loading...)</span>
     </div>
   </div>
@@ -93,7 +127,7 @@ async function loadOptions({ action, parentNode, callback }: { action: string; p
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 13px;
   color: #e83e8c;
 }
