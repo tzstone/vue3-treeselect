@@ -28,25 +28,16 @@ const selectedNode = computed(() => {
   return instance.value.selectedNodes[0]
 })
 
-// Get slots
-const slots = defineSlots<{
-  'value-label'?: (props: { node: typeof selectedNode.value }) => any
-}>()
 
-// Render single value label
-function renderSingleValueLabel() {
-  const node = selectedNode.value
-  if (!node) return null
-
-  const customValueLabelRenderer = slots['value-label']
-  return customValueLabelRenderer
-    ? customValueLabelRenderer({ node })
-    : node.label
-}
 </script>
 
 <template>
   <div v-if="shouldShowValue" class="vue-treeselect__single-value">
-    {{ renderSingleValueLabel() }}
+    <template v-if="instance.slots?.['value-label']">
+      <component :is="() => instance.slots!['value-label']!({ node: selectedNode })" />
+    </template>
+    <template v-else>
+      {{ selectedNode?.label }}
+    </template>
   </div>
 </template>

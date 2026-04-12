@@ -586,6 +586,11 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
   control?: {
     [key: string]: any
   }
+  /** Slots passed from parent component */
+  slots: {
+    'option-label'?: (props: { node: TreeselectNode; shouldShowCount: boolean; count: number; labelClassName: string; countClassName: string }) => any
+    'value-label'?: (props: { node: TreeselectNode }) => any
+  }
 }
 
 // =============================================================================

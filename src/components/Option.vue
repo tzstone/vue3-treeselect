@@ -6,7 +6,7 @@
  * This is a recursive component that renders itself for child nodes.
  */
 
-import { computed, inject, useSlots, type ComputedRef } from 'vue'
+import { computed, inject, type ComputedRef } from 'vue'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '../constants'
 import { TRESELECT_INSTANCE_KEY, type TreeselectNode, type TreeselectInstance } from '../types'
 import { onLeftClick } from '../utils'
@@ -30,9 +30,6 @@ if (!instanceRef) {
 
 // Unwrap computed ref for template auto-unwrap
 const instance = computed(() => instanceRef.value)
-
-// Slots
-const slots = useSlots()
 
 // Computed
 const shouldExpand = computed(() => {
@@ -65,7 +62,7 @@ const count = computed(() => {
 })
 
 const hasCustomLabelRenderer = computed(() => {
-  return !!slots['option-label']
+  return !!instance.value.slots?.['option-label']
 })
 
 const hasLoadedChildren = computed(() => {
@@ -187,14 +184,14 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
         </div>
 
         <!-- Label -->
-        <slot
+        <component
+          :is="instance.slots?.['option-label']"
           v-if="hasCustomLabelRenderer"
-          name="option-label"
           :node="node"
           :should-show-count="shouldShowCount"
           :count="count"
-          label-class-name="vue-treeselect__label"
-          count-class-name="vue-treeselect__count"
+          :label-class-name="'vue-treeselect__label'"
+          :count-class-name="'vue-treeselect__count'"
         />
         <label v-else class="vue-treeselect__label">
           {{ node.label }}
@@ -211,9 +208,9 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
         <!-- Recursive children rendering -->
         <template v-if="hasLoadedChildren">
           <Option
-            v-for="childNode in node.children"
-            :key="childNode.id"
-            :node="childNode"
+            v-for="child in node.children"
+            :key="child.id"
+            :node="child"
           />
         </template>
 

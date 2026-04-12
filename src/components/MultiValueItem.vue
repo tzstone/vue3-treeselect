@@ -31,11 +31,6 @@ const instance = computed(() => instanceRef.value)
 // Type assertion: instance is definitely defined after the check above
 const treeselectInstance = instance
 
-// Get slots
-const slots = defineSlots<{
-  'value-label'?: (props: { node: TreeselectNode }) => any
-}>()
-
 // CSS classes for the item
 const itemClass = computed(() => ({
   'vue-treeselect__multi-value-item': true,
@@ -43,13 +38,10 @@ const itemClass = computed(() => ({
   'vue-treeselect__multi-value-item-new': props.node.isNew,
 }))
 
-// Render label
-function renderLabel() {
-  const customValueLabelRenderer = slots['value-label']
-  return customValueLabelRenderer
-    ? customValueLabelRenderer({ node: props.node })
-    : props.node.label
-}
+// Check if custom value-label slot is provided
+const hasCustomValueLabel = computed(() => {
+  return !!instance.value.slots?.['value-label']
+})
 
 // Handle click to deselect
 function handleMouseDown(event: MouseEvent) {
@@ -68,7 +60,12 @@ function handleMouseDown(event: MouseEvent) {
   <div class="vue-treeselect__multi-value-item-container">
     <div :class="itemClass" @mousedown="handleMouseDown">
       <span class="vue-treeselect__multi-value-label">
-        {{ renderLabel() }}
+        <template v-if="hasCustomValueLabel">
+          <component :is="() => instance.slots!['value-label']!({ node })" />
+        </template>
+        <template v-else>
+          {{ node.label }}
+        </template>
       </span>
       <span class="vue-treeselect__icon vue-treeselect__value-remove">
         <DeleteIcon />

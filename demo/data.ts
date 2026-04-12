@@ -176,3 +176,89 @@ export const valueFormatterOptions: TreeselectOption[] = [
     ],
   },
 ];
+
+// 自定义键名数据 - 用于展示 normalizer 功能
+// 使用非标准字段名：key 代替 id，name 代替 label，subItems 代替 children
+export const customKeyOptions = [
+  {
+    key: "dept-1",
+    name: "技术部",
+    subItems: [
+      { key: "team-frontend", name: "前端团队" },
+      { key: "team-backend", name: "后端团队" },
+      { key: "team-qa", name: "测试团队" },
+    ],
+  },
+  {
+    key: "dept-2",
+    name: "产品部",
+    subItems: [
+      { key: "team-product", name: "产品设计" },
+      { key: "team-ux", name: "用户体验" },
+    ],
+  },
+  {
+    key: "dept-3",
+    name: "运营部",
+    subItems: [
+      { key: "team-marketing", name: "市场推广" },
+      { key: "team-sales", name: "销售团队" },
+    ],
+  },
+];
+
+// 带图标的选项数据 - 用于展示 option-label slot 功能
+export const optionsWithIcons = [
+  {
+    id: "category-files",
+    label: "文件类型",
+    icon: "📁",
+    children: [
+      { id: "file-doc", label: "文档", icon: "📄", size: "2MB" },
+      { id: "file-img", label: "图片", icon: "🖼️", size: "5MB" },
+      { id: "file-video", label: "视频", icon: "🎬", size: "100MB" },
+    ],
+  },
+  {
+    id: "category-status",
+    label: "状态",
+    icon: "🏷️",
+    children: [
+      { id: "status-active", label: "进行中", icon: "🟢", priority: "高" },
+      { id: "status-pending", label: "待处理", icon: "🟡", priority: "中" },
+      { id: "status-done", label: "已完成", icon: "🔵", priority: "低" },
+    ],
+  },
+];
+
+// 带详细信息的值数据 - 用于展示 value-label slot 功能
+export const optionsWithDetails = [
+  {
+    id: "employee-1",
+    label: "张三",
+    role: "高级工程师",
+    department: "技术部",
+    avatar: "👨‍💻",
+  },
+  {
+    id: "employee-2",
+    label: "李四",
+    role: "产品经理",
+    department: "产品部",
+    avatar: "👩‍💼",
+  },
+  {
+    id: "employee-3",
+    label: "王五",
+    role: "UI设计师",
+    department: "设计部",
+    avatar: "👨‍🎨",
+  },
+  {
+    id: "employee-4",
+    label: "赵六",
+    role: "测试工程师",
+    department: "技术部",
+    avatar: "👩‍🔬",
+  },
+];

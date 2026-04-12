@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, provide, computed, ref, type ComputedRef } from 'vue'
+import { onMounted, onBeforeUnmount, provide, computed, ref, type ComputedRef, useSlots } from 'vue'
 
 import type { TreeselectProps, TreeselectEmits, TreeselectInstance } from '../types'
 import { TRESELECT_INSTANCE_KEY } from '../types'
@@ -20,6 +20,9 @@ const controlRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
 // @ts-ignore - Will be used for Teleport component
 const portalRef = ref<HTMLElement | null>(null)
+
+// Get slots to pass down to child components
+const slots = useSlots()
 
 // Define props
 const props = withDefaults(defineProps<TreeselectProps>(), {
@@ -242,6 +245,11 @@ const instance = computed(() => ({
   toggleMenu,
   select,
   loadChildrenOptions,
+  // Pass slots to child components via provide/inject
+  slots: {
+    'option-label': slots['option-label'],
+    'value-label': slots['value-label'],
+  },
 })) as ComputedRef<TreeselectInstance>
 
 // Provide instance to child components (pass computed ref for reactivity)
