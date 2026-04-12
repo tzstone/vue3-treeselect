@@ -61,7 +61,7 @@ const sizerRef = ref<HTMLElement | null>(null)
 
 // State
 const inputWidth = ref(MIN_INPUT_WIDTH)
-const inputValue = ref(instanceNonNull.value.searchQuery)
+const inputValue = ref(instanceNonNull.value.trigger.searchQuery)
 
 // Computed
 const needAutoSize = computed(() => {
@@ -112,14 +112,14 @@ function blur() {
 }
 
 function onFocus() {
-  ;(instanceNonNull.value as any).trigger.isFocused = true
+  instanceNonNull.value.trigger.isFocused = true
   if (openOnFocus.value) {
     instanceNonNull.value.openMenu()
   }
 }
 
 function onBlur() {
-  ;(instanceNonNull.value as any).trigger.isFocused = false
+  instanceNonNull.value.trigger.isFocused = false
   instanceNonNull.value.closeMenu()
 }
 
@@ -271,11 +271,11 @@ function updateInputWidth() {
 }
 
 function updateSearchQuery() {
-  ;(instanceNonNull.value as any).trigger.searchQuery = inputValue.value
+  instanceNonNull.value.trigger.searchQuery = inputValue.value
 }
 
 // Watchers
-watch(() => instanceNonNull.value.searchQuery, (newValue) => {
+watch(() => instanceNonNull.value.trigger.searchQuery, (newValue) => {
   inputValue.value = newValue
 })
 

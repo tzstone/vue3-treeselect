@@ -61,7 +61,7 @@ const remoteSearchEntry = computed(() => instance.value!.getRemoteSearchEntry())
 
 // Computed: Should show search prompt tip
 const shouldShowSearchPromptTip = computed(
-  () => instance.value!.searchQuery === '' && !(instance.value as any).defaultOptions
+  () => instance.value!.trigger.searchQuery === '' && !(instance.value as any).defaultOptions
 )
 
 // Computed: Should show no results tip (async search)

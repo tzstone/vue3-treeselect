@@ -1,6 +1,6 @@
 <template>
   <div :class="placeholderClass">
-    {{ instance.searchQuery || instance.placeholder }}
+    {{ instance.trigger.searchQuery || instance.placeholder }}
   </div>
 </template>
 
@@ -20,6 +20,6 @@ const instance = computed(() => instanceRef.value)
 const placeholderClass = computed(() => ({
   'vue-treeselect__placeholder': true,
   'vue-treeselect-helper-zoom-effect-off': true,
-  'vue-treeselect-helper-hide': instance.value.hasValue || instance.value.searchQuery,
+  'vue-treeselect-helper-hide': instance.value.hasValue || instance.value.trigger.searchQuery,
 }))
 </script>

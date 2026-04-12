@@ -9,10 +9,11 @@ import type { TreeselectInstance } from '../src/types'
 import { TRESELECT_INSTANCE_KEY } from '../src/types'
 
 function createMockInstance(overrides: Partial<TreeselectInstance> = {}): TreeselectInstance {
-  const trigger = ref({ isFocused: false, searchQuery: '' })
   return {
-    isFocused: false,
-    searchQuery: '',
+    trigger: {
+      isFocused: false,
+      searchQuery: '',
+    },
     menuIsOpen: false,
     currentHighlightedOptionId: null,
     selectedNodes: [],
@@ -20,22 +21,40 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     single: true,
     multiple: false,
     hasBranchNodes: false,
+    checkedStateMap: {},
+    localSearch: {
+      active: false,
+      countMap: {},
+    },
+    showCount: false,
+    showCountOf: 'ALL_CHILDREN',
+    showCountOnSearchComputed: false,
+    noChildrenText: 'No sub-options.',
+    loadingText: 'Loading...',
+    retryTitle: 'Click to retry',
+    retryText: 'Retry?',
+    shouldFlattenOptions: false,
+    shouldExpand: vi.fn(),
+    shouldShowOptionInMenu: vi.fn(() => true),
+    setCurrentHighlightedOption: vi.fn(),
+    removeLastValue: vi.fn(),
     disabled: false,
+    searchable: true,
+    placeholder: 'Select...',
     clearable: true,
     allowClearingDisabled: false,
-    alwaysOpen: false,
     clearAllText: 'Clear all',
     clearValueText: 'Clear value',
-    placeholder: 'Select...',
-    trigger: trigger.value,
+    alwaysOpen: false,
     openOnFocus: false,
+    autoFocus: false,
     tabIndex: 0,
-    required: false,
     backspaceRemoves: true,
     deleteRemoves: true,
-    disableBranchNodes: false,
-    autoFocus: false,
-    searchable: true,
+    limit: Infinity,
+    limitText: vi.fn(),
+    valueFormat: 'id',
+    delimiter: ',',
     openMenu: vi.fn(),
     closeMenu: vi.fn(),
     clear: vi.fn(),
@@ -47,14 +66,54 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     toggleExpanded: vi.fn(),
     select: vi.fn(),
     loadChildrenOptions: vi.fn(),
-    removeLastValue: vi.fn(),
-    shouldExpand: vi.fn(() => false),
-    highlightLastOption: vi.fn(),
+    getInstanceId: vi.fn(() => 'test'),
+    getValue: vi.fn(),
+    initialize: vi.fn(),
+    buildForestState: vi.fn(),
+    shouldOptionBeIncludedInSearchResult: vi.fn(() => false),
+    traverseAllNodesByIndex: vi.fn(),
+    extractCheckedNodeIdsFromValue: vi.fn(() => []),
+    fixSelectedNodeIds: vi.fn(),
+    enhancedNormalizer: vi.fn((o) => o),
+    toggleMenu: vi.fn(),
+    resetHighlightedOptionWhenNecessary: vi.fn(),
     highlightFirstOption: vi.fn(),
     highlightPrevOption: vi.fn(),
     highlightNextOption: vi.fn(),
-    setCurrentHighlightedOption: vi.fn(),
+    highlightLastOption: vi.fn(),
+    visibleOptionIds: [],
+    setMenuGetter: vi.fn(),
+    setControlGetter: vi.fn(),
+    setInputGetter: vi.fn(),
+    handleLocalSearch: vi.fn(),
+    handleRemoteSearch: vi.fn(),
+    resetSearchQuery: vi.fn(),
+    loadRootOptions: vi.fn(),
+    callLoadOptionsProp: vi.fn(),
     handleMouseDown: vi.fn(),
+    setup: vi.fn(),
+    onMount: vi.fn(),
+    onUnmount: vi.fn(),
+    forest: {
+      normalizedOptions: [],
+    },
+    remoteSearch: {},
+    noOptionsText: 'No options available.',
+    noResultsText: 'No results found.',
+    searchPromptText: 'Type to search...',
+    getRemoteSearchEntry: vi.fn(() => ({ isLoaded: false, isLoading: false, loadingError: '', options: [] })),
+    openDirection: 'auto',
+    getMenu: vi.fn(() => null),
+    getControl: vi.fn(() => null),
+    menu: {
+      isOpen: false,
+      current: null,
+      lastScrollPosition: 0,
+      placement: 'bottom',
+    },
+    getValueContainer: vi.fn(() => null),
+    setValueContainerGetter: vi.fn(),
+    setupHandleClickOutside: vi.fn(),
     ...overrides,
   }
 }
@@ -175,7 +234,7 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
       const mockInstance = createMockInstance({
         placeholder: 'Select an option...',
         hasValue: false,
-        searchQuery: '',
+        trigger: { isFocused: false, searchQuery: '' },
       })
 
       const TestWrapper = {
@@ -198,7 +257,7 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
       const mockInstance = createMockInstance({
         placeholder: 'Select an option...',
         hasValue: true,
-        searchQuery: '',
+        trigger: { isFocused: false, searchQuery: '' },
       })
 
       const TestWrapper = {
@@ -220,7 +279,7 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
       const mockInstance = createMockInstance({
         placeholder: 'Select an option...',
         hasValue: false,
-        searchQuery: 'test',
+        trigger: { isFocused: false, searchQuery: 'test' },
       })
 
       const TestWrapper = {
@@ -329,7 +388,7 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
 
       await new Promise(resolve => setTimeout(resolve, 250))
 
-      expect(mockInstance.searchQuery).toBe('test')
+      expect(mockInstance.trigger.searchQuery).toBe('test')
     })
 
     it('should handle keyboard events - BACKSPACE removes last value', async () => {

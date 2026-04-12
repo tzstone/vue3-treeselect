@@ -20,7 +20,7 @@ const instance = computed(() => instanceRef.value)
 
 // Computed: Whether to show the value
 const shouldShowValue = computed(() => {
-  return instance.value.hasValue && !instance.value.searchQuery
+  return instance.value.hasValue && !instance.value.trigger.searchQuery
 })
 
 // Computed: Selected node (first for single-select mode)

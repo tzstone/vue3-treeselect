@@ -157,8 +157,6 @@ const {
 
 // Create instance object for provide/inject
 const instance = computed(() => ({
-  isFocused: trigger.isFocused,
-  searchQuery: trigger.searchQuery,
   menuIsOpen: menu.isOpen,
   currentHighlightedOptionId: menu.current,
   selectedNodes: selectedNodes.value,
@@ -200,10 +198,7 @@ const instance = computed(() => ({
   limitText: props.limitText ?? ((count: number) => `and ${count} more`),
   valueFormat: props.valueFormat ?? 'id',
   delimiter: props.delimiter ?? ',',
-  trigger: {
-    isFocused: trigger.isFocused,
-    searchQuery: trigger.searchQuery,
-  },
+  trigger: trigger,
   // Additional properties for Menu component
   maxHeight: props.maxHeight ?? 300,
   zIndex: props.zIndex ?? 999,

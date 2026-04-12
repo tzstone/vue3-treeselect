@@ -422,10 +422,6 @@ export interface TreeselectPublicMethods {
  * Combines public methods with internal state
  */
 export interface TreeselectInstance extends TreeselectPublicMethods {
-  /** Whether the control is focused */
-  isFocused: boolean
-  /** Current search query */
-  searchQuery: string
   /** Whether the menu is open */
   menuIsOpen: boolean
   /** Current highlighted option ID */
