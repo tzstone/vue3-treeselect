@@ -81,26 +81,26 @@ describe('Events', () => {
   })
 
   describe('input event', () => {
-    it('emits input event when value changes', async () => {
-      const onInput = vi.fn()
+    it('emits update:modelValue event when value changes', async () => {
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: [
             { id: 'a', label: 'Option A' }
           ],
-          onInput
+          'onUpdate:modelValue': onUpdateModelValue
         }
       })
 
-      await wrapper.setProps({ value: 'a' })
+      await wrapper.setProps({ modelValue: 'a' })
       await nextTick()
 
-      expect(onInput).toHaveBeenCalled()
+      expect(onUpdateModelValue).toHaveBeenCalled()
     })
 
-    it('emits input event with instanceId', async () => {
-      const onInput = vi.fn()
+    it('emits update:modelValue event with instanceId', async () => {
+      const onUpdateModelValue = vi.fn()
       const instanceId = 'test-instance'
 
       const wrapper = mount(Treeselect, {
@@ -109,14 +109,14 @@ describe('Events', () => {
             { id: 'a', label: 'Option A' }
           ],
           instanceId,
-          onInput
+          'onUpdate:modelValue': onUpdateModelValue
         }
       })
 
-      await wrapper.setProps({ value: 'a' })
+      await wrapper.setProps({ modelValue: 'a' })
       await nextTick()
 
-      expect(onInput.mock.calls[0][1]).toBe(instanceId)
+      expect(onUpdateModelValue.mock.calls[0][1]).toBe(instanceId)
     })
   })
 
@@ -167,7 +167,7 @@ describe('Events', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options,
-          value: 'a',
+          modelValue: 'a',
           instanceId,
           onDeselect
         }

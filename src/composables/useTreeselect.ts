@@ -421,7 +421,6 @@ export function useTreeselect(
   watch(internalValue, (newValue, oldValue) => {
     const hasChanged = quickDiff(newValue, oldValue)
     if (hasChanged) {
-      emit('input', getValue(), getInstanceId())
       emit('update:modelValue', getValue(), getInstanceId())
     }
   })
@@ -474,11 +473,12 @@ export function useTreeselect(
     }
   })
 
-  watch(() => props.value, () => {
+  // Watch modelValue (v-model) for changes
+  watch(() => props.modelValue, () => {
     const nodeIdsFromValue = forestComposable.extractCheckedNodeIdsFromValue()
     const hasChanged = quickDiff(nodeIdsFromValue, internalValue.value)
     if (hasChanged) forestComposable.fixSelectedNodeIds(nodeIdsFromValue)
-  })
+  }, { flush: 'post' })
 
   // =========================================================================
   // Lifecycle

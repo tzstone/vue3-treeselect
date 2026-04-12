@@ -92,7 +92,7 @@ describe('Selection Logic', () => {
 
     it('re-selects same node (clear + select) in single mode', async () => {
       const wrapper = mount(Treeselect, {
-        props: { options: flatOptions, value: 'a' },
+        props: { options: flatOptions, modelValue: 'a' },
       })
 
       await nextTick()
@@ -108,7 +108,7 @@ describe('Selection Logic', () => {
 
     it('clears value with clear()', async () => {
       const wrapper = mount(Treeselect, {
-        props: { options: flatOptions, value: 'a' },
+        props: { options: flatOptions, modelValue: 'a' },
       })
 
       await nextTick()
@@ -152,7 +152,7 @@ describe('Selection Logic', () => {
         props: {
           options: flatOptions,
           multiple: true,
-          value: ['a', 'b', 'c'],
+          modelValue: ['a', 'b', 'c'],
         },
       })
 
@@ -177,7 +177,7 @@ describe('Selection Logic', () => {
         props: {
           options: flatOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
         },
       })
 
@@ -194,7 +194,7 @@ describe('Selection Logic', () => {
         props: {
           options: flatOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
         },
       })
 
@@ -396,13 +396,13 @@ describe('Selection Logic', () => {
     ]
 
     it('BRANCH_PRIORITY: includes branch when all children selected', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
       const wrapper = mount(Treeselect, {
         props: {
           options: branchLeafOptions,
           multiple: true,
           valueConsistsOf: 'BRANCH_PRIORITY',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -413,7 +413,7 @@ describe('Selection Logic', () => {
       // With BRANCH_PRIORITY, selecting the branch should result in
       // the branch being in the value, not the individual leaves
       const emitted = wrapper.emitted()
-      expect(emitted['input']).toBeTruthy()
+      expect(emitted['update:modelValue']).toBeTruthy()
     })
 
     it('LEAF_PRIORITY: includes only leaf nodes', async () => {
@@ -512,13 +512,13 @@ describe('Selection Logic', () => {
     })
 
     it('LEVEL: sorts by tree depth', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
       const wrapper = mount(Treeselect, {
         props: {
           options: sortedOptions,
           multiple: true,
           sortValueBy: 'LEVEL',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -527,13 +527,13 @@ describe('Selection Logic', () => {
       wrapper.vm.select(wrapper.vm.getNode('top')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       const value = lastCall[0] as (string | number)[]
       expect(value.indexOf('top')).toBeLessThan(value.indexOf('leaf1'))
     })
 
     it('INDEX: sorts by original option index', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
       const wrapper = mount(Treeselect, {
         props: {
           options: [
@@ -543,7 +543,7 @@ describe('Selection Logic', () => {
           ],
           multiple: true,
           sortValueBy: 'INDEX',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -552,7 +552,7 @@ describe('Selection Logic', () => {
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall[0]).toEqual(['a', 'c'])
     })
   })
@@ -616,7 +616,7 @@ describe('Selection Logic', () => {
         props: {
           options: disabledOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
           allowClearingDisabled: false,
         },
       })
@@ -641,7 +641,7 @@ describe('Selection Logic', () => {
         props: {
           options: disabledOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
           allowClearingDisabled: true,
         },
       })
@@ -842,7 +842,7 @@ describe('Selection Logic', () => {
         props: {
           options: flatOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
         },
       })
 
@@ -856,13 +856,13 @@ describe('Selection Logic', () => {
       expect(wrapper.emitted('deselect')!.length).toBeGreaterThan(0)
     })
 
-    it('emits input event when value changes via selection', async () => {
-      const onInput = vi.fn()
+    it('emits update:modelValue event when value changes via selection', async () => {
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: flatOptions,
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -870,7 +870,7 @@ describe('Selection Logic', () => {
       wrapper.vm.select(nodeA)
       await nextTick()
 
-      expect(onInput).toHaveBeenCalled()
+      expect(onUpdateModelValue).toHaveBeenCalled()
     })
   })
 
@@ -894,6 +894,186 @@ describe('Selection Logic', () => {
       // No assertion on search query since we can't easily set it,
       // but verify the select still works
       expect(wrapper.vm.isSelected(nodeA)).toBe(true)
+    })
+  })
+
+  // =========================================================================
+  // Async value setting
+  // =========================================================================
+  describe('Async value setting', () => {
+    it('syncs value when set asynchronously after mount (single select)', async () => {
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: flatOptions,
+          modelValue: null,
+        },
+      })
+
+      await nextTick()
+
+      // Verify initial state - no selection
+      expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+
+      // Asynchronously set value (simulating setTimeout scenario)
+      await wrapper.setProps({ modelValue: 'a' })
+      await nextTick()
+
+      // Verify the node is now selected
+      const nodeA = wrapper.vm.getNode('a')
+      expect(nodeA).toBeTruthy()
+      expect(wrapper.vm.isSelected(nodeA!)).toBe(true)
+      expect(wrapper.vm.getSelectedNodes().map(n => n.id)).toContain('a')
+    })
+
+    it('syncs value when set asynchronously after mount (multi select)', async () => {
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: flatOptions,
+          multiple: true,
+          modelValue: [],
+        },
+      })
+
+      await nextTick()
+
+      // Verify initial state - no selection
+      expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+
+      // Asynchronously set value (simulating setTimeout scenario)
+      await wrapper.setProps({ modelValue: ['a', 'c'] })
+      await nextTick()
+
+      // Verify both nodes are now selected
+      const nodeA = wrapper.vm.getNode('a')
+      const nodeC = wrapper.vm.getNode('c')
+      expect(nodeA).toBeTruthy()
+      expect(nodeC).toBeTruthy()
+      expect(wrapper.vm.isSelected(nodeA!)).toBe(true)
+      expect(wrapper.vm.isSelected(nodeC!)).toBe(true)
+      expect(wrapper.vm.getSelectedNodes().map(n => n.id)).toEqual(['a', 'c'])
+    })
+
+    it('syncs nested value when set asynchronously', async () => {
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: nestedOptions,
+          multiple: true,
+          modelValue: [],
+        },
+      })
+
+      await nextTick()
+
+      // Asynchronously set value to a nested node
+      await wrapper.setProps({ modelValue: ['leaf1a'] })
+      await nextTick()
+
+      // Verify the nested node is selected
+      const leaf1a = wrapper.vm.getNode('leaf1a')
+      expect(leaf1a).toBeTruthy()
+      expect(wrapper.vm.isSelected(leaf1a!)).toBe(true)
+    })
+
+    it('handles options loaded then value set asynchronously', async () => {
+      // Simulates the common scenario: options load first, then value is set asynchronously
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: flatOptions,
+          modelValue: null,
+        },
+      })
+
+      await nextTick()
+
+      // Verify initial state - no selection
+      expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+
+      // Simulate async value change (like setTimeout)
+      const newValue = 'b'
+      await wrapper.setProps({ modelValue: newValue })
+      await nextTick()
+
+      // Value should now be synced from props
+      const nodeB = wrapper.vm.getNode('b')
+      expect(nodeB).toBeTruthy()
+      expect(wrapper.vm.isSelected(nodeB!)).toBe(true)
+      expect(wrapper.vm.getSelectedNodes().map(n => n.id)).toContain('b')
+    })
+
+    // This test reproduces the Basic.vue scenario: disableBranchNodes + nested options + async value
+    it('syncs value asynchronously with disableBranchNodes and nested options', async () => {
+      const nestedOptionsWithDisableBranch = [
+        {
+          id: 'fruits',
+          label: 'Fruits',
+          children: [
+            { id: 'apple', label: 'Apple' },
+            { id: 'grapes', label: 'Grapes' },
+          ],
+        },
+        {
+          id: 'vegetables',
+          label: 'Vegetables',
+          children: [
+            { id: 'corn', label: 'Corn' },
+          ],
+        },
+      ]
+
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: nestedOptionsWithDisableBranch,
+          modelValue: null,
+          disableBranchNodes: true,
+        },
+      })
+
+      await nextTick()
+
+      // Verify initial state - no selection
+      expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+
+      // Asynchronously set value (like setTimeout in Basic.vue)
+      await wrapper.setProps({ modelValue: 'apple' })
+      await nextTick()
+
+      // Verify the leaf node is selected
+      const appleNode = wrapper.vm.getNode('apple')
+      expect(appleNode).toBeTruthy()
+      expect(wrapper.vm.isSelected(appleNode!)).toBe(true)
+      expect(wrapper.vm.getSelectedNodes().map(n => n.id)).toContain('apple')
+    })
+
+    // Test using actual setTimeout to simulate Basic.vue exactly
+    it('handles setTimeout value change like Basic.vue demo', async () => {
+      vi.useFakeTimers()
+      
+      const wrapper = mount(Treeselect, {
+        props: {
+          options: nestedOptions,
+          modelValue: null,
+          disableBranchNodes: true,
+        },
+      })
+
+      await nextTick()
+      expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+
+      // Simulate the Basic.vue setTimeout
+      setTimeout(() => {
+        wrapper.setProps({ modelValue: 'leaf1a' })
+      }, 2000)
+
+      // Advance timers
+      vi.runAllTimers()
+      await nextTick()
+
+      // Verify selection
+      const leaf1a = wrapper.vm.getNode('leaf1a')
+      expect(leaf1a).toBeTruthy()
+      expect(wrapper.vm.isSelected(leaf1a!)).toBe(true)
+
+      vi.useRealTimers()
     })
   })
 })

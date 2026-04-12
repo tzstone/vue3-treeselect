@@ -544,40 +544,40 @@ describe('Props', () => {
   })
 
   describe('Value Props', () => {
-    it('accepts value prop as string', () => {
+    it('accepts modelValue prop as string', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: [
             { id: 'a', label: 'Option A' }
           ],
-          value: 'a'
+          modelValue: 'a'
         }
       })
 
       expect(wrapper.find('.vue-treeselect__single-value').text()).toBe('Option A')
     })
 
-    it('accepts value prop as number', () => {
+    it('accepts modelValue prop as number', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: [
             { id: 1, label: 'Option 1' }
           ],
-          value: 1
+          modelValue: 1
         }
       })
 
       expect(wrapper.find('.vue-treeselect__single-value').text()).toBe('Option 1')
     })
 
-    it('accepts value prop as array for multi-select', () => {
+    it('accepts modelValue prop as array for multi-select', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: [
             { id: 'a', label: 'Option A' },
             { id: 'b', label: 'Option B' }
           ],
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
           multiple: true
         }
       })
@@ -585,22 +585,22 @@ describe('Props', () => {
       expect(wrapper.exists()).toBe(true)
     })
 
-    it('accepts value prop as null', () => {
+    it('accepts modelValue prop as null', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: [],
-          value: null
+          modelValue: null
         }
       })
 
       expect(wrapper.find('.vue-treeselect__placeholder').exists()).toBe(true)
     })
 
-    it('accepts value prop as undefined', () => {
+    it('accepts modelValue prop as undefined', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: [],
-          value: undefined
+          modelValue: undefined
         }
       })
 

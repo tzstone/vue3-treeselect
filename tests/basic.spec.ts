@@ -45,7 +45,7 @@ describe('Basic Rendering', () => {
           { id: 'a', label: 'Option A' },
           { id: 'b', label: 'Option B' }
         ],
-        value: 'a'
+        modelValue: 'a'
       }
     })
 
@@ -59,7 +59,7 @@ describe('Basic Rendering', () => {
         options: [
           { id: 'a', label: 'Option A' }
         ],
-        value: 'a'
+        modelValue: 'a'
       }
     })
 
@@ -74,7 +74,7 @@ describe('Basic Rendering', () => {
           { id: 'a', label: 'Option A' },
           { id: 'b', label: 'Option B' }
         ],
-        value: ['a', 'b'],
+        modelValue: ['a', 'b'],
         multiple: true
       }
     })
@@ -88,7 +88,7 @@ describe('Basic Rendering', () => {
         options: [
           { id: 'a', label: 'Option A' }
         ],
-        value: 'a',
+        modelValue: 'a',
         clearable: true
       }
     })
@@ -102,7 +102,7 @@ describe('Basic Rendering', () => {
         options: [
           { id: 'a', label: 'Option A' }
         ],
-        value: 'a',
+        modelValue: 'a',
         clearable: false
       }
     })

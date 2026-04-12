@@ -23,33 +23,33 @@ const nestedOptions = [
 describe('Value Formatting', () => {
   describe('valueFormat: "id" (default)', () => {
     it('returns ID string for single select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           valueFormat: 'id',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(lastCall[0]).toBe('a')
     })
 
     it('returns array of IDs for multi select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           multiple: true,
           valueFormat: 'id',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -58,7 +58,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('b')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(lastCall[0]).toContain('a')
       expect(lastCall[0]).toContain('b')
@@ -67,34 +67,34 @@ describe('Value Formatting', () => {
 
   describe('valueFormat: "object"', () => {
     it('returns full object for single select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           valueFormat: 'object',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(lastCall[0].id).toBe('a')
       expect(lastCall[0].label).toBe('Option A')
     })
 
     it('returns array of full objects for multi select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           multiple: true,
           valueFormat: 'object',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -103,7 +103,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('b')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(Array.isArray(lastCall[0])).toBe(true)
 
@@ -115,7 +115,7 @@ describe('Value Formatting', () => {
 
   describe('delimiter', () => {
     it('does not affect value when joinValues is false (default)', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
@@ -123,7 +123,7 @@ describe('Value Formatting', () => {
           multiple: true,
           delimiter: '|',
           joinValues: false,
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -132,7 +132,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('b')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(Array.isArray(lastCall[0])).toBe(true)
     })
@@ -140,7 +140,7 @@ describe('Value Formatting', () => {
 
   describe('joinValues', () => {
     it('emits array of values even when joinValues is true (joinValues only affects hidden fields)', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
@@ -148,7 +148,7 @@ describe('Value Formatting', () => {
           multiple: true,
           delimiter: '|',
           joinValues: true,
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -157,7 +157,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('b')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
       expect(Array.isArray(lastCall[0])).toBe(true)
       expect(lastCall[0]).toContain('a')
@@ -179,14 +179,14 @@ describe('Value Formatting', () => {
 
   describe('valueConsistsOf with value formatting', () => {
     it('BRANCH_PRIORITY excludes leaf IDs when branch fully selected', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: nestedOptions,
           multiple: true,
           valueConsistsOf: 'BRANCH_PRIORITY',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -194,7 +194,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(branch)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
 
       const emittedValue = lastCall[0]
@@ -204,14 +204,14 @@ describe('Value Formatting', () => {
     })
 
     it('LEAF_PRIORITY excludes branch IDs', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: nestedOptions,
           multiple: true,
           valueConsistsOf: 'LEAF_PRIORITY',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -219,7 +219,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(branch)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
 
       const emittedValue = lastCall[0]
@@ -229,14 +229,14 @@ describe('Value Formatting', () => {
     })
 
     it('ALL includes all selected node IDs', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: nestedOptions,
           multiple: true,
           valueConsistsOf: 'ALL',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -244,7 +244,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(branch)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
 
       const emittedValue = lastCall[0]
@@ -254,14 +254,14 @@ describe('Value Formatting', () => {
     })
 
     it('ALL_WITH_INDETERMINATE includes indeterminate ancestors', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: nestedOptions,
           multiple: true,
           valueConsistsOf: 'ALL_WITH_INDETERMINATE',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -269,7 +269,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(leaf1)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall).toBeTruthy()
 
       const emittedValue = lastCall[0]
@@ -280,14 +280,14 @@ describe('Value Formatting', () => {
 
   describe('sortValueBy with value formatting', () => {
     it('ORDER_SELECTED preserves insertion order', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           multiple: true,
           sortValueBy: 'ORDER_SELECTED',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -296,19 +296,19 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall[0]).toEqual(['c', 'a'])
     })
 
     it('INDEX sorts by original option order', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           multiple: true,
           sortValueBy: 'INDEX',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -317,12 +317,12 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       expect(lastCall[0]).toEqual(['a', 'c'])
     })
 
     it('LEVEL sorts by tree depth (shallow first)', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const levelOptions = [
         {
@@ -341,7 +341,7 @@ describe('Value Formatting', () => {
           multiple: true,
           sortValueBy: 'LEVEL',
           valueConsistsOf: 'ALL',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
@@ -350,7 +350,7 @@ describe('Value Formatting', () => {
       wrapper.vm.select(wrapper.vm.getNode('top')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[onInput.mock.calls.length - 1]
+      const lastCall = onUpdateModelValue.mock.calls[onUpdateModelValue.mock.calls.length - 1]
       const value = lastCall[0] as (string | number)[]
       expect(value).toContain('top')
       expect(value).toContain('leaf')
@@ -373,38 +373,38 @@ describe('Value Formatting', () => {
     })
 
     it('returns string ID when valueFormat is "id" and single select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           valueFormat: 'id',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[0]
+      const lastCall = onUpdateModelValue.mock.calls[0]
       expect(lastCall[0]).toBe('a')
     })
 
     it('returns object when valueFormat is "object" and single select', async () => {
-      const onInput = vi.fn()
+      const onUpdateModelValue = vi.fn()
 
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
           valueFormat: 'object',
-          onInput,
+          'onUpdate:modelValue': onUpdateModelValue,
         },
       })
 
       wrapper.vm.select(wrapper.vm.getNode('a')!)
       await nextTick()
 
-      const lastCall = onInput.mock.calls[0]
+      const lastCall = onUpdateModelValue.mock.calls[0]
       expect(typeof lastCall[0]).toBe('object')
       expect(lastCall[0].id).toBe('a')
       expect(lastCall[0].label).toBe('Option A')
@@ -447,7 +447,7 @@ describe('Value Formatting', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
-          value: 'a',
+          modelValue: 'a',
         },
       })
 
@@ -461,7 +461,7 @@ describe('Value Formatting', () => {
       const wrapper = mount(Treeselect, {
         props: {
           options: simpleOptions,
-          value: 'a',
+          modelValue: 'a',
         },
       })
 
@@ -478,7 +478,7 @@ describe('Value Formatting', () => {
         props: {
           options: simpleOptions,
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
         },
       })
 
@@ -512,7 +512,7 @@ describe('Value Formatting', () => {
         props: {
           options: simpleOptions,
           name: 'test-field',
-          value: 'a',
+          modelValue: 'a',
         },
       })
 
@@ -528,7 +528,7 @@ describe('Value Formatting', () => {
           options: simpleOptions,
           name: 'test-field',
           multiple: true,
-          value: ['a', 'b'],
+          modelValue: ['a', 'b'],
         },
       })
 

@@ -158,15 +158,16 @@ export function useForest(
   // ===========================================================================
 
   function extractCheckedNodeIdsFromValue(): (string | number)[] {
-    if (props.value == null) return []
+    const value = props.modelValue
+    if (value == null) return []
 
     if (props.valueFormat === 'id') {
       return props.multiple
-        ? (props.value as (string | number)[]).slice()
-        : [props.value as string | number]
+        ? (value as (string | number)[]).slice()
+        : [value as string | number]
     }
 
-    return (props.multiple ? props.value as TreeselectOption[] : [props.value as TreeselectOption])
+    return (props.multiple ? value as TreeselectOption[] : [value as TreeselectOption])
       .map(node => enhancedNormalizer(node))
       .map(node => node.id)
   }
@@ -178,9 +179,10 @@ export function useForest(
       return defaultNode
     }
 
+    const value = props.modelValue
     const valueArray = props.multiple
-      ? Array.isArray(props.value) ? props.value as TreeselectOption[] : []
-      : props.value ? [props.value as TreeselectOption] : []
+      ? Array.isArray(value) ? value as TreeselectOption[] : []
+      : value ? [value as TreeselectOption] : []
     const matched = find(
       valueArray,
       node => node && enhancedNormalizer(node).id === id,
@@ -506,7 +508,7 @@ export function useForest(
       forest.nodeMap = createMap<TreeselectNode>()
       keepDataOfSelectedNodes(prevNodeMap)
       forest.normalizedOptions = normalize(null, options, prevNodeMap)
-      fixSelectedNodeIds(internalValue.value)
+      fixSelectedNodeIds(extractCheckedNodeIdsFromValue())
     } else {
       forest.normalizedOptions = []
     }

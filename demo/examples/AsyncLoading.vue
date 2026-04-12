@@ -67,10 +67,12 @@ async function loadOptions({
       }
       case "no-children": {
         parentNode.children = [];
+        isLoading.value = false;
         callback();
         break;
       }
       case "failure": {
+        isLoading.value = false;
         callback(new Error("Failed to load options: network error."));
         break;
       }

@@ -4,6 +4,10 @@ import { Treeselect } from "vue3-treeselect";
 import { simpleOptions } from "../data";
 
 const value = ref<string | null>(null);
+
+setTimeout(() => {
+  value.value = "apple";
+}, 2000);
 </script>
 
 <template>
@@ -16,6 +20,7 @@ const value = ref<string | null>(null);
     <div class="example-content">
       <Treeselect
         v-model="value"
+        :disableBranchNodes="true"
         :options="simpleOptions"
         placeholder="Select an option..."
       />

@@ -311,8 +311,8 @@ export interface TreeselectProps {
   sortValueBy?: SortValueBy
   /** Tab index of the control */
   tabIndex?: number
-  /** The value of the control */
-  value?: string | number | TreeselectOption | (string | number | TreeselectOption)[]
+  /** The value of the control (for v-model) */
+  modelValue?: string | number | TreeselectOption | (string | number | TreeselectOption)[]
   /** Which kind of nodes should be included in the value array in multi-select mode */
   valueConsistsOf?: ValueConsistsOf
   /** Format of value prop */
@@ -330,7 +330,7 @@ export interface TreeselectProps {
  */
 export interface TreeselectEmits {
   /** Emitted when the selected value changes */
-  (event: 'input', value: any, instanceId: string | number): void
+  (event: 'update:modelValue', value: any, instanceId: string | number): void
   /** Emitted when the search query changes */
   (event: 'search-change', searchQuery: string, instanceId: string | number): void
   /** Emitted when an option is selected */
