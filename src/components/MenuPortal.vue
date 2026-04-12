@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch, type ComputedRef } from 'vue'
+import { computed, inject, nextTick, onBeforeUnmount, ref, watch, type ComputedRef } from 'vue'
 import { TRESELECT_INSTANCE_KEY, type TreeselectInstance } from '../types'
-import { inject } from 'vue'
+import Menu from './Menu.vue'
 
 const instanceRef = inject<ComputedRef<TreeselectInstance>>(TRESELECT_INSTANCE_KEY)
 if (!instanceRef) throw new Error('TreeselectInstance not provided')
@@ -10,12 +10,11 @@ if (!instanceRef) throw new Error('TreeselectInstance not provided')
 const instance = computed(() => instanceRef.value)
 
 const portalTargetRef = ref<HTMLElement | null>(null)
-const controlRef = computed(() => (instance.value as any).control)
-// const menuRef = computed(() => (instance as any).menu)
 
 function getControl(): HTMLElement | null {
-  if (!controlRef.value) return null
-  return typeof controlRef.value.$el === 'object' ? controlRef.value.$el : controlRef.value
+  const getter = (instance.value as any).getControl
+  if (typeof getter === 'function') return getter()
+  return null
 }
 
 function updatePosition() {
@@ -23,26 +22,16 @@ function updatePosition() {
   const $control = getControl()
   if (!$portalTarget || !$control) return
 
-  // const controlRect = $control.getBoundingClientRect()
-  // const portalTargetRect = $portalTarget.getBoundingClientRect()
-  // const placement = (instance as any).menu?.placement || 'bottom'
-  // const offsetY = placement === 'bottom' ? controlRect.height : 0
+  const controlRect = $control.getBoundingClientRect()
+  const placement = (instance.value as any).menu?.placement || 'bottom'
 
-  // const left = Math.round(controlRect.left - portalTargetRect.left) + 'px'
-  // const top = Math.round(controlRect.top - portalTargetRect.top + offsetY) + 'px'
-
-  // Menu container will be available after Task 11
-  // const menuContainer = menuRef.value?.$el?.querySelector('.vue-treeselect__menu-container')
-  // if (!menuContainer) return
-
-  // Find the correct transform property for cross-browser support
-  // const transformVariations = ['transform', 'webkitTransform', 'MozTransform', 'msTransform']
-  // const transform = transformVariations.find(t => t in document.body.style)
-
-  // Will be used after Task 11 when Menu component is available
-  // if (transform) {
-  //   ;(menuContainer as any).style[transform] = `translate(${left}, ${top})`
-  // }
+  if (placement === 'bottom') {
+    $portalTarget.style.top = `${Math.round(controlRect.bottom)}px`
+  } else {
+    $portalTarget.style.top = `${Math.round(controlRect.top - $portalTarget.offsetHeight)}px`
+  }
+  $portalTarget.style.left = `${Math.round(controlRect.left)}px`
+  $portalTarget.style.width = `${Math.round(controlRect.width)}px`
 }
 
 // Setup event handlers
@@ -52,70 +41,72 @@ let resizeObserver: ResizeObserver | null = null
 
 watch(() => instance.value.menuIsOpen, (isOpen) => {
   if (isOpen) {
-    // Setup resize observer
-    const $portalTarget = portalTargetRef.value
-    if ($portalTarget) {
-      const $control = getControl()
-      if ($control) {
-        resizeObserver = new ResizeObserver(() => updatePosition())
-        resizeObserver.observe($control)
-        resizeObserver.observe($portalTarget)
-
-        // Setup scroll listeners
-        const handleResize = () => updatePosition()
-        const handleScroll = () => updatePosition()
-
-        window.addEventListener('resize', handleResize, { passive: true })
-        window.addEventListener('scroll', handleScroll, { passive: true })
-
-        cleanupResize = () => {
-          window.removeEventListener('resize', handleResize)
-          window.removeEventListener('scroll', handleScroll)
-        }
-      }
-    }
+    nextTick(updatePosition)
+    nextTick(() => {
+      setupListeners()
+    })
   } else {
-    // Cleanup
-    if (resizeObserver) {
-      resizeObserver.disconnect()
-      resizeObserver = null
-    }
-    if (cleanupResize) {
-      cleanupResize()
-      cleanupResize = null
-    }
-    if (cleanupScroll) {
-      cleanupScroll()
-      cleanupScroll = null
-    }
+    cleanupListeners()
   }
 })
 
-onBeforeUnmount(() => {
+watch(portalTargetRef, (el) => {
+  if (el && instance.value.menuIsOpen) {
+    nextTick(updatePosition)
+  }
+})
+
+function setupListeners() {
+  const $portalTarget = portalTargetRef.value
+  if (!$portalTarget) return
+  const $control = getControl()
+  if (!$control) return
+
+  resizeObserver = new ResizeObserver(() => updatePosition())
+  resizeObserver.observe($control)
+  resizeObserver.observe($portalTarget)
+
+  const handleResize = () => updatePosition()
+  const handleScroll = () => updatePosition()
+
+  window.addEventListener('resize', handleResize, { passive: true })
+  window.addEventListener('scroll', handleScroll, { passive: true })
+
+  cleanupResize = () => {
+    window.removeEventListener('resize', handleResize)
+    window.removeEventListener('scroll', handleScroll)
+  }
+}
+
+function cleanupListeners() {
   if (resizeObserver) {
     resizeObserver.disconnect()
+    resizeObserver = null
   }
   if (cleanupResize) {
     cleanupResize()
+    cleanupResize = null
   }
   if (cleanupScroll) {
     cleanupScroll()
+    cleanupScroll = null
   }
+}
+
+onBeforeUnmount(() => {
+  cleanupListeners()
 })
 </script>
 
 <template>
-  <div v-if="instance.appendToBody" ref="portalTargetRef" class="vue-treeselect__portal-target" />
+  <div v-if="instance.appendToBody" ref="portalTargetRef" class="vue-treeselect__portal-target">
+    <Menu />
+  </div>
 </template>
 
 <style scoped>
 .vue-treeselect__portal-target {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
   z-index: 9999;
 }
 </style>
