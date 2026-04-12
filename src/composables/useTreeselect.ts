@@ -343,6 +343,7 @@ export function useTreeselect(
       succeed: () => {
         const node = forestComposable.getNode(id)
         if (node) node.childrenStates.isLoaded = true
+        forestComposable.initialize()
       },
       fail: (err) => {
         const node = forestComposable.getNode(id)
