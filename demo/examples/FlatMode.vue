@@ -1,28 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
-import { flatOptions } from '../data'
-
-const value = ref<string | null>(null)
+import { ref } from "vue";
+import { Treeselect } from "vue3-treeselect";
+import { generateOptions } from "../utils";
+const value = ref<string | null>(null);
+const flatOptions = generateOptions(3);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Flat Mode</h2>
     <p class="example-description">
-      Set <code>flat</code> prop to <code>true</code> to display all options at the same level,
-      regardless of their position in the tree structure. This is useful for flat lists of options.
+      Set <code>flat</code> prop to <code>true</code> to display all options at
+      the same level, regardless of their position in the tree structure. This
+      is useful for flat lists of options.
     </p>
     <div class="example-content">
       <Treeselect
         v-model="value"
         :options="flatOptions"
+        :multiple="true"
         :flat="true"
         placeholder="Select an option..."
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -50,7 +52,7 @@ const value = ref<string | null>(null)
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 13px;
   color: #e83e8c;
 }

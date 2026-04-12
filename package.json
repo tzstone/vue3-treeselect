@@ -49,6 +49,7 @@
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/test-utils": "^2.4.6",
+    "entities": "^8.0.0",
     "jsdom": "^29.0.2",
     "sass": "^1.99.0",
     "typescript": "^6.0.2",
