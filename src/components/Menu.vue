@@ -71,7 +71,7 @@ const shouldShowAsyncSearchNoResultsTip = computed(
 
 // Computed: Should show no results tip (local search)
 const shouldShowLocalSearchNoResultsTip = computed(
-  () => instance.value!.localSearch.active && !instance.value!.localSearch.countMap
+  () => instance.value!.localSearch.active && instance.value!.localSearch.noResults
 )
 
 // Computed: Has no options

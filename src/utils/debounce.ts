@@ -11,7 +11,6 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   let timeout: ReturnType<typeof setTimeout> | null = null
   let lastArgs: Parameters<T> | undefined
   let lastThis: unknown | undefined
-  let lastCallTime: number | undefined
 
   const { leading = false } = options || {}
 
@@ -23,40 +22,24 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     }
   }
 
-  function shouldInvoke(): boolean {
-    return lastCallTime === undefined
-  }
-
   function debounced(this: unknown, ...args: Parameters<T>): void {
-    const isInvoking = shouldInvoke()
-
     lastArgs = args
     lastThis = this
-    lastCallTime = Date.now()
 
-    if (isInvoking) {
-      if (timeout === null) {
-        timeout = setTimeout(() => {
-          timeout = null
-        }, wait)
-        if (leading) {
-          invokeFunc()
-        }
-      } else {
-        clearTimeout(timeout)
-        timeout = setTimeout(() => {
-          timeout = null
-          invokeFunc()
-        }, wait)
-      }
-    } else if (timeout === null) {
-      timeout = setTimeout(() => {
-        timeout = null
-      }, wait)
-      if (leading) {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+    }
+
+    if (leading && timeout === null) {
+      invokeFunc()
+    }
+
+    timeout = setTimeout(() => {
+      timeout = null
+      if (!leading) {
         invokeFunc()
       }
-    }
+    }, wait)
   }
 
   debounced.cancel = function cancel(): void {
@@ -66,7 +49,6 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     }
     lastArgs = undefined
     lastThis = undefined
-    lastCallTime = undefined
   }
 
   return debounced as ((...args: Parameters<T>) => void) & { cancel: () => void }
