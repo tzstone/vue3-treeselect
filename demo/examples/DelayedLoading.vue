@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
+import { ref, onMounted } from "vue";
+import { Treeselect } from "vue3-treeselect";
 
-const value = ref<string | null>(null)
-const options = ref<any[]>([])
-const isLoading = ref(true)
+const value = ref<string | null>(null);
+const options = ref<any[]>([]);
+const isLoading = ref(true);
 
 onMounted(() => {
   setTimeout(() => {
     options.value = [
       {
-        id: 'category-1',
-        label: 'Category 1',
+        id: "category-1",
+        label: "Category 1",
         children: [
-          { id: 'item-1-1', label: 'Item 1-1' },
-          { id: 'item-1-2', label: 'Item 1-2' },
+          { id: "item-1-1", label: "Item 1-1" },
+          { id: "item-1-2", label: "Item 1-2" },
         ],
       },
       {
-        id: 'category-2',
-        label: 'Category 2',
+        id: "category-2",
+        label: "Category 2",
         children: [
-          { id: 'item-2-1', label: 'Item 2-1' },
-          { id: 'item-2-2', label: 'Item 2-2' },
+          { id: "item-2-1", label: "Item 2-1" },
+          { id: "item-2-2", label: "Item 2-2" },
         ],
       },
-    ]
-    isLoading.value = false
-  }, 800)
-})
+    ];
+    isLoading.value = false;
+  }, 2000);
+});
 </script>
 
 <template>
@@ -36,8 +36,8 @@ onMounted(() => {
     <h2 class="example-title">Delayed Loading</h2>
     <p class="example-description">
       Demonstrates lazy initial loading of options. The options are loaded after
-      a simulated 800ms delay when the component mounts. The component shows
-      a loading state until the data is ready. Useful for initial data fetching.
+      a simulated 800ms delay when the component mounts. The component shows a
+      loading state until the data is ready. Useful for initial data fetching.
     </p>
     <div class="example-content">
       <Treeselect
@@ -48,7 +48,7 @@ onMounted(() => {
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
