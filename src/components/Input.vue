@@ -28,8 +28,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick, inject, type ComputedRef } from 'vue'
-import { debounce, includes } from '../utils'
-import { MIN_INPUT_WIDTH, KEY_CODES, INPUT_DEBOUNCE_DELAY } from '../constants'
+import { includes } from '../utils'
+import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
 import { TRESELECT_INSTANCE_KEY, type TreeselectInstance } from '../types'
 
 const instanceRef = inject<ComputedRef<TreeselectInstance>>(TRESELECT_INSTANCE_KEY)
@@ -123,24 +123,14 @@ function onBlur() {
   instanceNonNull.value.closeMenu()
 }
 
-// Set up debounced callback
-const debouncedUpdateSearchQuery = debounce(
-  updateSearchQuery,
-  INPUT_DEBOUNCE_DELAY,
-)
-
 function onInput(evt: Event) {
   const target = evt.target as HTMLInputElement
   const value = target.value
 
   inputValue.value = value
 
-  if (value) {
-    debouncedUpdateSearchQuery()
-  } else {
-    debouncedUpdateSearchQuery.cancel()
-    updateSearchQuery()
-  }
+  // Update searchQuery immediately so placeholder disappears on first keystroke
+  updateSearchQuery()
 }
 
 function onKeyDown(evt: KeyboardEvent) {

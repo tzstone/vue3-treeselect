@@ -52,6 +52,12 @@ describe('Task 9: MultiValue Component', () => {
 
     const mockInstance = {
       selectedNodes: nodes,
+      hasValue: true,
+      searchable: true,
+      trigger: {
+        isFocused: false,
+        searchQuery: '',
+      },
       limit: Infinity,
       limitText: (count: number) => `and ${count} more`,
       getNode: vi.fn((id) => nodes.find(n => n.id === id) || null),
@@ -83,6 +89,12 @@ describe('Task 9: MultiValue Component', () => {
 
     const mockInstance = {
       selectedNodes: nodes,
+      hasValue: true,
+      searchable: true,
+      trigger: {
+        isFocused: false,
+        searchQuery: '',
+      },
       limit: 2,
       limitText: (count: number) => `and ${count} more`,
       getNode: vi.fn((id) => nodes.find(n => n.id === id) || null),
@@ -113,6 +125,12 @@ describe('Task 9: MultiValue Component', () => {
 
     const mockInstance = {
       selectedNodes: nodes,
+      hasValue: true,
+      searchable: true,
+      trigger: {
+        isFocused: false,
+        searchQuery: '',
+      },
       limit: 2,
       limitText: (count: number) => `and ${count} more`,
       getNode: vi.fn((id) => nodes.find(n => n.id === id) || null),

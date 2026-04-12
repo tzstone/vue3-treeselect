@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { inject, computed, type ComputedRef } from 'vue'
+import { inject, computed, ref, type ComputedRef } from 'vue'
 
 import type { TreeselectNode, TreeselectInstance } from '../types'
 import { TRESELECT_INSTANCE_KEY } from '../types'
 
-// Import MultiValueItem component
+// Import components
 import MultiValueItem from './MultiValueItem.vue'
+import Input from './Input.vue'
+import Placeholder from './Placeholder.vue'
 
 // Import SCSS styles
 // @ts-ignore - SCSS import
@@ -17,6 +19,7 @@ interface TreeselectInstanceExtended {
   limit: number
   limitText: (count: number) => string
   getNode: (nodeId: string | number) => TreeselectNode | null
+  searchable: boolean
   [key: string]: any
 }
 
@@ -60,6 +63,14 @@ const hasMore = computed(() => {
 const hiddenCount = computed(() => {
   return instance.value.selectedNodes.length - limit.value
 })
+
+// Input element reference for parent focusInput() access
+const inputRef = ref<HTMLInputElement | null>(null)
+
+// Expose inputRef to parent
+defineExpose({
+  inputRef
+})
 </script>
 
 <template>
@@ -84,5 +95,16 @@ const hiddenCount = computed(() => {
         {{ limitText(hiddenCount) }}
       </span>
     </div>
+
+    <Placeholder
+      v-if="!instance.hasValue"
+      key="placeholder"
+    />
+
+    <Input
+      v-if="instance.searchable"
+      ref="inputRef"
+      key="input"
+    />
   </transition-group>
 </template>

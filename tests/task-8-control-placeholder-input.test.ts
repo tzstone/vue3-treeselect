@@ -136,20 +136,17 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
         hasValue: false,
       })
 
-      const TestWrapper1 = {
-        template: '<Control />',
-        components: { Control },
-        setup() {
-          provide(TRESELECT_INSTANCE_KEY, computed(() => mockInstance))
-          return {}
+      const wrapper = mount(Control, {
+        global: {
+          provide: {
+            [TRESELECT_INSTANCE_KEY as symbol]: computed(() => mockInstance),
+          },
         },
-      }
-
-      const wrapper = mount(TestWrapper1)
+      })
 
       expect(wrapper.find('.vue-treeselect__control').exists()).toBe(true)
       expect(wrapper.find('.vue-treeselect__placeholder').exists()).toBe(true)
-      expect(wrapper.find('.vue-treeselect__input').exists()).toBe(false)
+      expect(wrapper.find('.vue-treeselect__input').exists()).toBe(true)
       expect(wrapper.find('.vue-treeselect__x-container').exists()).toBe(false)
     })
 
@@ -160,77 +157,71 @@ describe('Task 8: Control + Placeholder + Input Components', () => {
         hasValue: false,
       })
 
-      const TestWrapper = {
-        template: '<Control />',
-        components: { Control },
-        setup() {
-          provide(TRESELECT_INSTANCE_KEY, computed(() => mockInstance))
-          return {}
+      const wrapper = mount(Control, {
+        global: {
+          provide: {
+            [TRESELECT_INSTANCE_KEY as symbol]: computed(() => mockInstance),
+          },
         },
-      }
-
-      const wrapper = mount(TestWrapper)
+      })
 
       expect(wrapper.find('.vue-treeselect__control').exists()).toBe(true)
-      expect(wrapper.find('.vue-treeselect__placeholder').exists()).toBe(true)
+      expect(wrapper.find('.vue-treeselect__placeholder').exists()).toBe(false)
     })
 
     it('should show X button when clearable and hasValue', async () => {
       const mockInstance = createMockInstance({
+        single: true,
+        multiple: false,
         hasValue: true,
         selectedNodes: [
-          { id: '1', label: 'Option 1' } as any,
+          { id: '1', label: 'Option 1', isDisabled: false } as any,
         ],
       })
 
-      const TestWrapper = {
-        template: '<Control />',
-        components: { Control },
-        setup() {
-          provide(TRESELECT_INSTANCE_KEY, computed(() => mockInstance))
-          return {}
+      const wrapper = mount(Control, {
+        global: {
+          provide: {
+            [TRESELECT_INSTANCE_KEY as symbol]: computed(() => mockInstance),
+          },
         },
-      }
-
-      const wrapper = mount(TestWrapper)
+      })
 
       expect(wrapper.find('.vue-treeselect__x-container').exists()).toBe(true)
     })
 
     it('should show arrow button', async () => {
       const mockInstance = createMockInstance({
+        single: true,
+        multiple: false,
         menuIsOpen: false,
       })
 
-      const TestWrapper = {
-        template: '<Control />',
-        components: { Control },
-        setup() {
-          provide(TRESELECT_INSTANCE_KEY, computed(() => mockInstance))
-          return {}
+      const wrapper = mount(Control, {
+        global: {
+          provide: {
+            [TRESELECT_INSTANCE_KEY as symbol]: computed(() => mockInstance),
+          },
         },
-      }
-
-      const wrapper = mount(TestWrapper)
+      })
 
       expect(wrapper.find('.vue-treeselect__control-arrow-container').exists()).toBe(true)
     })
 
     it('should rotate arrow when menu is open', async () => {
       const mockInstance = createMockInstance({
+        single: true,
+        multiple: false,
         menuIsOpen: true,
       })
 
-      const TestWrapper = {
-        template: '<Control />',
-        components: { Control },
-        setup() {
-          provide(TRESELECT_INSTANCE_KEY, computed(() => mockInstance))
-          return {}
+      const wrapper = mount(Control, {
+        global: {
+          provide: {
+            [TRESELECT_INSTANCE_KEY as symbol]: computed(() => mockInstance),
+          },
         },
-      }
-
-      const wrapper = mount(TestWrapper)
+      })
 
       const arrow = wrapper.find('.vue-treeselect__control-arrow')
       expect(arrow.exists()).toBe(true)

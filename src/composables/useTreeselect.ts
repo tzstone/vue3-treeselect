@@ -7,6 +7,7 @@ import {
 
 import {
   createMap,
+  debounce,
   isPromise,
   quickDiff,
   includes,
@@ -16,6 +17,7 @@ import {
   LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   LEVEL, INDEX,
+  INPUT_DEBOUNCE_DELAY,
 } from '../constants'
 
 import type {
@@ -424,13 +426,38 @@ export function useTreeselect(
     rootOptionsStates.isLoaded = Array.isArray(props.options)
   }, { deep: true, immediate: true })
 
-  watch(() => trigger.searchQuery, () => {
-    if (props.async) {
-      searchComposable.handleRemoteSearch()
-    } else {
-      searchComposable.handleLocalSearch()
-    }
+  // Set up debounced search handlers to improve performance
+  const debouncedHandleLocalSearch = debounce(
+    () => searchComposable.handleLocalSearch(),
+    INPUT_DEBOUNCE_DELAY,
+  )
+
+  const debouncedHandleRemoteSearch = debounce(
+    () => searchComposable.handleRemoteSearch(),
+    INPUT_DEBOUNCE_DELAY,
+  )
+
+  watch(() => trigger.searchQuery, (newQuery) => {
+    // Emit search-change immediately for responsive UI
     emit('search-change', trigger.searchQuery, getInstanceId())
+
+    // Debounce the actual search filtering for performance
+    if (newQuery) {
+      if (props.async) {
+        debouncedHandleRemoteSearch()
+      } else {
+        debouncedHandleLocalSearch()
+      }
+    } else {
+      // Clear search immediately (no debounce) when emptying the input
+      debouncedHandleLocalSearch.cancel()
+      debouncedHandleRemoteSearch.cancel()
+      if (props.async) {
+        searchComposable.handleRemoteSearch()
+      } else {
+        searchComposable.handleLocalSearch()
+      }
+    }
   })
 
   watch(() => props.value, () => {
