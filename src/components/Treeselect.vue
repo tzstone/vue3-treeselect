@@ -159,6 +159,7 @@ const {
 const instance = computed(() => ({
   menuIsOpen: menu.isOpen,
   currentHighlightedOptionId: menu.current,
+  internalValue: _internalValue.value,
   selectedNodes: selectedNodes.value,
   hasValue: hasValue.value,
   single: single.value,
@@ -178,6 +179,7 @@ const instance = computed(() => ({
   setCurrentHighlightedOption: _setCurrentHighlightedOption,
   removeLastValue: _removeLastValue,
   disabled: props.disabled ?? false,
+  disableBranchNodes: props.disableBranchNodes ?? false,
   searchable: props.searchable ?? false,
   placeholder: props.placeholder ?? 'Select...',
   clearable: props.clearable ?? true,

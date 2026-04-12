@@ -100,7 +100,7 @@ function handleMouseDownOnArrow(evt: MouseEvent) {
 
 function handleMouseDownOnLabelContainer(evt: MouseEvent) {
   onLeftClick(() => {
-    if (props.node.isBranch && instance.value.single) {
+    if (props.node.isBranch && instance.value.disableBranchNodes) {
       instance.value.toggleExpanded(props.node)
     } else {
       instance.value.select(props.node)
@@ -169,7 +169,7 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
       >
         <!-- Checkbox -->
         <div
-          v-if="!instance.single && !(instance.single && node.isBranch)"
+          v-if="!instance.single && !(instance.disableBranchNodes && node.isBranch)"
           class="vue-treeselect__checkbox-container"
         >
           <span

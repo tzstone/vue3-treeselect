@@ -15,6 +15,7 @@ import '../styles/index.scss'
 
 // Extended instance type with limit-related properties
 interface TreeselectInstanceExtended {
+  internalValue: (string | number)[]
   selectedNodes: TreeselectNode[]
   limit: number
   limitText: (count: number) => string
@@ -45,9 +46,12 @@ const limitText = computed(() => {
     : ((count: number) => `and ${count} more`)
 })
 
-// Get visible nodes (up to limit)
+// Get visible nodes (up to limit) based on internalValue (filtered by valueConsistsOf)
 const visibleNodes = computed(() => {
-  const nodes = instance.value.selectedNodes
+  const nodeIds = instance.value.internalValue ?? instance.value.selectedNodes.map(n => n.id)
+  const nodes = nodeIds
+    .map(id => instance.value.getNode(id))
+    .filter((node): node is TreeselectNode => node != null)
   if (limit.value === Infinity) {
     return nodes
   }
@@ -56,12 +60,14 @@ const visibleNodes = computed(() => {
 
 // Check if there are more items beyond the limit
 const hasMore = computed(() => {
-  return limit.value !== Infinity && instance.value.selectedNodes.length > limit.value
+  const total = (instance.value.internalValue ?? instance.value.selectedNodes.map(n => n.id)).length
+  return limit.value !== Infinity && total > limit.value
 })
 
 // Count of hidden items
 const hiddenCount = computed(() => {
-  return instance.value.selectedNodes.length - limit.value
+  const total = (instance.value.internalValue ?? instance.value.selectedNodes.map(n => n.id)).length
+  return total - limit.value
 })
 
 // Input element reference for parent focusInput() access

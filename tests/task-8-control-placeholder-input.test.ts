@@ -17,6 +17,7 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     menuIsOpen: false,
     currentHighlightedOptionId: null,
     selectedNodes: [],
+    internalValue: [],
     hasValue: false,
     single: true,
     multiple: false,

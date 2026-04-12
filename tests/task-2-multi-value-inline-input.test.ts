@@ -16,6 +16,7 @@ function createMockInstance(overrides: Partial<TreeselectInstance> = {}): Treese
     menuIsOpen: false,
     currentHighlightedOptionId: null,
     selectedNodes: [],
+    internalValue: [],
     hasValue: false,
     single: false,
     multiple: true,
@@ -142,6 +143,7 @@ describe('Task 2: MultiValue inline Input layout', () => {
         hasValue: false,
         searchable: false,
         selectedNodes: [],
+        internalValue: [],
       })
 
       const TestWrapper = {
@@ -179,7 +181,9 @@ describe('Task 2: MultiValue inline Input layout', () => {
         hasValue: true,
         searchable: true,
         selectedNodes: mockNodes,
+        internalValue: ['1', '2', '3'],
         limit: 2, // Show first 2, limit-tip for 3rd
+        getNode: vi.fn((id: string) => mockNodes.find(n => n.id === id) || null),
       })
 
       const TestWrapper = {
@@ -223,6 +227,8 @@ describe('Task 2: MultiValue inline Input layout', () => {
         searchable: true,
         selectedNodes: mockNodes,
         limit: Infinity, // No limit
+        internalValue: ['1', '2'],
+        getNode: vi.fn((id: string) => mockNodes.find(n => n.id === id) || null),
       })
 
       const TestWrapper = {
@@ -258,6 +264,10 @@ describe('Task 2: MultiValue inline Input layout', () => {
         selectedNodes: [
           { id: '1', label: 'Option 1', isBranch: false, isLeaf: true } as TreeselectNode,
         ],
+        internalValue: ['1'],
+        getNode: vi.fn((id: string) => id === '1'
+          ? ({ id: '1', label: 'Option 1', isBranch: false, isLeaf: true } as TreeselectNode)
+          : null),
       })
 
       const TestWrapper = {
@@ -312,6 +322,7 @@ describe('Task 2: MultiValue inline Input layout', () => {
         selectedNodes: [
           { id: '1', label: 'Option 1', isBranch: false, isLeaf: true } as TreeselectNode,
         ],
+        internalValue: ['1'],
       })
 
       const TestWrapper = {
@@ -343,6 +354,8 @@ describe('Task 2: MultiValue inline Input layout', () => {
         hasValue: true,
         searchable: true,
         selectedNodes: mockNodes,
+        internalValue: ['1'],
+        getNode: vi.fn((id: string) => mockNodes.find(n => n.id === id) || null),
       })
 
       const TestWrapper = {

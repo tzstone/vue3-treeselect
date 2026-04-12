@@ -576,8 +576,8 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
   highlightNextOption?(): void
   /** Function that processes before clearing all input fields */
   beforeClearAll?: () => boolean | Promise<boolean>
-  /** Internal value array */
-  internalValue?: (string | number)[]
+  /** Internal value array (filtered by valueConsistsOf) */
+  internalValue: (string | number)[]
   /** Joins multiple values into a single form field with the delimiter */
   joinValues?: boolean
   /** The default set of options to show before the user starts searching */
