@@ -368,16 +368,23 @@ export function useTreeselect(
     if (props.disabled) return
 
     const controlEl = menuComposable.getControl()
+    let menuOpened = false
     if (controlEl && controlEl.contains(evt.target as Node)) {
       if (!menu.isOpen && (props.openOnClick || trigger.isFocused)) {
         menuComposable.openMenu()
+        menuComposable.focusInput()
+        menuOpened = true
       }
     }
 
-    if (selectionComposable.getBlurOnSelect()) {
-      menuComposable.blurInput()
-    } else {
-      menuComposable.focusInput()
+    // Only apply blurOnSelect logic if menu was not just opened
+    // If menu is opened, input should remain focused for keyboard navigation
+    if (!menuOpened) {
+      if (selectionComposable.getBlurOnSelect()) {
+        menuComposable.blurInput()
+      } else {
+        menuComposable.focusInput()
+      }
     }
 
     selectionComposable.resetFlags()

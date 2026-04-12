@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import { Treeselect } from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Keyboard Navigation</h2>
     <p class="example-description">
-      Demonstrates keyboard shortcuts for accessibility and power users. Try these
-      keyboard commands while the select is focused:
+      Demonstrates keyboard shortcuts for accessibility and power users. Try
+      these keyboard commands while the select is focused:
     </p>
     <div class="shortcuts">
       <div class="shortcut-item">
@@ -43,11 +43,12 @@ const value = ref<string | null>(null)
       <Treeselect
         v-model="value"
         :options="simpleOptions"
+        :multiple="true"
         placeholder="Focus and try keyboard navigation..."
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -96,7 +97,7 @@ const value = ref<string | null>(null)
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
   margin-right: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);

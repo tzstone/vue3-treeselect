@@ -134,7 +134,7 @@ function onInput(evt: Event) {
 }
 
 function onKeyDown(evt: KeyboardEvent) {
-  const key = evt.which || evt.keyCode
+  const key = evt.keyCode ?? evt.which ?? 0
 
   if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey)
     return
