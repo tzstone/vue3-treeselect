@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { Treeselect } from "vue3-treeselect";
+import Treeselect from "vue3-treeselect";
 
 const value = ref<string | null>(null);
 const options = ref<any[]>([]);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Treeselect } from 'vue3-treeselect'
+import Treeselect from 'vue3-treeselect'
 
 const sortMode = ref('ORDER_SELECTED')
 const value = ref<string[]>([])

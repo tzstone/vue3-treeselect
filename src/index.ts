@@ -6,6 +6,6 @@
  * @see https://github.com/riophae/vue-treeselect
  */
 
-export { default as Treeselect } from './components/Treeselect.vue'
+export { default } from './components/Treeselect.vue'
 
 export * from './types'
