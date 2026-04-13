@@ -116,8 +116,8 @@ async function handleMouseDownOnX(evt: MouseEvent) {
   };
 
   if (isPromise(result)) {
-    await result;
-    handler(true);
+    const resolved = await result;
+    handler(resolved as boolean);
   } else {
     setTimeout(() => handler(result), 0);
   }

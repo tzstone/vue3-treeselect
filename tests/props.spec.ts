@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import Treeselect from '../src/components/Treeselect.vue'
 
@@ -491,6 +492,89 @@ describe('Props', () => {
       })
 
       expect(wrapper.exists()).toBe(true)
+    })
+
+    describe('beforeClearAll interaction', () => {
+      const options = [
+        { id: 'a', label: 'Option A' },
+        { id: 'b', label: 'Option B' },
+      ]
+
+      async function mountWithBeforeClearAll(
+        beforeClearAll?: () => boolean | Promise<boolean>,
+      ) {
+        const wrapper = mount(Treeselect, {
+          props: {
+            options,
+            multiple: true,
+            modelValue: ['a'],
+            clearable: true,
+            ...(beforeClearAll ? { beforeClearAll } : {}),
+          },
+          attachTo: document.body,
+        })
+        await nextTick()
+        return wrapper
+      }
+
+      it('calls beforeClearAll when clicking x button', async () => {
+        const fn = vi.fn(() => true)
+        const wrapper = await mountWithBeforeClearAll(fn)
+
+        wrapper.find('.vue-treeselect__x-container').trigger('mousedown')
+        await nextTick()
+
+        expect(fn).toHaveBeenCalledTimes(1)
+        wrapper.unmount()
+      })
+
+      it('prevents clearing when beforeClearAll returns false', async () => {
+        const wrapper = await mountWithBeforeClearAll(() => false)
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+
+        wrapper.find('.vue-treeselect__x-container').trigger('mousedown')
+        await nextTick()
+
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+        wrapper.unmount()
+      })
+
+      it('allows clearing when beforeClearAll returns true', async () => {
+        const wrapper = await mountWithBeforeClearAll(() => true)
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+
+        wrapper.find('.vue-treeselect__x-container').trigger('mousedown')
+        await new Promise((r) => setTimeout(r, 10)) // setTimeout(0) in sync path
+
+        expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+        wrapper.unmount()
+      })
+
+      it('prevents clearing when beforeClearAll resolves to false (async)', async () => {
+        const wrapper = await mountWithBeforeClearAll(
+          () => Promise.resolve(false),
+        )
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+
+        wrapper.find('.vue-treeselect__x-container').trigger('mousedown')
+        await nextTick()
+
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+        wrapper.unmount()
+      })
+
+      it('allows clearing when beforeClearAll resolves to true (async)', async () => {
+        const wrapper = await mountWithBeforeClearAll(
+          () => Promise.resolve(true),
+        )
+        expect(wrapper.vm.getSelectedNodes().length).toBe(1)
+
+        wrapper.find('.vue-treeselect__x-container').trigger('mousedown')
+        await nextTick()
+
+        expect(wrapper.vm.getSelectedNodes().length).toBe(0)
+        wrapper.unmount()
+      })
     })
   })
 

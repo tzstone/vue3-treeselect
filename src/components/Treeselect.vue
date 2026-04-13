@@ -193,6 +193,7 @@ const instance = computed(() => ({
   allowClearingDisabled: props.allowClearingDisabled ?? false,
   clearAllText: props.clearAllText ?? 'Clear all',
   clearValueText: props.clearValueText ?? 'Clear value',
+  beforeClearAll: props.beforeClearAll,
   alwaysOpen: props.alwaysOpen ?? false,
   openOnFocus: props.openOnFocus ?? false,
   autoFocus: props.autoFocus ?? false,
