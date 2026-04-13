@@ -5,9 +5,9 @@
  * including props, events, slots, and public methods.
  */
 
-import type { InjectionKey, ComputedRef } from 'vue'
-import type { ForestState, LocalSearchState } from '../composables/useForest'
-import type { AsyncOptionsStates } from '../composables/useTreeselect'
+import type { InjectionKey, ComputedRef } from 'vue';
+import type { ForestState, LocalSearchState } from '../composables/useForest';
+import type { AsyncOptionsStates } from '../composables/useTreeselect';
 
 // =============================================================================
 // Core Option and Node Types
@@ -19,21 +19,21 @@ import type { AsyncOptionsStates } from '../composables/useTreeselect'
  */
 export interface TreeselectOption {
   /** Unique identifier for the option */
-  id: string | number
+  id: string | number;
   /** Display label for the option */
-  label: string
+  label: string;
   /** Child options (for branch nodes) */
-  children?: TreeselectOption[]
+  children?: TreeselectOption[];
   /** Whether this node should be expanded by default */
-  isDefaultExpanded?: boolean
+  isDefaultExpanded?: boolean;
   /** Whether this node is disabled and cannot be selected */
-  isDisabled?: boolean
+  isDisabled?: boolean;
   /** Whether this is a newly created option (for creating new options) */
-  isNew?: boolean
+  isNew?: boolean;
   /** Whether this is a leaf node (has no children) */
-  isLeaf?: boolean
+  isLeaf?: boolean;
   /** Any additional properties for custom data */
-  [key: string]: any
+  [key: string]: any;
 }
 
 /**
@@ -41,13 +41,13 @@ export interface TreeselectOption {
  */
 export interface CountMap {
   /** Count of all direct children */
-  ALL_CHILDREN: number
+  ALL_CHILDREN: number;
   /** Count of all descendants (children, grandchildren, etc.) */
-  ALL_DESCENDANTS: number
+  ALL_DESCENDANTS: number;
   /** Count of leaf children */
-  LEAF_CHILDREN: number
+  LEAF_CHILDREN: number;
   /** Count of leaf descendants */
-  LEAF_DESCENDANTS: number
+  LEAF_DESCENDANTS: number;
 }
 
 /**
@@ -55,11 +55,11 @@ export interface CountMap {
  */
 export interface ChildrenStates {
   /** Whether children have been loaded */
-  isLoaded: boolean
+  isLoaded: boolean;
   /** Whether children are currently being loaded */
-  isLoading: boolean
+  isLoading: boolean;
   /** Error message if loading failed */
-  loadingError: string
+  loadingError: string;
 }
 
 /**
@@ -68,67 +68,67 @@ export interface ChildrenStates {
  */
 export interface TreeselectNode {
   /** Unique identifier */
-  id: string | number
+  id: string | number;
   /** Display label */
-  label: string
+  label: string;
   /** Lowercase version of label for search matching */
-  lowerLabel: string
+  lowerLabel: string;
   /** Lowercase versions of all searchable properties */
-  lowerCased: Record<string, string>
+  lowerCased: Record<string, string>;
   /** Combined lowercase label for nested search */
-  nestedSearchLabel: string
+  nestedSearchLabel: string;
   /** Whether this is a leaf node (no children) */
-  isLeaf: boolean
+  isLeaf: boolean;
   /** Whether this is a branch node (has children) */
-  isBranch: boolean
+  isBranch: boolean;
   /** Whether this node is disabled */
-  isDisabled: boolean
+  isDisabled: boolean;
   /** Whether this is a newly created option */
-  isNew: boolean
+  isNew: boolean;
   /** Whether this node matches the current search query */
-  isMatched: boolean
+  isMatched: boolean;
   /** Whether this node is currently highlighted */
-  isHighlighted: boolean
+  isHighlighted: boolean;
   /** Whether this node has any matched descendants */
-  hasMatchedDescendants: boolean
+  hasMatchedDescendants: boolean;
   /** Whether this node has any disabled descendants */
-  hasDisabledDescendants: boolean
+  hasDisabledDescendants: boolean;
   /** Whether this node has children */
-  hasChildren: boolean
+  hasChildren: boolean;
   /** Whether this node's children have been loaded */
-  hasLoadedChildren: boolean
+  hasLoadedChildren: boolean;
   /** Whether this node is expanded */
-  isExpanded: boolean
+  isExpanded: boolean;
   /** Whether this node is expanded during search */
-  isExpandedOnSearch: boolean
+  isExpandedOnSearch: boolean;
   /** Whether to show all children during search */
-  showAllChildrenOnSearch: boolean
+  showAllChildrenOnSearch: boolean;
   /** Whether this node is currently loading */
-  isLoading: boolean
+  isLoading: boolean;
   /** Error message if loading failed */
-  loadingError: string
+  loadingError: string;
   /** Children loading state */
-  childrenStates: ChildrenStates
+  childrenStates: ChildrenStates;
   /** Count of children/descendants */
-  count: CountMap
+  count: CountMap;
   /** Whether this node is selected */
-  isSelected: boolean
+  isSelected: boolean;
   /** Hierarchy level (0 for root nodes) */
-  level: number
+  level: number;
   /** Index in the tree at each level */
-  index: number[]
+  index: number[];
   /** Ancestor nodes (parent, grandparent, etc.) */
-  ancestors: TreeselectNode[]
+  ancestors: TreeselectNode[];
   /** Parent node (null for root nodes) */
-  parentNode: TreeselectNode | null
+  parentNode: TreeselectNode | null;
   /** Whether this is a root node */
-  isRootNode: boolean
+  isRootNode: boolean;
   /** Whether this is a fallback node (not in actual options) */
-  isFallbackNode: boolean
+  isFallbackNode: boolean;
   /** Child nodes */
-  children: TreeselectNode[]
+  children: TreeselectNode[];
   /** Raw option data from user */
-  raw: TreeselectOption
+  raw: TreeselectOption;
 }
 
 /**
@@ -136,15 +136,15 @@ export interface TreeselectNode {
  */
 export interface TreeselectForestState {
   /** Normalized root options */
-  normalizedOptions: TreeselectNode[]
+  normalizedOptions: TreeselectNode[];
   /** Map of node ID to node for fast lookup */
-  nodeMap: Record<string | number, TreeselectNode>
+  nodeMap: Record<string | number, TreeselectNode>;
   /** Map of node ID to checked state (multi-select mode) */
-  checkedStateMap: Record<string | number, 'UNCHECKED' | 'INDETERMINATE' | 'CHECKED'>
+  checkedStateMap: Record<string | number, 'UNCHECKED' | 'INDETERMINATE' | 'CHECKED'>;
   /** List of selected node IDs */
-  selectedNodeIds: (string | number)[]
+  selectedNodeIds: (string | number)[];
   /** Map for fast checking if a node is selected */
-  selectedNodeMap: Record<string | number, boolean>
+  selectedNodeMap: Record<string | number, boolean>;
 }
 
 /**
@@ -152,13 +152,13 @@ export interface TreeselectForestState {
  */
 export interface RemoteSearchEntry {
   /** Whether search results are loaded */
-  isLoaded: boolean
+  isLoaded: boolean;
   /** Whether currently loading */
-  isLoading: boolean
+  isLoading: boolean;
   /** Error message if loading failed */
-  loadingError: string
+  loadingError: string;
   /** Options returned from search */
-  options: TreeselectOption[]
+  options: TreeselectOption[];
 }
 
 // =============================================================================
@@ -166,19 +166,23 @@ export interface RemoteSearchEntry {
 // =============================================================================
 
 /** ValueConsistsOf options */
-export type ValueConsistsOf = 'ALL' | 'BRANCH_PRIORITY' | 'LEAF_PRIORITY' | 'ALL_WITH_INDETERMINATE'
+export type ValueConsistsOf =
+  | 'ALL'
+  | 'BRANCH_PRIORITY'
+  | 'LEAF_PRIORITY'
+  | 'ALL_WITH_INDETERMINATE';
 
 /** ShowCountOf options */
-export type ShowCountOf = 'ALL_CHILDREN' | 'ALL_DESCENDANTS' | 'LEAF_CHILDREN' | 'LEAF_DESCENDANTS'
+export type ShowCountOf = 'ALL_CHILDREN' | 'ALL_DESCENDANTS' | 'LEAF_CHILDREN' | 'LEAF_DESCENDANTS';
 
 /** SortValueBy options */
-export type SortValueBy = 'ORDER_SELECTED' | 'LEVEL' | 'INDEX'
+export type SortValueBy = 'ORDER_SELECTED' | 'LEVEL' | 'INDEX';
 
 /** OpenDirection options */
-export type OpenDirection = 'auto' | 'top' | 'bottom' | 'above' | 'below'
+export type OpenDirection = 'auto' | 'top' | 'bottom' | 'above' | 'below';
 
 /** ValueFormat options */
-export type ValueFormat = 'id' | 'object'
+export type ValueFormat = 'id' | 'object';
 
 // =============================================================================
 // Props
@@ -189,136 +193,136 @@ export type ValueFormat = 'id' | 'object'
  */
 export interface TreeselectProps {
   /** Whether to allow resetting value even if there are disabled selected nodes */
-  allowClearingDisabled?: boolean
+  allowClearingDisabled?: boolean;
   /** When an ancestor node is selected/deselected, whether its disabled descendants should be selected/deselected */
-  allowSelectingDisabledDescendants?: boolean
+  allowSelectingDisabledDescendants?: boolean;
   /** Whether the menu should be always open */
-  alwaysOpen?: boolean
+  alwaysOpen?: boolean;
   /** Append the menu to <body />? */
-  appendToBody?: boolean
+  appendToBody?: boolean;
   /** Whether to enable async search mode */
-  async?: boolean
+  async?: boolean;
   /** Automatically focus the component on mount? */
-  autoFocus?: boolean
+  autoFocus?: boolean;
   /** Automatically load root options on mount */
-  autoLoadRootOptions?: boolean
+  autoLoadRootOptions?: boolean;
   /** When user deselects a node, automatically deselect its ancestors (flat mode only) */
-  autoDeselectAncestors?: boolean
+  autoDeselectAncestors?: boolean;
   /** When user deselects a node, automatically deselect its descendants (flat mode only) */
-  autoDeselectDescendants?: boolean
+  autoDeselectDescendants?: boolean;
   /** When user selects a node, automatically select its ancestors (flat mode only) */
-  autoSelectAncestors?: boolean
+  autoSelectAncestors?: boolean;
   /** When user selects a node, automatically select its descendants (flat mode only) */
-  autoSelectDescendants?: boolean
+  autoSelectDescendants?: boolean;
   /** Whether pressing backspace key removes the last item if there is no text input */
-  backspaceRemoves?: boolean
+  backspaceRemoves?: boolean;
   /** Function that processes before clearing all input fields. Return false to prevent clearing */
-  beforeClearAll?: () => boolean | Promise<boolean>
+  beforeClearAll?: () => boolean | Promise<boolean>;
   /** Show branch nodes before leaf nodes? */
-  branchNodesFirst?: boolean
+  branchNodesFirst?: boolean;
   /** Should cache results of every search request? */
-  cacheOptions?: boolean
+  cacheOptions?: boolean;
   /** Show an "×" button that resets value? */
-  clearable?: boolean
+  clearable?: boolean;
   /** Title for the "×" button when multiple: true */
-  clearAllText?: string
+  clearAllText?: string;
   /** Whether to clear the search input after selecting (multi-select mode) */
-  clearOnSelect?: boolean
+  clearOnSelect?: boolean;
   /** Title for the "×" button */
-  clearValueText?: string
+  clearValueText?: string;
   /** Whether to close the menu after selecting an option (multi-select mode) */
-  closeOnSelect?: boolean
+  closeOnSelect?: boolean;
   /** How many levels of branch nodes should be automatically expanded when loaded */
-  defaultExpandLevel?: number
+  defaultExpandLevel?: number;
   /** The default set of options to show before the user starts searching (async search mode) */
-  defaultOptions?: boolean | TreeselectOption[]
+  defaultOptions?: boolean | TreeselectOption[];
   /** Whether pressing delete key removes the last item if there is no text input */
-  deleteRemoves?: boolean
+  deleteRemoves?: boolean;
   /** Delimiter to use to join multiple values for the hidden field value */
-  delimiter?: string
+  delimiter?: string;
   /** Only show the nodes that match the search value directly, excluding its ancestors */
-  flattenSearchResults?: boolean
+  flattenSearchResults?: boolean;
   /** Prevent branch nodes from being selected? */
-  disableBranchNodes?: boolean
+  disableBranchNodes?: boolean;
   /** Disable the control? */
-  disabled?: boolean
+  disabled?: boolean;
   /** Disable the fuzzy matching functionality? */
-  disableFuzzyMatching?: boolean
+  disableFuzzyMatching?: boolean;
   /** Whether to enable flat mode */
-  flat?: boolean
+  flat?: boolean;
   /** Will be passed with all events as the last param for identifying events origin */
-  instanceId?: string | number
+  instanceId?: string | number;
   /** Joins multiple values into a single form field with the delimiter (legacy mode) */
-  joinValues?: boolean
+  joinValues?: boolean;
   /** Limit the display of selected options */
-  limit?: number
+  limit?: number;
   /** Function that processes the message shown when selected elements pass the defined limit */
-  limitText?: (count: number) => string
+  limitText?: (count: number) => string;
   /** Text displayed when loading options */
-  loadingText?: string
+  loadingText?: string;
   /** Used for dynamically loading options */
   loadOptions?: (args: {
-    action: string
-    callback: (err?: Error | string, result?: unknown) => void
-    parentNode?: TreeselectNode
-    instanceId: string | number
-  }) => void
+    action: string;
+    callback: (err?: Error | string, result?: unknown) => void;
+    parentNode?: TreeselectNode;
+    instanceId: string | number;
+  }) => void;
   /** Which node properties to filter on */
-  matchKeys?: string[]
+  matchKeys?: string[];
   /** Sets maxHeight style value of the menu */
-  maxHeight?: number
+  maxHeight?: number;
   /** Set true to allow selecting multiple options (multi-select mode) */
-  multiple?: boolean
+  multiple?: boolean;
   /** Generates a hidden <input /> tag with this field name for html forms */
-  name?: string
+  name?: string;
   /** Text displayed when a branch node has no children */
-  noChildrenText?: string
+  noChildrenText?: string;
   /** Text displayed when there are no available options */
-  noOptionsText?: string
+  noOptionsText?: string;
   /** Text displayed when there are no matching search results */
-  noResultsText?: string
+  noResultsText?: string;
   /** Used for normalizing source data */
-  normalizer?: (node: TreeselectOption, instanceId: string | number) => TreeselectOption
+  normalizer?: (node: TreeselectOption, instanceId: string | number) => TreeselectOption;
   /** Which direction to open the menu */
-  openDirection?: OpenDirection
+  openDirection?: OpenDirection;
   /** Whether to automatically open the menu when the control is clicked */
-  openOnClick?: boolean
+  openOnClick?: boolean;
   /** Whether to automatically open the menu when the control is focused */
-  openOnFocus?: boolean
+  openOnFocus?: boolean;
   /** Array of available options */
-  options?: TreeselectOption[]
+  options?: TreeselectOption[];
   /** Field placeholder, displayed when there's no value */
-  placeholder?: string
+  placeholder?: string;
   /** Applies HTML5 required attribute when needed */
-  required?: boolean
+  required?: boolean;
   /** Text displayed asking user whether to retry loading children options */
-  retryText?: string
+  retryText?: string;
   /** Title for the retry button */
-  retryTitle?: string
+  retryTitle?: string;
   /** Enable searching feature? */
-  searchable?: boolean
+  searchable?: boolean;
   /** Search in ancestor nodes too */
-  searchNested?: boolean
+  searchNested?: boolean;
   /** Text tip to prompt for async search */
-  searchPromptText?: string
+  searchPromptText?: string;
   /** Whether to show a children count next to the label of each branch node */
-  showCount?: boolean
+  showCount?: boolean;
   /** Used in conjunction with showCount to specify which type of count number should be displayed */
-  showCountOf?: ShowCountOf
+  showCountOf?: ShowCountOf;
   /** Whether to show children count when searching */
-  showCountOnSearch?: boolean | null
+  showCountOnSearch?: boolean | null;
   /** In which order the selected options should be displayed in trigger & sorted in value array */
-  sortValueBy?: SortValueBy
+  sortValueBy?: SortValueBy;
   /** Tab index of the control */
-  tabIndex?: number
+  tabIndex?: number;
   /** The value of the control (for v-model) */
-  modelValue?: string | number | TreeselectOption | (string | number | TreeselectOption)[]
+  modelValue?: string | number | TreeselectOption | (string | number | TreeselectOption)[];
   /** Which kind of nodes should be included in the value array in multi-select mode */
-  valueConsistsOf?: ValueConsistsOf
+  valueConsistsOf?: ValueConsistsOf;
   /** Format of value prop */
-  valueFormat?: ValueFormat
+  valueFormat?: ValueFormat;
   /** z-index of the menu */
-  zIndex?: number | string
+  zIndex?: number | string;
 }
 
 // =============================================================================
@@ -330,17 +334,17 @@ export interface TreeselectProps {
  */
 export interface TreeselectEmits {
   /** Emitted when the selected value changes */
-  (event: 'update:modelValue', value: any, instanceId: string | number): void
+  (event: 'update:modelValue', value: any, instanceId: string | number): void;
   /** Emitted when the search query changes */
-  (event: 'search-change', searchQuery: string, instanceId: string | number): void
+  (event: 'search-change', searchQuery: string, instanceId: string | number): void;
   /** Emitted when an option is selected */
-  (event: 'select', node: TreeselectOption, instanceId: string | number): void
+  (event: 'select', node: TreeselectOption, instanceId: string | number): void;
   /** Emitted when an option is deselected */
-  (event: 'deselect', node: TreeselectOption, instanceId: string | number): void
+  (event: 'deselect', node: TreeselectOption, instanceId: string | number): void;
   /** Emitted when the menu opens */
-  (event: 'open', instanceId: string | number): void
+  (event: 'open', instanceId: string | number): void;
   /** Emitted when the menu closes */
-  (event: 'close', value: any, instanceId: string | number): void
+  (event: 'close', value: any, instanceId: string | number): void;
 }
 
 // =============================================================================
@@ -352,15 +356,15 @@ export interface TreeselectEmits {
  */
 export interface OptionLabelSlotProps {
   /** The current option node */
-  node: TreeselectNode
+  node: TreeselectNode;
   /** Whether to show the count */
-  shouldShowCount: boolean
+  shouldShowCount: boolean;
   /** The count number */
-  count: number
+  count: number;
   /** CSS class name for the label element */
-  labelClassName: string
+  labelClassName: string;
   /** CSS class name for the count element */
-  countClassName: string
+  countClassName: string;
 }
 
 /**
@@ -368,7 +372,7 @@ export interface OptionLabelSlotProps {
  */
 export interface ValueLabelSlotProps {
   /** The selected node */
-  node: TreeselectNode
+  node: TreeselectNode;
 }
 
 /**
@@ -376,13 +380,13 @@ export interface ValueLabelSlotProps {
  */
 export interface TreeselectSlots {
   /** Slot before the option list */
-  'before-list': () => any
+  'before-list': () => any;
   /** Slot after the option list */
-  'after-list': () => any
+  'after-list': () => any;
   /** Custom label renderer for each option */
-  'option-label': (props: OptionLabelSlotProps) => any
+  'option-label': (props: OptionLabelSlotProps) => any;
   /** Custom label renderer for selected values */
-  'value-label': (props: ValueLabelSlotProps) => any
+  'value-label': (props: ValueLabelSlotProps) => any;
 }
 
 // =============================================================================
@@ -394,29 +398,29 @@ export interface TreeselectSlots {
  */
 export interface TreeselectPublicMethods {
   /** Opens the menu */
-  openMenu(): void
+  openMenu(): void;
   /** Closes the menu */
-  closeMenu(): void
+  closeMenu(): void;
   /** Clears the selected value */
-  clear(): void
+  clear(): void;
   /** Focuses the input field */
-  focusInput(): void
+  focusInput(): void;
   /** Blurs the input field */
-  blurInput(): void
+  blurInput(): void;
   /** Gets the selected node(s) */
-  getSelectedNodes(): TreeselectNode[]
+  getSelectedNodes(): TreeselectNode[];
   /** Gets a node by ID */
-  getNode(nodeId: string | number): TreeselectNode | null
+  getNode(nodeId: string | number): TreeselectNode | null;
   /** Checks if a node is selected */
-  isSelected(node: TreeselectNode): boolean
+  isSelected(node: TreeselectNode): boolean;
   /** Toggles menu open/close */
-  toggleMenu(): void
+  toggleMenu(): void;
   /** Toggles the expanded state of a node */
-  toggleExpanded(node: TreeselectNode): void
+  toggleExpanded(node: TreeselectNode): void;
   /** Selects a node */
-  select(node: TreeselectNode): void
+  select(node: TreeselectNode): void;
   /** Loads children options for a node */
-  loadChildrenOptions(node: TreeselectNode): void
+  loadChildrenOptions(node: TreeselectNode): void;
 }
 
 /**
@@ -425,174 +429,183 @@ export interface TreeselectPublicMethods {
  */
 export interface TreeselectInstance extends TreeselectPublicMethods {
   /** Whether the menu is open */
-  menuIsOpen: boolean
+  menuIsOpen: boolean;
   /** Current highlighted option ID */
-  currentHighlightedOptionId: string | number | null
+  currentHighlightedOptionId: string | number | null;
   /** Selected nodes */
-  selectedNodes: TreeselectNode[]
+  selectedNodes: TreeselectNode[];
   /** Whether any option has been selected */
-  hasValue: boolean
+  hasValue: boolean;
   /** Whether in single-select mode */
-  single: boolean
+  single: boolean;
   /** Whether in multi-select mode */
-  multiple: boolean
+  multiple: boolean;
   /** Whether any branch node exists */
-  hasBranchNodes: boolean
+  hasBranchNodes: boolean;
   /** Local search state */
-  localSearch: LocalSearchState
+  localSearch: LocalSearchState;
   /** Whether to show children count next to the label */
-  showCount: boolean
+  showCount: boolean;
   /** Which type of count to display */
-  showCountOf: ShowCountOf
+  showCountOf: ShowCountOf;
   /** Whether to show children count when searching */
-  showCountOnSearchComputed: boolean
+  showCountOnSearchComputed: boolean;
   /** Text displayed when a branch node has no children */
-  noChildrenText: string
+  noChildrenText: string;
   /** Text displayed when loading options */
-  loadingText: string
+  loadingText: string;
   /** Title for the retry button */
-  retryTitle: string
+  retryTitle: string;
   /** Text displayed asking user whether to retry loading children options */
-  retryText: string
+  retryText: string;
   /** Whether to flatten search results */
-  shouldFlattenOptions: boolean
+  shouldFlattenOptions: boolean;
   /** Check if a node should be expanded */
-  shouldExpand(node: TreeselectNode): boolean
+  shouldExpand(node: TreeselectNode): boolean;
   /** Check if an option should be shown in the menu */
-  shouldShowOptionInMenu(node: TreeselectNode): boolean
+  shouldShowOptionInMenu(node: TreeselectNode): boolean;
   /** Set the current highlighted option */
-  setCurrentHighlightedOption(node: TreeselectNode, shouldAutoScroll?: boolean): void
+  setCurrentHighlightedOption(node: TreeselectNode, shouldAutoScroll?: boolean): void;
   /** Remove the last selected value */
-  removeLastValue(): void
+  removeLastValue(): void;
   /** Whether the control is disabled */
-  disabled: boolean
+  disabled: boolean;
   /** Whether searching is enabled */
-  searchable: boolean
+  searchable: boolean;
   /** Placeholder text */
-  placeholder: string
+  placeholder: string;
   /** Whether to automatically open the menu when the control is focused */
-  openOnFocus: boolean
+  openOnFocus: boolean;
   /** Automatically focus the component on mount */
-  autoFocus: boolean
+  autoFocus: boolean;
   /** Tab index of the control */
-  tabIndex: number
+  tabIndex: number;
   /** Whether pressing backspace key removes the last item if there is no text input */
-  backspaceRemoves: boolean
+  backspaceRemoves: boolean;
   /** Whether pressing delete key removes the last item if there is no text input */
-  deleteRemoves: boolean
+  deleteRemoves: boolean;
   /** Show an "×" button that resets value */
-  clearable: boolean
+  clearable: boolean;
   /** Whether to allow resetting value even if there are disabled selected nodes */
-  allowClearingDisabled: boolean
+  allowClearingDisabled: boolean;
   /** Whether the menu should be always open */
-  alwaysOpen: boolean
+  alwaysOpen: boolean;
   /** Title for the "×" button when multiple: true */
-  clearAllText: string
+  clearAllText: string;
   /** Title for the "×" button */
-  clearValueText: string
+  clearValueText: string;
   /** Limit the display of selected options */
-  limit: number
+  limit: number;
   /** Function that processes the message shown when selected elements pass the defined limit */
-  limitText: (count: number) => string
+  limitText: (count: number) => string;
   /** Generates a hidden <input /> tag with this field name for html forms */
-  name?: string
+  name?: string;
   /** The value of the control */
-  value?: string | number | (string | number)[]
+  value?: string | number | (string | number)[];
   /** Format of value prop */
-  valueFormat: 'id' | 'object'
+  valueFormat: 'id' | 'object';
   /** Delimiter to use to join multiple values for the hidden field value */
-  delimiter: string
+  delimiter: string;
   /** Maximum height of the menu in pixels */
-  maxHeight: number
+  maxHeight: number;
   /** z-index of the menu */
-  zIndex: number | string
+  zIndex: number | string;
   /** Whether to append menu to body */
-  appendToBody: boolean
+  appendToBody: boolean;
   /** Whether using async search mode */
-  async: boolean
+  async: boolean;
   /** Root options loading state */
-  rootOptionsStates: AsyncOptionsStates
+  rootOptionsStates: AsyncOptionsStates;
   /** Forest state with normalized options */
-  forest: ForestState
+  forest: ForestState;
   /** Remote search entries cache */
-  remoteSearch: Record<string, {
-    /** Whether search results have been loaded */
-    isLoaded: boolean
-    /** Whether search is currently loading */
-    isLoading: boolean
-    /** Error message if search failed */
-    loadingError: string
-    /** Search result options */
-    options: TreeselectOption[]
-  }>
+  remoteSearch: Record<
+    string,
+    {
+      /** Whether search results have been loaded */
+      isLoaded: boolean;
+      /** Whether search is currently loading */
+      isLoading: boolean;
+      /** Error message if search failed */
+      loadingError: string;
+      /** Search result options */
+      options: TreeselectOption[];
+    }
+  >;
   /** Text displayed when there are no options available */
-  noOptionsText: string
+  noOptionsText: string;
   /** Text displayed when there are no search results */
-  noResultsText: string
+  noResultsText: string;
   /** Text displayed to prompt for async search */
-  searchPromptText: string
+  searchPromptText: string;
   /** Gets the remote search entry for current query */
   getRemoteSearchEntry(): {
-    isLoaded: boolean
-    isLoading: boolean
-    loadingError: string
-    options: TreeselectOption[]
-  }
+    isLoaded: boolean;
+    isLoading: boolean;
+    loadingError: string;
+    options: TreeselectOption[];
+  };
   /** Loads root options asynchronously */
-  loadRootOptions(): void
+  loadRootOptions(): void;
   /** Handles remote search */
-  handleRemoteSearch(): void
+  handleRemoteSearch(): void;
   /** Handles mouse down events */
-  handleMouseDown(evt: MouseEvent): void
+  handleMouseDown(evt: MouseEvent): void;
   /** Menu placement (top/bottom) */
   menu: {
     /** Current placement */
-    placement: string
-  }
+    placement: string;
+  };
   /** Direction in which the menu should open */
-  openDirection: 'auto' | 'top' | 'bottom' | 'above' | 'below'
+  openDirection: 'auto' | 'top' | 'bottom' | 'above' | 'below';
   /** Gets the menu DOM element */
-  getMenu(): HTMLElement | null
+  getMenu(): HTMLElement | null;
   /** Gets the control DOM element */
-  getControl(): HTMLElement | null
+  getControl(): HTMLElement | null;
   /** Applies HTML5 required attribute when needed */
-  required?: boolean
+  required?: boolean;
   /** Prevent branch nodes from being selected */
-  disableBranchNodes?: boolean
+  disableBranchNodes?: boolean;
   /** Trigger control state */
   trigger: {
     /** Whether the control is focused */
-    isFocused: boolean
+    isFocused: boolean;
     /** Current search query */
-    searchQuery: string
-  }
+    searchQuery: string;
+  };
   /** Highlights the last option in the menu */
-  highlightLastOption?(): void
+  highlightLastOption?(): void;
   /** Highlights the first option in the menu */
-  highlightFirstOption?(): void
+  highlightFirstOption?(): void;
   /** Highlights the previous option in the menu */
-  highlightPrevOption?(): void
+  highlightPrevOption?(): void;
   /** Highlights the next option in the menu */
-  highlightNextOption?(): void
+  highlightNextOption?(): void;
   /** Function that processes before clearing all input fields */
-  beforeClearAll?: () => boolean | Promise<boolean>
+  beforeClearAll?: () => boolean | Promise<boolean>;
   /** Internal value array (filtered by valueConsistsOf) */
-  internalValue: (string | number)[]
+  internalValue: (string | number)[];
   /** Joins multiple values into a single form field with the delimiter */
-  joinValues?: boolean
+  joinValues?: boolean;
   /** The default set of options to show before the user starts searching */
-  defaultOptions?: boolean | TreeselectOption[]
+  defaultOptions?: boolean | TreeselectOption[];
   /** Control element reference */
   control?: {
-    [key: string]: any
-  }
+    [key: string]: any;
+  };
   /** Slots passed from parent component */
   slots: {
-    'option-label'?: (props: { node: TreeselectNode; shouldShowCount: boolean; count: number; labelClassName: string; countClassName: string }) => any
-    'value-label'?: (props: { node: TreeselectNode }) => any
-    'before-list'?: () => any
-    'after-list'?: () => any
-  }
+    'option-label'?: (props: {
+      node: TreeselectNode;
+      shouldShowCount: boolean;
+      count: number;
+      labelClassName: string;
+      countClassName: string;
+    }) => any;
+    'value-label'?: (props: { node: TreeselectNode }) => any;
+    'before-list'?: () => any;
+    'after-list'?: () => any;
+  };
 }
 
 // =============================================================================
@@ -602,7 +615,8 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
 /**
  * Injection key for accessing the Treeselect instance from child components
  */
-export const TRESELECT_INSTANCE_KEY: InjectionKey<ComputedRef<TreeselectInstance>> = Symbol('treeselect-instance')
+export const TRESELECT_INSTANCE_KEY: InjectionKey<ComputedRef<TreeselectInstance>> =
+  Symbol('treeselect-instance');
 
 // =============================================================================
 // Type Utilities
@@ -617,4 +631,4 @@ export type TreeselectValue<P extends TreeselectProps> = P['multiple'] extends t
     : (string | number)[]
   : P['valueFormat'] extends 'object'
     ? TreeselectOption | null
-    : string | number | null
+    : string | number | null;

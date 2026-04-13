@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string | null>(null)
-const treeselectRef = ref<InstanceType<typeof Treeselect> | null>(null)
+const value = ref<string | null>(null);
+const treeselectRef = ref<InstanceType<typeof Treeselect> | null>(null);
 
 function openMenu() {
-  treeselectRef.value?.openMenu()
+  treeselectRef.value?.openMenu();
 }
 
 function closeMenu() {
-  treeselectRef.value?.closeMenu()
+  treeselectRef.value?.closeMenu();
 }
 
 function clear() {
-  treeselectRef.value?.clear()
+  treeselectRef.value?.clear();
 }
 
 function focusInput() {
-  treeselectRef.value?.focusInput()
+  treeselectRef.value?.focusInput();
 }
 
 function blurInput() {
-  treeselectRef.value?.blurInput()
+  treeselectRef.value?.blurInput();
 }
 </script>
 
@@ -33,15 +33,15 @@ function blurInput() {
     <p class="example-description">
       Demonstrates all public methods for programmatic control of the component.
       Use the buttons below to trigger methods like opening/closing the menu,
-      clearing selection, and managing input focus. This is useful for custom
-      UI patterns and integration with other components.
+      clearing selection, and managing input focus. This is useful for custom UI
+      patterns and integration with other components.
     </p>
     <div class="method-buttons">
-      <button @click="openMenu" class="method-btn">Open Menu</button>
-      <button @click="closeMenu" class="method-btn">Close Menu</button>
-      <button @click="clear" class="method-btn">Clear Selection</button>
-      <button @click="focusInput" class="method-btn">Focus Input</button>
-      <button @click="blurInput" class="method-btn">Blur Input</button>
+      <button class="method-btn" @click="openMenu">Open Menu</button>
+      <button class="method-btn" @click="closeMenu">Close Menu</button>
+      <button class="method-btn" @click="clear">Clear Selection</button>
+      <button class="method-btn" @click="focusInput">Focus Input</button>
+      <button class="method-btn" @click="blurInput">Blur Input</button>
     </div>
     <div class="example-content">
       <Treeselect
@@ -52,7 +52,7 @@ function blurInput() {
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -92,7 +92,9 @@ function blurInput() {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .method-btn:hover {

@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Append to Body</h2>
     <p class="example-description">
-      Demonstrates the <code>appendToBody</code> prop which renders the dropdown menu
-      directly in the document body using Vue's Teleport. This is useful when the select
-      is inside a container with <code>overflow: hidden</code> or other CSS clipping.
-      Check your browser's developer tools to see the menu rendered at the end of the body.
+      Demonstrates the <code>appendToBody</code> prop which renders the dropdown
+      menu directly in the document body using Vue's Teleport. This is useful
+      when the select is inside a container with
+      <code>overflow: hidden</code> or other CSS clipping. Check your browser's
+      developer tools to see the menu rendered at the end of the body.
     </p>
     <div class="example-content">
       <div class="clipped-container">
@@ -27,7 +28,7 @@ const value = ref<string | null>(null)
       </div>
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -55,7 +56,7 @@ const value = ref<string | null>(null)
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
 }
 

@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { nestedOptions } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { nestedOptions } from "../data";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Nested Options</h2>
     <p class="example-description">
-      This example demonstrates deeply nested options. The tree supports unlimited nesting levels.
-      Click the arrow icons to expand/collapse branches.
+      This example demonstrates deeply nested options. The tree supports
+      unlimited nesting levels. Click the arrow icons to expand/collapse
+      branches.
     </p>
     <div class="example-content">
       <Treeselect
@@ -21,7 +22,7 @@ const value = ref<string | null>(null)
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>

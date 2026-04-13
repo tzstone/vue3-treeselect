@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string | null>(null)
-const eventLog = ref<string[]>([])
+const value = ref<string | null>(null);
+const eventLog = ref<string[]>([]);
 
 function addEvent(message: string) {
-  eventLog.value.unshift(`[${new Date().toLocaleTimeString()}] ${message}`)
+  eventLog.value.unshift(`[${new Date().toLocaleTimeString()}] ${message}`);
   if (eventLog.value.length > 10) {
-    eventLog.value.pop()
+    eventLog.value.pop();
   }
 }
 
 function handleInput(val: any) {
-  addEvent(`input: value changed to ${JSON.stringify(val)}`)
+  addEvent(`input: value changed to ${JSON.stringify(val)}`);
 }
 
 function handleSelect(node: any) {
-  addEvent(`select: "${node.label}" was selected`)
+  addEvent(`select: "${node.label}" was selected`);
 }
 
 function handleDeselect(node: any) {
-  addEvent(`deselect: "${node.label}" was deselected`)
+  addEvent(`deselect: "${node.label}" was deselected`);
 }
 
 function handleOpen() {
-  addEvent('open: menu opened')
+  addEvent("open: menu opened");
 }
 
 function handleClose() {
-  addEvent('close: menu closed')
+  addEvent("close: menu closed");
 }
 
 function handleSearch(searchQuery: string) {
-  addEvent(`search-change: query is "${searchQuery}"`)
+  addEvent(`search-change: query is "${searchQuery}"`);
 }
 </script>
 
@@ -42,9 +42,10 @@ function handleSearch(searchQuery: string) {
   <div class="example">
     <h2 class="example-title">Events</h2>
     <p class="example-description">
-      Demonstrates all available events: <code>input</code>, <code>select</code>,
-      <code>deselect</code>, <code>open</code>, <code>close</code>, and <code>search-change</code>.
-      Try interacting with the select to see events logged in real-time.
+      Demonstrates all available events: <code>input</code>,
+      <code>select</code>, <code>deselect</code>, <code>open</code>,
+      <code>close</code>, and <code>search-change</code>. Try interacting with
+      the select to see events logged in real-time.
     </p>
     <div class="example-content">
       <Treeselect
@@ -62,7 +63,9 @@ function handleSearch(searchQuery: string) {
     </div>
     <div class="event-log">
       <h3 class="log-title">Event Log (latest 10)</h3>
-      <div v-if="eventLog.length === 0" class="log-empty">No events yet. Start interacting!</div>
+      <div v-if="eventLog.length === 0" class="log-empty">
+        No events yet. Start interacting!
+      </div>
       <ul v-else class="log-list">
         <li v-for="(event, index) in eventLog" :key="index" class="log-item">
           {{ event }}
@@ -95,7 +98,7 @@ function handleSearch(searchQuery: string) {
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
 }
 
@@ -138,7 +141,7 @@ function handleSearch(searchQuery: string) {
 .log-item {
   padding: 8px 16px;
   border-bottom: 1px solid #f0f0f0;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
   color: #555;
 }

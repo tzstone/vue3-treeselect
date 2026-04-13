@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "vue3-treeselect",
   "version": "1.0.0",
   "description": "A multi-select component with nested options support for Vue 3",
@@ -45,12 +46,19 @@
     "fuzzysearch": "^1.0.3"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/lodash": "^4.17.24",
     "@types/node": "^25.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/test-utils": "^2.4.6",
     "entities": "^8.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.8.0",
     "jsdom": "^29.0.2",
+    "prettier": "^3.8.2",
     "sass": "^1.99.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.8",
@@ -64,6 +72,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "lint": "eslint src --ext .ts,.vue",
+    "format": "prettier --write \"src/**/*.{ts,vue,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,vue,json,md}\"",
     "type-check": "vue-tsc --noEmit"
   }
 }

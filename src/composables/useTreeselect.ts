@@ -1,55 +1,55 @@
-import {
-  reactive,
-  computed,
-  watch,
-  nextTick,
-} from 'vue'
+import { computed, nextTick, reactive, watch } from "vue";
+
+import { createMap, debounce, includes, isPromise, quickDiff } from "../utils";
 
 import {
-  createMap,
-  debounce,
-  isPromise,
-  quickDiff,
-  includes,
-} from '../utils'
-
-import {
-  LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS,
-  ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
-  LEVEL, INDEX,
+  ALL,
+  ALL_WITH_INDETERMINATE,
+  BRANCH_PRIORITY,
+  INDEX,
   INPUT_DEBOUNCE_DELAY,
-} from '../constants'
+  LEAF_PRIORITY,
+  LEVEL,
+  LOAD_CHILDREN_OPTIONS,
+  LOAD_ROOT_OPTIONS,
+} from "../constants";
 
 import type {
-  TreeselectProps,
+  CountMap,
   TreeselectNode,
   TreeselectOption,
-  CountMap,
-} from '../types'
+  TreeselectProps,
+} from "../types";
 
-import { useForest, type ForestState, type LocalSearchState, type TriggerState, type MenuState } from './useForest'
-import { useSearch } from './useSearch'
-import { useSelection } from './useSelection'
-import { useMenu } from './useMenu'
+import {
+  useForest,
+  type ForestState,
+  type LocalSearchState,
+  type MenuState,
+  type TriggerState,
+} from "./useForest";
+import { useMenu } from "./useMenu";
+import { useSearch } from "./useSearch";
+import { useSelection } from "./useSelection";
 
-let instanceIdCounter = 0
+let instanceIdCounter = 0;
 
 export interface AsyncOptionsStates {
-  isLoaded: boolean
-  isLoading: boolean
-  loadingError: string
+  isLoaded: boolean;
+  isLoading: boolean;
+  loadingError: string;
 }
 
 function createAsyncOptionsStates(): AsyncOptionsStates {
   return {
     isLoaded: false,
     isLoading: false,
-    loadingError: '',
-  }
+    loadingError: "",
+  };
 }
 
 function getErrorMessage(err: Error | string): string {
-  return (err instanceof Error ? err.message : String(err)) || ''
+  return (err instanceof Error ? err.message : String(err)) || "";
 }
 
 export function useTreeselect(
@@ -58,15 +58,15 @@ export function useTreeselect(
 ) {
   const trigger = reactive<TriggerState>({
     isFocused: false,
-    searchQuery: '',
-  })
+    searchQuery: "",
+  });
 
   const menu = reactive<MenuState>({
     isOpen: false,
     current: null,
     lastScrollPosition: 0,
-    placement: 'bottom',
-  })
+    placement: "bottom",
+  });
 
   const forest = reactive<ForestState>({
     normalizedOptions: [],
@@ -74,24 +74,41 @@ export function useTreeselect(
     checkedStateMap: createMap<number>(),
     selectedNodeIds: [],
     selectedNodeMap: createMap<boolean>(),
-  })
+  });
 
-  const rootOptionsStates = reactive<AsyncOptionsStates>(createAsyncOptionsStates())
+  const rootOptionsStates = reactive<AsyncOptionsStates>(
+    createAsyncOptionsStates(),
+  );
 
   const localSearch = reactive<LocalSearchState>({
     active: false,
     noResults: true,
     countMap: createMap<CountMap>(),
-  })
+  });
 
-  const remoteSearch = reactive<Record<string, ReturnType<typeof createAsyncOptionsStates> & { options: TreeselectOption[] }>>(
-    createMap<ReturnType<typeof createAsyncOptionsStates> & { options: TreeselectOption[] }>()
-  )
+  const remoteSearch = reactive<
+    Record<
+      string,
+      ReturnType<typeof createAsyncOptionsStates> & {
+        options: TreeselectOption[];
+      }
+    >
+  >(
+    createMap<
+      ReturnType<typeof createAsyncOptionsStates> & {
+        options: TreeselectOption[];
+      }
+    >(),
+  );
 
-  const forestComposable = useForest(props, forest, localSearch, emit)
+  const forestComposable = useForest(props, forest, localSearch, emit);
 
   const searchComposable = useSearch(
-    props, forest, localSearch, trigger, remoteSearch,
+    props,
+    forest,
+    localSearch,
+    trigger,
+    remoteSearch,
     forestComposable.getNode,
     forestComposable.traverseAllNodesDFS,
     forestComposable.shouldExpand,
@@ -100,26 +117,32 @@ export function useTreeselect(
     () => getInstanceId(),
     callLoadOptionsProp,
     emit,
-  )
+  );
 
   // Wire up getRemoteSearchEntry to useForest
-  forestComposable.setGetRemoteSearchEntry(searchComposable.getRemoteSearchEntry)
+  forestComposable.setGetRemoteSearchEntry(
+    searchComposable.getRemoteSearchEntry,
+  );
 
   function closeMenu(): void {
-    if (!menu.isOpen || (!props.disabled && props.alwaysOpen)) return
-    menuComposable.saveMenuScrollPosition()
-    menu.isOpen = false
-    menuComposable.toggleClickOutsideEvent(false)
-    searchComposable.resetSearchQuery()
-    emit('close', getValue(), getInstanceId())
+    if (!menu.isOpen || (!props.disabled && props.alwaysOpen)) return;
+    menuComposable.saveMenuScrollPosition();
+    menu.isOpen = false;
+    menuComposable.toggleClickOutsideEvent(false);
+    searchComposable.resetSearchQuery();
+    emit("close", getValue(), getInstanceId());
   }
 
   function blurInput(): void {
-    menuComposable.blurInput()
+    menuComposable.blurInput();
   }
 
   const menuComposable = useMenu(
-    props, forest, menu, trigger, localSearch,
+    props,
+    forest,
+    menu,
+    trigger,
+    localSearch,
     forestComposable.getNode,
     forestComposable.shouldExpand,
     forestComposable.shouldShowOptionInMenu,
@@ -128,173 +151,206 @@ export function useTreeselect(
     searchComposable.resetSearchQuery,
     loadRootOptions,
     emit,
-  )
+  );
 
   const selectionComposable = useSelection(
-    props, forest,
+    props,
+    forest,
     forestComposable.getNode,
     forestComposable.isSelected,
     forestComposable.getSelectedNodes,
     forestComposable.buildForestState,
     forestComposable.traverseDescendantsBFS,
     forestComposable.traverseDescendantsDFS,
-    { get value() { return internalValue.value } },
+    {
+      get value() {
+        return internalValue.value;
+      },
+    },
     emit,
     searchComposable.resetSearchQuery,
     closeMenu,
-  )
+  );
 
   // Initialize selectedNodeIds from value
-  forest.selectedNodeIds = forestComposable.extractCheckedNodeIdsFromValue()
+  forest.selectedNodeIds = forestComposable.extractCheckedNodeIdsFromValue();
 
   function getInstanceId(): string | number {
-    return props.instanceId ?? `${instanceIdCounter++}$$`
+    return props.instanceId ?? `${instanceIdCounter++}$$`;
   }
 
   function getValue(): unknown {
-    if (props.valueFormat === 'id') {
+    if (props.valueFormat === "id") {
       return props.multiple
         ? internalValue.value.slice()
-        : internalValue.value[0]
+        : internalValue.value[0];
     }
 
-    const rawNodes = internalValue.value.map(id => {
-      const node = forestComposable.getNode(id)
-      return node ? node.raw : null
-    }).filter(Boolean)
-    return props.multiple ? rawNodes : rawNodes[0]
+    const rawNodes = internalValue.value
+      .map((id) => {
+        const node = forestComposable.getNode(id);
+        return node ? node.raw : null;
+      })
+      .filter(Boolean);
+    return props.multiple ? rawNodes : rawNodes[0];
   }
 
   const internalValue = computed(() => {
-    let result: (string | number)[]
+    let result: (string | number)[];
 
-    if (!props.multiple || props.flat || props.disableBranchNodes || props.valueConsistsOf === ALL) {
-      result = forest.selectedNodeIds.slice()
+    if (
+      !props.multiple ||
+      props.flat ||
+      props.disableBranchNodes ||
+      props.valueConsistsOf === ALL
+    ) {
+      result = forest.selectedNodeIds.slice();
     } else if (props.valueConsistsOf === BRANCH_PRIORITY) {
-      result = forest.selectedNodeIds.filter(id => {
-        const node = forestComposable.getNode(id)
-        if (!node) return false
-        if (node.isRootNode) return true
-        return node.parentNode != null && !forestComposable.isSelected(node.parentNode)
-      })
+      result = forest.selectedNodeIds.filter((id) => {
+        const node = forestComposable.getNode(id);
+        if (!node) return false;
+        if (node.isRootNode) return true;
+        return (
+          node.parentNode != null &&
+          !forestComposable.isSelected(node.parentNode)
+        );
+      });
     } else if (props.valueConsistsOf === LEAF_PRIORITY) {
-      result = forest.selectedNodeIds.filter(id => {
-        const node = forestComposable.getNode(id)
-        if (!node) return false
-        if (node.isLeaf) return true
-        return node.children.length === 0
-      })
+      result = forest.selectedNodeIds.filter((id) => {
+        const node = forestComposable.getNode(id);
+        if (!node) return false;
+        if (node.isLeaf) return true;
+        return node.children.length === 0;
+      });
     } else if (props.valueConsistsOf === ALL_WITH_INDETERMINATE) {
-      const indeterminateNodeIds: (string | number)[] = []
-      result = forest.selectedNodeIds.slice()
-      forestComposable.getSelectedNodes().forEach(selectedNode => {
-        selectedNode.ancestors.forEach(ancestor => {
-          if (includes(indeterminateNodeIds, ancestor.id)) return
-          if (includes(result, ancestor.id)) return
-          indeterminateNodeIds.push(ancestor.id)
-        })
-      })
-      result.push(...indeterminateNodeIds)
+      const indeterminateNodeIds: (string | number)[] = [];
+      result = forest.selectedNodeIds.slice();
+      forestComposable.getSelectedNodes().forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((ancestor) => {
+          if (includes(indeterminateNodeIds, ancestor.id)) return;
+          if (includes(result, ancestor.id)) return;
+          indeterminateNodeIds.push(ancestor.id);
+        });
+      });
+      result.push(...indeterminateNodeIds);
     } else {
-      result = forest.selectedNodeIds.slice()
+      result = forest.selectedNodeIds.slice();
     }
 
     if (props.sortValueBy === LEVEL) {
-      result.sort((a, b) => forestComposable.sortValueByLevel(
-        forestComposable.getNode(a)!, forestComposable.getNode(b)!
-      ))
+      result.sort((a, b) =>
+        forestComposable.sortValueByLevel(
+          forestComposable.getNode(a)!,
+          forestComposable.getNode(b)!,
+        ),
+      );
     } else if (props.sortValueBy === INDEX) {
-      result.sort((a, b) => forestComposable.sortValueByIndex(
-        forestComposable.getNode(a)!, forestComposable.getNode(b)!
-      ))
+      result.sort((a, b) =>
+        forestComposable.sortValueByIndex(
+          forestComposable.getNode(a)!,
+          forestComposable.getNode(b)!,
+        ),
+      );
     }
 
-    return result
-  })
+    return result;
+  });
 
   const selectedNodes = computed(() => {
-    return forest.selectedNodeIds.map(id => forestComposable.getNode(id)).filter(Boolean) as TreeselectNode[]
-  })
+    return forest.selectedNodeIds
+      .map((id) => forestComposable.getNode(id))
+      .filter(Boolean) as TreeselectNode[];
+  });
 
-  const hasValue = computed(() => internalValue.value.length > 0)
+  const hasValue = computed(() => internalValue.value.length > 0);
 
-  const single = computed(() => !props.multiple)
+  const single = computed(() => !props.multiple);
 
   const hasVisibleOptions = computed(() => {
-    return menuComposable.hasVisibleOptions.value
-  })
+    return menuComposable.hasVisibleOptions.value;
+  });
 
   const showCountOnSearchComputed = computed(() => {
-    return typeof props.showCountOnSearch === 'boolean'
+    return typeof props.showCountOnSearch === "boolean"
       ? props.showCountOnSearch
-      : props.showCount
-  })
+      : props.showCount;
+  });
 
   const hasBranchNodes = computed(() => {
-    return forest.normalizedOptions.some(rootNode => rootNode.isBranch)
-  })
+    return forest.normalizedOptions.some((rootNode) => rootNode.isBranch);
+  });
 
   const shouldFlattenOptions = computed(() => {
-    return localSearch.active && !!props.flattenSearchResults
-  })
+    return localSearch.active && !!props.flattenSearchResults;
+  });
 
   const hasNoOptions = computed(() => {
-    return forest.normalizedOptions.length === 0
-  })
+    return forest.normalizedOptions.length === 0;
+  });
 
   const hasNoSearchResults = computed(() => {
-    return localSearch.active && localSearch.noResults
-  })
+    return localSearch.active && localSearch.noResults;
+  });
 
   // =========================================================================
   // Async Loading
   // =========================================================================
 
   function callLoadOptionsProp(params: {
-    action: string
-    args?: Record<string, unknown>
-    isPending: () => boolean
-    start: () => void
-    succeed: (result?: unknown) => void
-    fail: (err: Error | string) => void
-    end: () => void
+    action: string;
+    args?: Record<string, unknown>;
+    isPending: () => boolean;
+    start: () => void;
+    succeed: (result?: unknown) => void;
+    fail: (err: Error | string) => void;
+    end: () => void;
   }): void {
     if (!props.loadOptions || params.isPending()) {
-      return
+      return;
     }
 
-    params.start()
+    params.start();
 
-    let callbackCalled = false
-    const callback = (err: Error | string | null | undefined, result?: unknown) => {
-      if (callbackCalled) return
-      callbackCalled = true
+    let callbackCalled = false;
+    const callback = (
+      err: Error | string | null | undefined,
+      result?: unknown,
+    ) => {
+      if (callbackCalled) return;
+      callbackCalled = true;
       if (err) {
-        params.fail(err)
+        params.fail(err);
       } else {
-        params.succeed(result)
+        params.succeed(result);
       }
-      params.end()
-    }
+      params.end();
+    };
 
     const loadArgs: Record<string, unknown> = {
       instanceId: getInstanceId(),
       action: params.action,
       ...params.args,
       callback: (err?: Error | string, result?: unknown) => {
-        callback(err ?? null, result)
+        callback(err ?? null, result);
       },
-    }
-    const result = props.loadOptions(loadArgs as Parameters<NonNullable<typeof props.loadOptions>>[0])
+    };
+    const result = props.loadOptions(
+      loadArgs as Parameters<NonNullable<typeof props.loadOptions>>[0],
+    );
 
     if (isPromise(result)) {
-      result.then((options) => {
-        callback(null, options)
-      }, (err: Error | string) => {
-        callback(err)
-      }).catch((err: Error) => {
-        console.error(err)
-      })
+      result
+        .then(
+          (options) => {
+            callback(null, options);
+          },
+          (err: Error | string) => {
+            callback(err);
+          },
+        )
+        .catch((err: Error) => {
+          console.error(err);
+        });
     }
   }
 
@@ -303,26 +359,26 @@ export function useTreeselect(
       action: LOAD_ROOT_OPTIONS,
       isPending: () => rootOptionsStates.isLoading,
       start: () => {
-        rootOptionsStates.isLoading = true
-        rootOptionsStates.loadingError = ''
+        rootOptionsStates.isLoading = true;
+        rootOptionsStates.loadingError = "";
       },
       succeed: () => {
-        rootOptionsStates.isLoaded = true
+        rootOptionsStates.isLoaded = true;
         nextTick(() => {
-          menuComposable.resetHighlightedOptionWhenNecessary(true)
-        })
+          menuComposable.resetHighlightedOptionWhenNecessary(true);
+        });
       },
       fail: (err) => {
-        rootOptionsStates.loadingError = getErrorMessage(err)
+        rootOptionsStates.loadingError = getErrorMessage(err);
       },
       end: () => {
-        rootOptionsStates.isLoading = false
+        rootOptionsStates.isLoading = false;
       },
-    })
+    });
   }
 
   function loadChildrenOptions(parentNode: TreeselectNode): void {
-    const { id, raw } = parentNode
+    const { id, raw } = parentNode;
 
     callLoadOptionsProp({
       action: LOAD_CHILDREN_OPTIONS,
@@ -330,30 +386,30 @@ export function useTreeselect(
         parentNode: raw,
       },
       isPending: () => {
-        const node = forestComposable.getNode(id)
-        return node ? node.childrenStates.isLoading : false
+        const node = forestComposable.getNode(id);
+        return node ? node.childrenStates.isLoading : false;
       },
       start: () => {
-        const node = forestComposable.getNode(id)
+        const node = forestComposable.getNode(id);
         if (node) {
-          node.childrenStates.isLoading = true
-          node.childrenStates.loadingError = ''
+          node.childrenStates.isLoading = true;
+          node.childrenStates.loadingError = "";
         }
       },
       succeed: () => {
-        const node = forestComposable.getNode(id)
-        if (node) node.childrenStates.isLoaded = true
-        forestComposable.initialize()
+        const node = forestComposable.getNode(id);
+        if (node) node.childrenStates.isLoaded = true;
+        forestComposable.initialize();
       },
       fail: (err) => {
-        const node = forestComposable.getNode(id)
-        if (node) node.childrenStates.loadingError = getErrorMessage(err)
+        const node = forestComposable.getNode(id);
+        if (node) node.childrenStates.loadingError = getErrorMessage(err);
       },
       end: () => {
-        const node = forestComposable.getNode(id)
-        if (node) node.childrenStates.isLoading = false
+        const node = forestComposable.getNode(id);
+        if (node) node.childrenStates.isLoading = false;
       },
-    })
+    });
   }
 
   // =========================================================================
@@ -361,19 +417,19 @@ export function useTreeselect(
   // =========================================================================
 
   function handleMouseDown(evt: MouseEvent): void {
-    if (evt.type === 'mousedown' && (evt as MouseEvent).button !== 0) return
-    evt.preventDefault()
-    evt.stopPropagation()
+    if (evt.type === "mousedown" && (evt as MouseEvent).button !== 0) return;
+    evt.preventDefault();
+    evt.stopPropagation();
 
-    if (props.disabled) return
+    if (props.disabled) return;
 
-    const controlEl = menuComposable.getControl()
-    let menuOpened = false
+    const controlEl = menuComposable.getControl();
+    let menuOpened = false;
     if (controlEl && controlEl.contains(evt.target as Node)) {
       if (!menu.isOpen && (props.openOnClick || trigger.isFocused)) {
-        menuComposable.openMenu()
-        menuComposable.focusInput()
-        menuOpened = true
+        menuComposable.openMenu();
+        menuComposable.focusInput();
+        menuOpened = true;
       }
     }
 
@@ -381,123 +437,159 @@ export function useTreeselect(
     // If menu is opened, input should remain focused for keyboard navigation
     if (!menuOpened) {
       if (selectionComposable.getBlurOnSelect()) {
-        menuComposable.blurInput()
+        menuComposable.blurInput();
       } else {
-        menuComposable.focusInput()
+        menuComposable.focusInput();
       }
     }
 
-    selectionComposable.resetFlags()
+    selectionComposable.resetFlags();
   }
 
   // =========================================================================
   // Watchers
   // =========================================================================
 
-  watch(() => menuComposable.pendingLoadChildren.value, (node) => {
-    if (node) {
-      loadChildrenOptions(node)
-    }
-  })
+  watch(
+    () => menuComposable.pendingLoadChildren.value,
+    (node) => {
+      if (node) {
+        loadChildrenOptions(node);
+      }
+    },
+  );
 
-  watch(() => props.alwaysOpen, (newValue) => {
-    if (newValue) menuComposable.openMenu()
-    else menuComposable.closeMenu()
-  })
+  watch(
+    () => props.alwaysOpen,
+    (newValue) => {
+      if (newValue) menuComposable.openMenu();
+      else menuComposable.closeMenu();
+    },
+  );
 
-  watch(() => props.branchNodesFirst, () => {
-    forestComposable.initialize()
-  })
+  watch(
+    () => props.branchNodesFirst,
+    () => {
+      forestComposable.initialize();
+    },
+  );
 
-  watch(() => props.disabled, (newValue) => {
-    if (newValue && menu.isOpen) menuComposable.closeMenu()
-    else if (!newValue && !menu.isOpen && props.alwaysOpen) menuComposable.openMenu()
-  })
+  watch(
+    () => props.disabled,
+    (newValue) => {
+      if (newValue && menu.isOpen) menuComposable.closeMenu();
+      else if (!newValue && !menu.isOpen && props.alwaysOpen)
+        menuComposable.openMenu();
+    },
+  );
 
-  watch(() => props.flat, () => {
-    forestComposable.initialize()
-  })
+  watch(
+    () => props.flat,
+    () => {
+      forestComposable.initialize();
+    },
+  );
 
   watch(internalValue, (newValue, oldValue) => {
-    const hasChanged = quickDiff(newValue, oldValue)
+    const hasChanged = quickDiff(newValue, oldValue);
     if (hasChanged) {
-      emit('update:modelValue', getValue(), getInstanceId())
+      emit("update:modelValue", getValue(), getInstanceId());
     }
-  })
+  });
 
-  watch(() => props.matchKeys, () => {
-    forestComposable.initialize()
-  })
+  watch(
+    () => props.matchKeys,
+    () => {
+      forestComposable.initialize();
+    },
+  );
 
-  watch(() => props.multiple, (newValue) => {
-    if (newValue) forestComposable.buildForestState()
-  })
+  watch(
+    () => props.multiple,
+    (newValue) => {
+      if (newValue) forestComposable.buildForestState();
+    },
+  );
 
-  watch(() => props.options, () => {
-    if (props.async) return
-    forestComposable.initialize()
-    rootOptionsStates.isLoaded = Array.isArray(props.options)
-  }, { deep: true, immediate: true })
+  watch(
+    () => props.options,
+    () => {
+      if (props.async) return;
+      forestComposable.initialize();
+      rootOptionsStates.isLoaded = Array.isArray(props.options);
+    },
+    { deep: true, immediate: true },
+  );
 
   // Set up debounced search handlers to improve performance
   const debouncedHandleLocalSearch = debounce(
     () => searchComposable.handleLocalSearch(),
     INPUT_DEBOUNCE_DELAY,
-  )
+  );
 
   const debouncedHandleRemoteSearch = debounce(
     () => searchComposable.handleRemoteSearch(),
     INPUT_DEBOUNCE_DELAY,
-  )
+  );
 
-  watch(() => trigger.searchQuery, (newQuery) => {
-    // Emit search-change immediately for responsive UI
-    emit('search-change', trigger.searchQuery, getInstanceId())
+  watch(
+    () => trigger.searchQuery,
+    (newQuery) => {
+      // Emit search-change immediately for responsive UI
+      emit("search-change", trigger.searchQuery, getInstanceId());
 
-    // Debounce the actual search filtering for performance
-    if (newQuery) {
-      if (props.async) {
-        debouncedHandleRemoteSearch()
+      // Debounce the actual search filtering for performance
+      if (newQuery) {
+        if (props.async) {
+          debouncedHandleRemoteSearch();
+        } else {
+          debouncedHandleLocalSearch();
+        }
       } else {
-        debouncedHandleLocalSearch()
+        // Clear search immediately (no debounce) when emptying the input
+        debouncedHandleLocalSearch.cancel();
+        debouncedHandleRemoteSearch.cancel();
+        if (props.async) {
+          searchComposable.handleRemoteSearch();
+        } else {
+          searchComposable.handleLocalSearch();
+        }
       }
-    } else {
-      // Clear search immediately (no debounce) when emptying the input
-      debouncedHandleLocalSearch.cancel()
-      debouncedHandleRemoteSearch.cancel()
-      if (props.async) {
-        searchComposable.handleRemoteSearch()
-      } else {
-        searchComposable.handleLocalSearch()
-      }
-    }
-  })
+    },
+  );
 
   // Watch modelValue (v-model) for changes
-  watch(() => props.modelValue, () => {
-    const nodeIdsFromValue = forestComposable.extractCheckedNodeIdsFromValue()
-    const hasChanged = quickDiff(nodeIdsFromValue, internalValue.value)
-    if (hasChanged) forestComposable.fixSelectedNodeIds(nodeIdsFromValue)
-  }, { flush: 'post' })
+  watch(
+    () => props.modelValue,
+    () => {
+      const nodeIdsFromValue =
+        forestComposable.extractCheckedNodeIdsFromValue();
+      const hasChanged = quickDiff(nodeIdsFromValue, internalValue.value);
+      if (hasChanged) forestComposable.fixSelectedNodeIds(nodeIdsFromValue);
+    },
+    { flush: "post" },
+  );
 
   // =========================================================================
   // Lifecycle
   // =========================================================================
 
   function setup(): void {
-    forestComposable.verifyProps()
-    selectionComposable.resetFlags()
+    forestComposable.verifyProps();
+    selectionComposable.resetFlags();
   }
 
   function onMount(): void {
-    if (props.autoFocus) menuComposable.focusInput()
-    if (!props.options && !props.async && props.autoLoadRootOptions) loadRootOptions()
-    if (props.alwaysOpen) menuComposable.openMenu()
-    if (props.async && props.defaultOptions) searchComposable.handleRemoteSearch()
+    if (props.autoFocus) menuComposable.focusInput();
+    if (!props.options && !props.async && props.autoLoadRootOptions)
+      loadRootOptions();
+    if (props.alwaysOpen) menuComposable.openMenu();
+    if (props.async && props.defaultOptions)
+      searchComposable.handleRemoteSearch();
   }
 
   function onUnmount(): void {
-    menuComposable.toggleClickOutsideEvent(false)
+    menuComposable.toggleClickOutsideEvent(false);
   }
 
   // =========================================================================
@@ -506,20 +598,20 @@ export function useTreeselect(
 
   const wrapperClass = computed(() => {
     const classes: Record<string, boolean> = {
-      'vue-treeselect': true,
-      'vue-treeselect--single': !props.multiple,
-      'vue-treeselect--multi': !!props.multiple,
-      'vue-treeselect--searchable': !!props.searchable,
-      'vue-treeselect--disabled': !!props.disabled,
-      'vue-treeselect--focused': trigger.isFocused,
-      'vue-treeselect--has-value': hasValue.value,
-      'vue-treeselect--open': menu.isOpen,
-      'vue-treeselect--open-above': menu.placement === 'top',
-      'vue-treeselect--open-below': menu.placement === 'bottom',
-      'vue-treeselect--branch-nodes-first': !!props.branchNodesFirst,
-    }
-    return classes
-  })
+      "vue-treeselect": true,
+      "vue-treeselect--single": !props.multiple,
+      "vue-treeselect--multi": !!props.multiple,
+      "vue-treeselect--searchable": !!props.searchable,
+      "vue-treeselect--disabled": !!props.disabled,
+      "vue-treeselect--focused": trigger.isFocused,
+      "vue-treeselect--has-value": hasValue.value,
+      "vue-treeselect--open": menu.isOpen,
+      "vue-treeselect--open-above": menu.placement === "top",
+      "vue-treeselect--open-below": menu.placement === "bottom",
+      "vue-treeselect--branch-nodes-first": !!props.branchNodesFirst,
+    };
+    return classes;
+  });
 
   return {
     trigger,
@@ -553,10 +645,12 @@ export function useTreeselect(
     initialize: forestComposable.initialize,
     buildForestState: forestComposable.buildForestState,
     shouldExpand: forestComposable.shouldExpand,
-    shouldOptionBeIncludedInSearchResult: forestComposable.shouldOptionBeIncludedInSearchResult,
+    shouldOptionBeIncludedInSearchResult:
+      forestComposable.shouldOptionBeIncludedInSearchResult,
     shouldShowOptionInMenu: forestComposable.shouldShowOptionInMenu,
     traverseAllNodesByIndex: forestComposable.traverseAllNodesByIndex,
-    extractCheckedNodeIdsFromValue: forestComposable.extractCheckedNodeIdsFromValue,
+    extractCheckedNodeIdsFromValue:
+      forestComposable.extractCheckedNodeIdsFromValue,
     fixSelectedNodeIds: forestComposable.fixSelectedNodeIds,
     enhancedNormalizer: forestComposable.enhancedNormalizer,
 
@@ -573,7 +667,8 @@ export function useTreeselect(
     focusInput: menuComposable.focusInput,
     blurInput,
     setCurrentHighlightedOption: menuComposable.setCurrentHighlightedOption,
-    resetHighlightedOptionWhenNecessary: menuComposable.resetHighlightedOptionWhenNecessary,
+    resetHighlightedOptionWhenNecessary:
+      menuComposable.resetHighlightedOptionWhenNecessary,
     highlightFirstOption: menuComposable.highlightFirstOption,
     highlightPrevOption: menuComposable.highlightPrevOption,
     highlightNextOption: menuComposable.highlightNextOption,
@@ -600,7 +695,7 @@ export function useTreeselect(
     setup,
     onMount,
     onUnmount,
-  }
+  };
 }
 
-export type UseTreeselectReturn = ReturnType<typeof useTreeselect>
+export type UseTreeselectReturn = ReturnType<typeof useTreeselect>;

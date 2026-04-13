@@ -1,55 +1,57 @@
 interface DebounceOptions {
-  leading?: boolean
-  trailing?: boolean
+  leading?: boolean;
+  trailing?: boolean;
 }
 
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number,
-  options?: DebounceOptions
+  options?: DebounceOptions,
 ): ((...args: Parameters<T>) => void) & { cancel: () => void } {
-  let timeout: ReturnType<typeof setTimeout> | null = null
-  let lastArgs: Parameters<T> | undefined
-  let lastThis: unknown | undefined
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  let lastArgs: Parameters<T> | undefined;
+  let lastThis: unknown | undefined;
 
-  const { leading = false } = options || {}
+  const { leading = false } = options || {};
 
   function invokeFunc(): void {
     if (lastArgs) {
-      func.apply(lastThis, lastArgs)
-      lastArgs = undefined
-      lastThis = undefined
+      func.apply(lastThis, lastArgs);
+      lastArgs = undefined;
+      lastThis = undefined;
     }
   }
 
   function debounced(this: unknown, ...args: Parameters<T>): void {
-    lastArgs = args
-    lastThis = this
+    lastArgs = args;
+    lastThis = this;
 
     if (timeout !== null) {
-      clearTimeout(timeout)
+      clearTimeout(timeout);
     }
 
     if (leading && timeout === null) {
-      invokeFunc()
+      invokeFunc();
     }
 
     timeout = setTimeout(() => {
-      timeout = null
+      timeout = null;
       if (!leading) {
-        invokeFunc()
+        invokeFunc();
       }
-    }, wait)
+    }, wait);
   }
 
   debounced.cancel = function cancel(): void {
     if (timeout) {
-      clearTimeout(timeout)
-      timeout = null
+      clearTimeout(timeout);
+      timeout = null;
     }
-    lastArgs = undefined
-    lastThis = undefined
-  }
+    lastArgs = undefined;
+    lastThis = undefined;
+  };
 
-  return debounced as ((...args: Parameters<T>) => void) & { cancel: () => void }
+  return debounced as ((...args: Parameters<T>) => void) & {
+    cancel: () => void;
+  };
 }

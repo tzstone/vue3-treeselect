@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { optionsWithDisabled } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { optionsWithDisabled } from "../data";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Disabled Options</h2>
     <p class="example-description">
-      Options can be disabled by setting <code>isDisabled: true</code> on the option object.
-      Disabled options cannot be selected by users.
+      Options can be disabled by setting <code>isDisabled: true</code> on the
+      option object. Disabled options cannot be selected by users.
     </p>
     <div class="example-content">
       <Treeselect
@@ -21,7 +21,7 @@ const value = ref<string | null>(null)
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ const value = ref<string | null>(null)
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 13px;
   color: #e83e8c;
 }

@@ -1,60 +1,64 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
-import Basic from './examples/Basic.vue'
-import MultipleSelect from './examples/MultipleSelect.vue'
-import NestedOptions from './examples/NestedOptions.vue'
-import DisabledOptions from './examples/DisabledOptions.vue'
-import CustomLabels from './examples/CustomLabels.vue'
-import FlatMode from './examples/FlatMode.vue'
-import ValueFormatters from './examples/ValueFormatters.vue'
-import AsyncLoading from './examples/AsyncLoading.vue'
-import AsyncSearch from './examples/AsyncSearch.vue'
-import DelayedLoading from './examples/DelayedLoading.vue'
-import SearchFilter from './examples/SearchFilter.vue'
-import KeyboardNav from './examples/KeyboardNav.vue'
-import Slots from './examples/Slots.vue'
-import RTL from './examples/RTL.vue'
-import AppendToBody from './examples/AppendToBody.vue'
-import SortValue from './examples/SortValue.vue'
-import Events from './examples/Events.vue'
-import Methods from './examples/Methods.vue'
+import { ref, shallowRef } from "vue";
+import Basic from "./examples/Basic.vue";
+import MultipleSelect from "./examples/MultipleSelect.vue";
+import NestedOptions from "./examples/NestedOptions.vue";
+import DisabledOptions from "./examples/DisabledOptions.vue";
+import CustomLabels from "./examples/CustomLabels.vue";
+import FlatMode from "./examples/FlatMode.vue";
+import ValueFormatters from "./examples/ValueFormatters.vue";
+import AsyncLoading from "./examples/AsyncLoading.vue";
+import AsyncSearch from "./examples/AsyncSearch.vue";
+import DelayedLoading from "./examples/DelayedLoading.vue";
+import SearchFilter from "./examples/SearchFilter.vue";
+import KeyboardNav from "./examples/KeyboardNav.vue";
+import Slots from "./examples/Slots.vue";
+import RTL from "./examples/RTL.vue";
+import AppendToBody from "./examples/AppendToBody.vue";
+import SortValue from "./examples/SortValue.vue";
+import Events from "./examples/Events.vue";
+import Methods from "./examples/Methods.vue";
 
 interface Example {
-  id: string
-  title: string
-  component: any
+  id: string;
+  title: string;
+  component: any;
 }
 
 const examples: Example[] = [
-  { id: 'basic', title: 'Basic', component: Basic },
-  { id: 'multiple', title: 'Multiple Select', component: MultipleSelect },
-  { id: 'nested', title: 'Nested Options', component: NestedOptions },
-  { id: 'disabled', title: 'Disabled Options', component: DisabledOptions },
-  { id: 'custom-labels', title: 'Custom Labels', component: CustomLabels },
-  { id: 'flat', title: 'Flat Mode', component: FlatMode },
-  { id: 'formatters', title: 'Value Formatters', component: ValueFormatters },
-  { id: 'async-loading', title: 'Async Loading', component: AsyncLoading },
-  { id: 'async-search', title: 'Async Search', component: AsyncSearch },
-  { id: 'delayed-loading', title: 'Delayed Loading', component: DelayedLoading },
-  { id: 'search-filter', title: 'Search Filter', component: SearchFilter },
-  { id: 'keyboard-nav', title: 'Keyboard Navigation', component: KeyboardNav },
-  { id: 'slots', title: 'Custom Slots', component: Slots },
-  { id: 'rtl', title: 'RTL Support', component: RTL },
-  { id: 'append-to-body', title: 'Append to Body', component: AppendToBody },
-  { id: 'sort-value', title: 'Sort Value Order', component: SortValue },
-  { id: 'events', title: 'Events', component: Events },
-  { id: 'methods', title: 'Programmatic Methods', component: Methods },
-]
+  { id: "basic", title: "Basic", component: Basic },
+  { id: "multiple", title: "Multiple Select", component: MultipleSelect },
+  { id: "nested", title: "Nested Options", component: NestedOptions },
+  { id: "disabled", title: "Disabled Options", component: DisabledOptions },
+  { id: "custom-labels", title: "Custom Labels", component: CustomLabels },
+  { id: "flat", title: "Flat Mode", component: FlatMode },
+  { id: "formatters", title: "Value Formatters", component: ValueFormatters },
+  { id: "async-loading", title: "Async Loading", component: AsyncLoading },
+  { id: "async-search", title: "Async Search", component: AsyncSearch },
+  {
+    id: "delayed-loading",
+    title: "Delayed Loading",
+    component: DelayedLoading,
+  },
+  { id: "search-filter", title: "Search Filter", component: SearchFilter },
+  { id: "keyboard-nav", title: "Keyboard Navigation", component: KeyboardNav },
+  { id: "slots", title: "Custom Slots", component: Slots },
+  { id: "rtl", title: "RTL Support", component: RTL },
+  { id: "append-to-body", title: "Append to Body", component: AppendToBody },
+  { id: "sort-value", title: "Sort Value Order", component: SortValue },
+  { id: "events", title: "Events", component: Events },
+  { id: "methods", title: "Programmatic Methods", component: Methods },
+];
 
-const activeExample = ref(examples[0].id)
+const activeExample = ref(examples[0].id);
 
-const currentExample = shallowRef(examples[0].component)
+const currentExample = shallowRef(examples[0].component);
 
 function selectExample(exampleId: string) {
-  activeExample.value = exampleId
-  const example = examples.find(e => e.id === exampleId)
+  activeExample.value = exampleId;
+  const example = examples.find((e) => e.id === exampleId);
   if (example) {
-    currentExample.value = example.component
+    currentExample.value = example.component;
   }
 }
 </script>
@@ -84,7 +88,9 @@ function selectExample(exampleId: string) {
 .demo-container {
   display: flex;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, sans-serif;
 }
 
 .sidebar {

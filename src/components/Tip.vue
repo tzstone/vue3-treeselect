@@ -8,12 +8,18 @@
 
 interface TipProps {
   /** Type of tip */
-  type: 'no-children' | 'loading' | 'error' | 'search-prompt' | 'no-options' | 'no-results'
+  type:
+    | "no-children"
+    | "loading"
+    | "error"
+    | "search-prompt"
+    | "no-options"
+    | "no-results";
   /** Icon type */
-  icon: 'warning' | 'loader' | 'error'
+  icon: "warning" | "loader" | "error";
 }
 
-defineProps<TipProps>()
+defineProps<TipProps>();
 </script>
 
 <template>
@@ -21,7 +27,9 @@ defineProps<TipProps>()
     <div class="vue-treeselect__icon-container">
       <span :class="`vue-treeselect__icon-${icon}`" />
     </div>
-    <span :class="['vue-treeselect__tip-text', `vue-treeselect__${type}-tip-text`]">
+    <span
+      :class="['vue-treeselect__tip-text', `vue-treeselect__${type}-tip-text`]"
+    >
       <slot />
     </span>
   </div>

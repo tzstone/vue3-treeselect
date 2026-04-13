@@ -6,43 +6,51 @@
  * This is a recursive component that renders itself for child nodes.
  */
 
-import { computed, inject, type ComputedRef } from 'vue'
-import { UNCHECKED, INDETERMINATE, CHECKED } from '../constants'
-import { TRESELECT_INSTANCE_KEY, type TreeselectNode, type TreeselectInstance } from '../types'
-import { onLeftClick } from '../utils'
-import ArrowIcon from './icons/Arrow.vue'
-import Tip from './Tip.vue'
+import { computed, inject, type ComputedRef } from "vue";
+import { CHECKED, INDETERMINATE, UNCHECKED } from "../constants";
+import {
+  TRESELECT_INSTANCE_KEY,
+  type TreeselectInstance,
+  type TreeselectNode,
+} from "../types";
+import { onLeftClick } from "../utils";
+import ArrowIcon from "./icons/Arrow.vue";
+import Tip from "./Tip.vue";
 
 // Props
 interface OptionProps {
   /** The node to render */
-  node: TreeselectNode
+  node: TreeselectNode;
 }
 
-const props = defineProps<OptionProps>()
+const props = defineProps<OptionProps>();
 
 // Inject treeselect instance
-const instanceRef = inject<ComputedRef<TreeselectInstance>>(TRESELECT_INSTANCE_KEY)
+const instanceRef = inject<ComputedRef<TreeselectInstance>>(
+  TRESELECT_INSTANCE_KEY,
+);
 
 if (!instanceRef) {
-  throw new Error('Option component must be used within a Treeselect component')
+  throw new Error(
+    "Option component must be used within a Treeselect component",
+  );
 }
 
 // Unwrap computed ref for template auto-unwrap
-const instance = computed(() => instanceRef.value)
+const instance = computed(() => instanceRef.value);
 
 // Computed
 const shouldExpand = computed(() => {
-  return props.node.isBranch && instance.value.shouldExpand(props.node)
-})
+  return props.node.isBranch && instance.value.shouldExpand(props.node);
+});
 
 const shouldShow = computed(() => {
-  return instance.value.shouldShowOptionInMenu(props.node)
-})
+  return instance.value.shouldShowOptionInMenu(props.node);
+});
 
 const checkedState = computed(() => {
-  return instance.value.forest.checkedStateMap[props.node.id]
-})
+  return instance.value.forest.checkedStateMap[props.node.id];
+});
 
 const shouldShowCount = computed(() => {
   return (
@@ -50,65 +58,67 @@ const shouldShowCount = computed(() => {
     (instance.value.localSearch.active
       ? instance.value.showCountOnSearchComputed
       : instance.value.showCount)
-  )
-})
+  );
+});
 
 const count = computed(() => {
-  if (!shouldShowCount.value) return NaN
+  if (!shouldShowCount.value) return NaN;
 
   return instance.value.localSearch.active
-    ? instance.value.localSearch.countMap[props.node.id][instance.value.showCountOf]
-    : props.node.count[instance.value.showCountOf]
-})
+    ? instance.value.localSearch.countMap[props.node.id][
+        instance.value.showCountOf
+      ]
+    : props.node.count[instance.value.showCountOf];
+});
 
 const hasCustomLabelRenderer = computed(() => {
-  return !!instance.value.slots?.['option-label']
-})
+  return !!instance.value.slots?.["option-label"];
+});
 
 const hasLoadedChildren = computed(() => {
-  return props.node.childrenStates.isLoaded
-})
+  return props.node.childrenStates.isLoaded;
+});
 
 const hasChildren = computed(() => {
-  return props.node.children.length > 0
-})
+  return props.node.children.length > 0;
+});
 
 const isLoadingChildren = computed(() => {
-  return props.node.childrenStates.isLoading
-})
+  return props.node.childrenStates.isLoading;
+});
 
 const hasLoadingError = computed(() => {
-  return !!props.node.childrenStates.loadingError
-})
+  return !!props.node.childrenStates.loadingError;
+});
 
 // Methods
 function handleMouseEnterOption(evt: MouseEvent) {
   // Equivalent to `self` modifier.
-  if (evt.target !== evt.currentTarget) return
+  if (evt.target !== evt.currentTarget) return;
 
-  instance.value.setCurrentHighlightedOption(props.node, false)
+  instance.value.setCurrentHighlightedOption(props.node, false);
 }
 
 function handleMouseDownOnArrow(evt: MouseEvent) {
   onLeftClick(() => {
-    instance.value.toggleExpanded(props.node)
-  })(evt)
+    instance.value.toggleExpanded(props.node);
+  })(evt);
 }
 
 function handleMouseDownOnLabelContainer(evt: MouseEvent) {
   onLeftClick(() => {
     if (props.node.isBranch && instance.value.disableBranchNodes) {
-      instance.value.toggleExpanded(props.node)
+      instance.value.toggleExpanded(props.node);
     } else {
-      instance.value.select(props.node)
+      instance.value.select(props.node);
     }
-  })(evt)
+  })(evt);
 }
 
 function handleMouseDownOnRetry(evt: MouseEvent) {
   onLeftClick(() => {
-    instance.value.loadChildrenOptions(props.node)
-  })(evt)
+    instance.value.loadChildrenOptions(props.node);
+  })(evt);
 }
 </script>
 
@@ -126,7 +136,8 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
         'vue-treeselect__option--disabled': node.isDisabled,
         'vue-treeselect__option--selected': instance.isSelected(node),
         'vue-treeselect__option--highlight': node.isHighlighted,
-        'vue-treeselect__option--matched': instance.localSearch.active && node.isMatched,
+        'vue-treeselect__option--matched':
+          instance.localSearch.active && node.isMatched,
         'vue-treeselect__option--hide': !shouldShow,
       }"
       :data-id="node.id"
@@ -166,14 +177,17 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
       >
         <!-- Checkbox -->
         <div
-          v-if="!instance.single && !(instance.disableBranchNodes && node.isBranch)"
+          v-if="
+            !instance.single && !(instance.disableBranchNodes && node.isBranch)
+          "
           class="vue-treeselect__checkbox-container"
         >
           <span
             :class="{
               'vue-treeselect__checkbox': true,
               'vue-treeselect__checkbox--checked': checkedState === CHECKED,
-              'vue-treeselect__checkbox--indeterminate': checkedState === INDETERMINATE,
+              'vue-treeselect__checkbox--indeterminate':
+                checkedState === INDETERMINATE,
               'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
               'vue-treeselect__checkbox--disabled': node.isDisabled,
             }"
@@ -224,20 +238,12 @@ function handleMouseDownOnRetry(evt: MouseEvent) {
         </Tip>
 
         <!-- Loading tip -->
-        <Tip
-          v-if="isLoadingChildren"
-          type="loading"
-          icon="loader"
-        >
+        <Tip v-if="isLoadingChildren" type="loading" icon="loader">
           {{ instance.loadingText }}
         </Tip>
 
         <!-- Loading error tip -->
-        <Tip
-          v-if="hasLoadingError"
-          type="error"
-          icon="error"
-        >
+        <Tip v-if="hasLoadingError" type="error" icon="error">
           {{ node.childrenStates.loadingError }}
           <a
             class="vue-treeselect__retry"

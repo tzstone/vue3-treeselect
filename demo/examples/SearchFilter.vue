@@ -1,48 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 
 const options = [
   {
-    id: 'fruits',
-    label: 'Fruits',
+    id: "fruits",
+    label: "Fruits",
     children: [
-      { id: 'apple', label: 'Apple' },
-      { id: 'apricot', label: 'Apricot' },
-      { id: 'avocado', label: 'Avocado' },
-      { id: 'banana', label: 'Banana' },
-      { id: 'blueberry', label: 'Blueberry' },
-      { id: 'cherry', label: 'Cherry' },
-      { id: 'coconut', label: 'Coconut' },
-      { id: 'date', label: 'Date' },
+      { id: "apple", label: "Apple" },
+      { id: "apricot", label: "Apricot" },
+      { id: "avocado", label: "Avocado" },
+      { id: "banana", label: "Banana" },
+      { id: "blueberry", label: "Blueberry" },
+      { id: "cherry", label: "Cherry" },
+      { id: "coconut", label: "Coconut" },
+      { id: "date", label: "Date" },
     ],
   },
   {
-    id: 'vegetables',
-    label: 'Vegetables',
+    id: "vegetables",
+    label: "Vegetables",
     children: [
-      { id: 'artichoke', label: 'Artichoke' },
-      { id: 'asparagus', label: 'Asparagus' },
-      { id: 'broccoli', label: 'Broccoli' },
-      { id: 'cabbage', label: 'Cabbage' },
-      { id: 'carrot', label: 'Carrot' },
-      { id: 'cauliflower', label: 'Cauliflower' },
-      { id: 'cucumber', label: 'Cucumber' },
-      { id: 'eggplant', label: 'Eggplant' },
+      { id: "artichoke", label: "Artichoke" },
+      { id: "asparagus", label: "Asparagus" },
+      { id: "broccoli", label: "Broccoli" },
+      { id: "cabbage", label: "Cabbage" },
+      { id: "carrot", label: "Carrot" },
+      { id: "cauliflower", label: "Cauliflower" },
+      { id: "cucumber", label: "Cucumber" },
+      { id: "eggplant", label: "Eggplant" },
     ],
   },
-]
+];
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Search Filter</h2>
     <p class="example-description">
-      Demonstrates local fuzzy search functionality. Type in the search box to filter
-      the available options. The search is performed locally on the client side using
-      fuzzy matching. Try searching for "ap" to see Apple, Apricot, and Asparagus.
+      Demonstrates local fuzzy search functionality. Type in the search box to
+      filter the available options. The search is performed locally on the
+      client side using fuzzy matching. Try searching for "ap" to see Apple,
+      Apricot, and Asparagus.
     </p>
     <div class="example-content">
       <Treeselect
@@ -53,7 +54,7 @@ const options = [
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>

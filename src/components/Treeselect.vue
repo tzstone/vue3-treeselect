@@ -1,28 +1,40 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, provide, computed, ref, type ComputedRef, useSlots } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  useSlots,
+  type ComputedRef,
+} from "vue";
 
-import type { TreeselectProps, TreeselectEmits, TreeselectInstance } from '../types'
-import { TRESELECT_INSTANCE_KEY } from '../types'
-import { useTreeselect } from '../composables/useTreeselect'
-import Control from './Control.vue'
-import HiddenFields from './HiddenFields.vue'
-import Menu from './Menu.vue'
-import MenuPortal from './MenuPortal.vue'
+import { useTreeselect } from "../composables/useTreeselect";
+import type {
+  TreeselectEmits,
+  TreeselectInstance,
+  TreeselectProps,
+} from "../types";
+import { TRESELECT_INSTANCE_KEY } from "../types";
+import Control from "./Control.vue";
+import HiddenFields from "./HiddenFields.vue";
+import Menu from "./Menu.vue";
+import MenuPortal from "./MenuPortal.vue";
 
 // Import SCSS styles
 // @ts-ignore - SCSS import
-import '../styles/index.scss'
+import "../styles/index.scss";
 
 // Template refs
 // @ts-ignore - Will be used when child components are uncommented
-const wrapperRef = ref<HTMLElement | null>(null)
-const controlRef = ref<HTMLElement | null>(null)
-const menuRef = ref<HTMLElement | null>(null)
+const wrapperRef = ref<HTMLElement | null>(null);
+const controlRef = ref<HTMLElement | null>(null);
+const menuRef = ref<HTMLElement | null>(null);
 // @ts-ignore - Will be used for Teleport component
-const portalRef = ref<HTMLElement | null>(null)
+const portalRef = ref<HTMLElement | null>(null);
 
 // Get slots to pass down to child components
-const slots = useSlots()
+const slots = useSlots();
 
 // Define props
 const props = withDefaults(defineProps<TreeselectProps>(), {
@@ -42,14 +54,14 @@ const props = withDefaults(defineProps<TreeselectProps>(), {
   branchNodesFirst: false,
   cacheOptions: true,
   clearable: true,
-  clearAllText: 'Clear all',
+  clearAllText: "Clear all",
   clearOnSelect: true,
-  clearValueText: 'Clear value',
+  clearValueText: "Clear value",
   closeOnSelect: true,
   defaultExpandLevel: 0,
   defaultOptions: false,
   deleteRemoves: true,
-  delimiter: ',',
+  delimiter: ",",
   flattenSearchResults: false,
   disableBranchNodes: false,
   disabled: false,
@@ -59,40 +71,43 @@ const props = withDefaults(defineProps<TreeselectProps>(), {
   joinValues: false,
   limit: Infinity,
   limitText: (count: number) => `and ${count} more`,
-  loadingText: 'Loading...',
+  loadingText: "Loading...",
   loadOptions: undefined,
   matchKeys: undefined,
   maxHeight: 300,
   multiple: false,
   name: undefined,
-  noChildrenText: 'No sub-options.',
-  noOptionsText: 'No options available.',
-  noResultsText: 'No results found.',
+  noChildrenText: "No sub-options.",
+  noOptionsText: "No options available.",
+  noResultsText: "No results found.",
   normalizer: undefined,
-  openDirection: 'auto',
+  openDirection: "auto",
   openOnClick: true,
   openOnFocus: false,
   options: undefined,
-  placeholder: 'Select...',
+  placeholder: "Select...",
   required: false,
-  retryText: 'Retry?',
-  retryTitle: 'Click to retry',
+  retryText: "Retry?",
+  retryTitle: "Click to retry",
   searchable: true,
   searchNested: false,
-  searchPromptText: 'Type to search...',
+  searchPromptText: "Type to search...",
   showCount: false,
-  showCountOf: 'ALL_CHILDREN',
+  showCountOf: "ALL_CHILDREN",
   showCountOnSearch: null,
-  sortValueBy: 'ORDER_SELECTED',
+  sortValueBy: "ORDER_SELECTED",
   tabIndex: 0,
   value: undefined,
-  valueConsistsOf: 'BRANCH_PRIORITY',
-  valueFormat: 'id',
+  valueConsistsOf: "BRANCH_PRIORITY",
+  valueFormat: "id",
   zIndex: 999,
-})
+});
 
 // Define emits
-const emit = defineEmits<TreeselectEmits>() as (event: string, ...args: unknown[]) => void
+const emit = defineEmits<TreeselectEmits>() as (
+  event: string,
+  ...args: unknown[]
+) => void;
 
 // Initialize composable
 const {
@@ -156,7 +171,7 @@ const {
   setup,
   onMount: composableOnMount,
   onUnmount: composableOnUnmount,
-} = useTreeselect(props, emit)
+} = useTreeselect(props, emit);
 
 // Create instance object for provide/inject
 const instance = computed(() => ({
@@ -170,12 +185,12 @@ const instance = computed(() => ({
   hasBranchNodes: hasBranchNodes.value,
   localSearch: _localSearch,
   showCount: props.showCount ?? false,
-  showCountOf: props.showCountOf ?? 'ALL_CHILDREN',
+  showCountOf: props.showCountOf ?? "ALL_CHILDREN",
   showCountOnSearchComputed: _showCountOnSearchComputed.value ?? false,
-  noChildrenText: props.noChildrenText ?? 'No sub-options.',
-  loadingText: props.loadingText ?? 'Loading...',
-  retryTitle: props.retryTitle ?? 'Click to retry',
-  retryText: props.retryText ?? 'Retry?',
+  noChildrenText: props.noChildrenText ?? "No sub-options.",
+  loadingText: props.loadingText ?? "Loading...",
+  retryTitle: props.retryTitle ?? "Click to retry",
+  retryText: props.retryText ?? "Retry?",
   shouldFlattenOptions: _shouldFlattenOptions.value,
   shouldExpand: _shouldExpand,
   shouldShowOptionInMenu: _shouldShowOptionInMenu,
@@ -188,11 +203,11 @@ const instance = computed(() => ({
   disabled: props.disabled ?? false,
   disableBranchNodes: props.disableBranchNodes ?? false,
   searchable: props.searchable ?? false,
-  placeholder: props.placeholder ?? 'Select...',
+  placeholder: props.placeholder ?? "Select...",
   clearable: props.clearable ?? true,
   allowClearingDisabled: props.allowClearingDisabled ?? false,
-  clearAllText: props.clearAllText ?? 'Clear all',
-  clearValueText: props.clearValueText ?? 'Clear value',
+  clearAllText: props.clearAllText ?? "Clear all",
+  clearValueText: props.clearValueText ?? "Clear value",
   beforeClearAll: props.beforeClearAll,
   alwaysOpen: props.alwaysOpen ?? false,
   openOnFocus: props.openOnFocus ?? false,
@@ -202,8 +217,8 @@ const instance = computed(() => ({
   deleteRemoves: props.deleteRemoves ?? true,
   limit: props.limit ?? Infinity,
   limitText: props.limitText ?? ((count: number) => `and ${count} more`),
-  valueFormat: props.valueFormat ?? 'id',
-  delimiter: props.delimiter ?? ',',
+  valueFormat: props.valueFormat ?? "id",
+  delimiter: props.delimiter ?? ",",
   trigger: trigger,
   // Additional properties for Menu component
   maxHeight: props.maxHeight ?? 300,
@@ -213,22 +228,24 @@ const instance = computed(() => ({
   rootOptionsStates: _rootOptionsStates,
   forest: _forest,
   remoteSearch: _remoteSearch,
-  noOptionsText: props.noOptionsText ?? 'No options available.',
-  noResultsText: props.noResultsText ?? 'No results found.',
-  searchPromptText: props.searchPromptText ?? 'Type to search...',
+  noOptionsText: props.noOptionsText ?? "No options available.",
+  noResultsText: props.noResultsText ?? "No results found.",
+  searchPromptText: props.searchPromptText ?? "Type to search...",
   getRemoteSearchEntry: () => {
-    const searchQuery = trigger.searchQuery
-    return _remoteSearch[searchQuery] || {
-      isLoaded: false,
-      isLoading: false,
-      loadingError: '',
-      options: [],
-    }
+    const searchQuery = trigger.searchQuery;
+    return (
+      _remoteSearch[searchQuery] || {
+        isLoaded: false,
+        isLoading: false,
+        loadingError: "",
+        options: [],
+      }
+    );
   },
   loadRootOptions: _loadRootOptions,
   handleRemoteSearch: _handleRemoteSearch,
   handleMouseDown,
-  openDirection: props.openDirection ?? 'auto',
+  openDirection: props.openDirection ?? "auto",
   getMenu: () => (menuRef.value as any)?.rootElement || null,
   getControl: () => (controlRef.value as any)?.rootElement || null,
   // Expose menu state for template
@@ -248,15 +265,15 @@ const instance = computed(() => ({
   loadChildrenOptions,
   // Pass slots to child components via provide/inject
   slots: {
-    'option-label': slots['option-label'],
-    'value-label': slots['value-label'],
-    'before-list': slots['before-list'],
-    'after-list': slots['after-list'],
+    "option-label": slots["option-label"],
+    "value-label": slots["value-label"],
+    "before-list": slots["before-list"],
+    "after-list": slots["after-list"],
   },
-})) as ComputedRef<TreeselectInstance>
+})) as ComputedRef<TreeselectInstance>;
 
 // Provide instance to child components (pass computed ref for reactivity)
-provide(TRESELECT_INSTANCE_KEY, instance)
+provide(TRESELECT_INSTANCE_KEY, instance);
 
 // Define exposed methods for template ref access
 defineExpose({
@@ -272,32 +289,28 @@ defineExpose({
   toggleMenu,
   select,
   loadChildrenOptions,
-})
+});
 
 // Lifecycle hooks
-setup()
+setup();
 
 // Set up ref getters for composable access (must be BEFORE calling composable functions)
-setControlGetter(() => (controlRef.value as any)?.rootElement || null)
-setMenuGetter(() => (menuRef.value as any)?.rootElement || null)
+setControlGetter(() => (controlRef.value as any)?.rootElement || null);
+setMenuGetter(() => (menuRef.value as any)?.rootElement || null);
 setInputGetter(() => {
   // Find input element inside control
-  const control = (controlRef.value as any)?.rootElement
-  if (!control) return null
-  return control.querySelector('input') as HTMLInputElement | null
-})
+  const control = (controlRef.value as any)?.rootElement;
+  if (!control) return null;
+  return control.querySelector("input") as HTMLInputElement | null;
+});
 
 // Call this AFTER ref getters are set
-onMounted(composableOnMount)
-onBeforeUnmount(composableOnUnmount)
+onMounted(composableOnMount);
+onBeforeUnmount(composableOnUnmount);
 </script>
 
 <template>
-  <div
-    ref="wrapperRef"
-    :class="wrapperClass"
-    @mousedown="handleMouseDown"
-  >
+  <div ref="wrapperRef" :class="wrapperClass" @mousedown="handleMouseDown">
     <HiddenFields v-if="props.name" />
     <Control ref="controlRef" />
 

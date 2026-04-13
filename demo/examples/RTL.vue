@@ -1,39 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
 
-const value = ref<string | null>(null)
+const value = ref<string | null>(null);
 
 const options = [
   {
-    id: 'اللغة-العربية',
-    label: 'اللغة العربية (Arabic)',
+    id: "اللغة-العربية",
+    label: "اللغة العربية (Arabic)",
     children: [
-      { id: 'مرحبا', label: 'مرحبا (Hello)' },
-      { id: 'شكرا', label: 'شكرا (Thank you)' },
+      { id: "مرحبا", label: "مرحبا (Hello)" },
+      { id: "شكرا", label: "شكرا (Thank you)" },
     ],
   },
   {
-    id: 'עברית',
-    label: 'עברית (Hebrew)',
+    id: "עברית",
+    label: "עברית (Hebrew)",
     children: [
-      { id: 'שלום', label: 'שלום (Hello)' },
-      { id: 'תודה', label: 'תודה (Thank you)' },
+      { id: "שלום", label: "שלום (Hello)" },
+      { id: "תודה", label: "תודה (Thank you)" },
     ],
   },
-]
+];
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">RTL Support</h2>
     <p class="example-description">
-      Demonstrates right-to-left (RTL) layout support for languages like Arabic and Hebrew.
-      The entire container has <code>dir="rtl"</code> which flips the layout direction.
-      Notice how the dropdown menu, arrows, and text all align correctly for RTL users.
+      Demonstrates right-to-left (RTL) layout support for languages like Arabic
+      and Hebrew. The entire container has <code>dir="rtl"</code> which flips
+      the layout direction. Notice how the dropdown menu, arrows, and text all
+      align correctly for RTL users.
     </p>
     <div class="example-content">
-      <div dir="rtl" style="text-align: right;">
+      <div dir="rtl" style="text-align: right">
         <Treeselect
           v-model="value"
           :options="options"
@@ -42,7 +43,7 @@ const options = [
       </div>
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -70,7 +71,7 @@ const options = [
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
 }
 

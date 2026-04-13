@@ -33,6 +33,6 @@ export type {
 
   // Type Utilities
   TreeselectValue,
-} from './treeselect'
+} from './treeselect';
 
-export { TRESELECT_INSTANCE_KEY } from './treeselect'
+export { TRESELECT_INSTANCE_KEY } from './treeselect';

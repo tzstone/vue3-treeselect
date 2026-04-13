@@ -1,58 +1,60 @@
 <script setup lang="ts">
-import { inject, computed, type ComputedRef } from 'vue'
+import { computed, inject, type ComputedRef } from "vue";
 
-import type { TreeselectNode, TreeselectInstance } from '../types'
-import { TRESELECT_INSTANCE_KEY } from '../types'
+import type { TreeselectInstance, TreeselectNode } from "../types";
+import { TRESELECT_INSTANCE_KEY } from "../types";
 
 // Import Delete icon
-import DeleteIcon from './icons/Delete.vue'
+import DeleteIcon from "./icons/Delete.vue";
 
 // Import SCSS styles
 // @ts-ignore - SCSS import
-import '../styles/index.scss'
+import "../styles/index.scss";
 
 // Props
 interface Props {
-  node: TreeselectNode
+  node: TreeselectNode;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
 // Inject the treeselect instance
-const instanceRef = inject<ComputedRef<TreeselectInstance>>(TRESELECT_INSTANCE_KEY)
+const instanceRef = inject<ComputedRef<TreeselectInstance>>(
+  TRESELECT_INSTANCE_KEY,
+);
 
 if (!instanceRef) {
-  throw new Error('MultiValueItem must be used within a Treeselect component')
+  throw new Error("MultiValueItem must be used within a Treeselect component");
 }
 
 // Unwrap computed ref for template auto-unwrap
-const instance = computed(() => instanceRef.value)
+const instance = computed(() => instanceRef.value);
 
 // Type assertion: instance is definitely defined after the check above
-const treeselectInstance = instance
+const treeselectInstance = instance;
 
 // CSS classes for the item
 const itemClass = computed(() => ({
-  'vue-treeselect__multi-value-item': true,
-  'vue-treeselect__multi-value-item-disabled': props.node.isDisabled,
-  'vue-treeselect__multi-value-item-new': props.node.isNew,
-}))
+  "vue-treeselect__multi-value-item": true,
+  "vue-treeselect__multi-value-item-disabled": props.node.isDisabled,
+  "vue-treeselect__multi-value-item-new": props.node.isNew,
+}));
 
 // Check if custom value-label slot is provided
 const hasCustomValueLabel = computed(() => {
-  return !!instance.value.slots?.['value-label']
-})
+  return !!instance.value.slots?.["value-label"];
+});
 
 // Handle click to deselect
 function handleMouseDown(event: MouseEvent) {
   // Only handle left mouse button
-  if (event.button !== 0) return
+  if (event.button !== 0) return;
 
-  event.preventDefault()
-  event.stopPropagation()
+  event.preventDefault();
+  event.stopPropagation();
 
   // Deselect this node
-  treeselectInstance.value.select(props.node)
+  treeselectInstance.value.select(props.node);
 }
 </script>
 

@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import '../dist/vue3-treeselect.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import "../dist/vue3-treeselect.css";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");

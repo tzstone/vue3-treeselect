@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
-import { simpleOptions } from '../data'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
+import { simpleOptions } from "../data";
 
-const value = ref<string[]>([])
+const value = ref<string[]>([]);
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Multiple Select</h2>
     <p class="example-description">
-      Set the <code>multiple</code> prop to <code>true</code> to enable multiple selection.
-      Users can select multiple options from the tree.
+      Set the <code>multiple</code> prop to <code>true</code> to enable multiple
+      selection. Users can select multiple options from the tree.
     </p>
     <div class="example-content">
       <Treeselect
@@ -22,7 +22,8 @@ const value = ref<string[]>([])
       />
     </div>
     <div class="example-value">
-      <strong>Selected values:</strong> {{ value.length > 0 ? value.join(', ') : 'none' }}
+      <strong>Selected values:</strong>
+      {{ value.length > 0 ? value.join(", ") : "none" }}
     </div>
   </div>
 </template>
@@ -50,7 +51,7 @@ const value = ref<string[]>([])
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 13px;
   color: #e83e8c;
 }

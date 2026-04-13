@@ -1,59 +1,60 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
 
-const sortMode = ref('ORDER_SELECTED')
-const value = ref<string[]>([])
+const sortMode = ref("ORDER_SELECTED");
+const value = ref<string[]>([]);
 
 const options = [
   {
-    id: 'vegetables',
-    label: 'Vegetables',
+    id: "vegetables",
+    label: "Vegetables",
     children: [
-      { id: 'carrot', label: 'Carrot' },
-      { id: 'broccoli', label: 'Broccoli' },
-      { id: 'spinach', label: 'Spinach' },
+      { id: "carrot", label: "Carrot" },
+      { id: "broccoli", label: "Broccoli" },
+      { id: "spinach", label: "Spinach" },
     ],
   },
   {
-    id: 'fruits',
-    label: 'Fruits',
+    id: "fruits",
+    label: "Fruits",
     children: [
-      { id: 'apple', label: 'Apple' },
-      { id: 'banana', label: 'Banana' },
-      { id: 'cherry', label: 'Cherry' },
+      { id: "apple", label: "Apple" },
+      { id: "banana", label: "Banana" },
+      { id: "cherry", label: "Cherry" },
     ],
   },
   {
-    id: 'grains',
-    label: 'Grains',
+    id: "grains",
+    label: "Grains",
     children: [
-      { id: 'rice', label: 'Rice' },
-      { id: 'wheat', label: 'Wheat' },
-      { id: 'corn', label: 'Corn' },
+      { id: "rice", label: "Rice" },
+      { id: "wheat", label: "Wheat" },
+      { id: "corn", label: "Corn" },
     ],
   },
-]
+];
 </script>
 
 <template>
   <div class="example">
     <h2 class="example-title">Sort Value Order</h2>
     <p class="example-description">
-      Demonstrates the <code>sortValueBy</code> prop which controls how selected values
-      are ordered in multiple-select mode. Change the sort mode to see different ordering:
+      Demonstrates the <code>sortValueBy</code> prop which controls how selected
+      values are ordered in multiple-select mode. Change the sort mode to see
+      different ordering:
     </p>
     <div class="sort-controls">
       <label>
-        <input type="radio" v-model="sortMode" value="ORDER_SELECTED" />
+        <input v-model="sortMode" type="radio" value="ORDER_SELECTED" />
         <span>ORDER_SELECTED (selection order)</span>
       </label>
       <label>
-        <input type="radio" v-model="sortMode" value="LEVEL" />
+        <input v-model="sortMode" type="radio" value="LEVEL" />
         <span>LEVEL (tree depth)</span>
       </label>
       <label>
-        <input type="radio" v-model="sortMode" value="INDEX" />
+        <input v-model="sortMode" type="radio" value="INDEX" />
         <span>INDEX (option order)</span>
       </label>
     </div>
@@ -67,7 +68,8 @@ const options = [
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value.length ? value.join(', ') : 'none' }}
+      <strong>Selected value:</strong>
+      {{ value.length ? value.join(", ") : "none" }}
     </div>
   </div>
 </template>
@@ -95,7 +97,7 @@ const options = [
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
 }
 

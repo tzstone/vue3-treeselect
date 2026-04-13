@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Treeselect from 'vue3-treeselect'
+import { ref } from "vue";
+import Treeselect from "vue3-treeselect";
 
-const value = ref<string | null>(null)
-const allOptions = ref<any[]>([])
+const value = ref<string | null>(null);
+const allOptions = ref<any[]>([]);
 
 function loadOptions({ action, searchQuery, callback }: any) {
-  if (action === 'ASYNC_SEARCH') {
+  if (action === "ASYNC_SEARCH") {
     setTimeout(() => {
       const results = [
-        { id: 'result-1', label: `Search Result 1 for "${searchQuery}"` },
-        { id: 'result-2', label: `Search Result 2 for "${searchQuery}"` },
-        { id: 'result-3', label: `Search Result 3 for "${searchQuery}"` },
-      ]
-      callback(null, results)
-    }, 500)
+        { id: "result-1", label: `Search Result 1 for "${searchQuery}"` },
+        { id: "result-2", label: `Search Result 2 for "${searchQuery}"` },
+        { id: "result-3", label: `Search Result 3 for "${searchQuery}"` },
+      ];
+      callback(null, results);
+    }, 500);
   }
 }
 </script>
@@ -23,9 +23,10 @@ function loadOptions({ action, searchQuery, callback }: any) {
   <div class="example">
     <h2 class="example-title">Async Search</h2>
     <p class="example-description">
-      Demonstrates asynchronous search with the <code>:async</code> prop. When you type
-      in the search box, it simulates an API call with a 500ms delay and returns results.
-      This is useful for server-side search with large datasets.
+      Demonstrates asynchronous search with the <code>:async</code> prop. When
+      you type in the search box, it simulates an API call with a 500ms delay
+      and returns results. This is useful for server-side search with large
+      datasets.
     </p>
     <div class="example-content">
       <Treeselect
@@ -37,7 +38,7 @@ function loadOptions({ action, searchQuery, callback }: any) {
       />
     </div>
     <div class="example-value">
-      <strong>Selected value:</strong> {{ value || 'none' }}
+      <strong>Selected value:</strong> {{ value || "none" }}
     </div>
   </div>
 </template>
@@ -65,7 +66,7 @@ function loadOptions({ action, searchQuery, callback }: any) {
   background: #f0f0f0;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
 }
 
