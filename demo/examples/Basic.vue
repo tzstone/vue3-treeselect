@@ -6,7 +6,7 @@ import { simpleOptions } from "../data";
 const value = ref<string | null>(null);
 
 setTimeout(() => {
-  value.value = ["apple"];
+  value.value = "apple";
 }, 2000);
 </script>
 
@@ -20,8 +20,6 @@ setTimeout(() => {
     <div class="example-content">
       <Treeselect
         v-model="value"
-        :multiple="true"
-        :disableBranchNodes="true"
         :options="simpleOptions"
         placeholder="Select an option..."
       />
