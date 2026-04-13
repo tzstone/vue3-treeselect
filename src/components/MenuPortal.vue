@@ -104,9 +104,4 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
-.vue-treeselect__portal-target {
-  position: fixed;
-  z-index: 9999;
-}
-</style>
+
