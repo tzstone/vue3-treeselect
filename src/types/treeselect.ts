@@ -590,6 +590,8 @@ export interface TreeselectInstance extends TreeselectPublicMethods {
   slots: {
     'option-label'?: (props: { node: TreeselectNode; shouldShowCount: boolean; count: number; labelClassName: string; countClassName: string }) => any
     'value-label'?: (props: { node: TreeselectNode }) => any
+    'before-list'?: () => any
+    'after-list'?: () => any
   }
 }
 

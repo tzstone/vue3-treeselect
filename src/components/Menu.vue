@@ -79,6 +79,17 @@ const hasNoOptions = computed(
   () => instance.value!.rootOptionsStates.isLoaded && instance.value!.forest.normalizedOptions.length === 0
 )
 
+// Computed: before-list / after-list slot functional components
+const beforeListSlot = computed(() => {
+  const fn = instance.value.slots?.['before-list']
+  return fn ? fn : null
+})
+
+const afterListSlot = computed(() => {
+  const fn = instance.value.slots?.['after-list']
+  return fn ? fn : null
+})
+
 // Methods
 function onMenuOpen() {
   adjustMenuOpenDirection()
@@ -190,7 +201,7 @@ onBeforeUnmount(() => {
         @mousedown="instance!.handleMouseDown"
       >
         <!-- Before-list slot -->
-        <slot name="before-list" />
+        <component :is="beforeListSlot" v-if="beforeListSlot" />
 
         <!-- Menu content based on mode -->
         <!-- Async search mode -->
@@ -306,7 +317,7 @@ onBeforeUnmount(() => {
         </template>
 
         <!-- After-list slot -->
-        <slot name="after-list" />
+        <component :is="afterListSlot" v-if="afterListSlot" />
       </div>
     </transition>
   </div>

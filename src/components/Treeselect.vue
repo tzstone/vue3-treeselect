@@ -249,6 +249,8 @@ const instance = computed(() => ({
   slots: {
     'option-label': slots['option-label'],
     'value-label': slots['value-label'],
+    'before-list': slots['before-list'],
+    'after-list': slots['after-list'],
   },
 })) as ComputedRef<TreeselectInstance>
 
