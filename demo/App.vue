@@ -18,6 +18,7 @@ import AppendToBody from "./examples/AppendToBody.vue";
 import SortValue from "./examples/SortValue.vue";
 import Events from "./examples/Events.vue";
 import Methods from "./examples/Methods.vue";
+import FeaturePlayground from "./examples/FeaturePlayground.vue";
 
 interface Example {
   id: string;
@@ -48,6 +49,7 @@ const examples: Example[] = [
   { id: "sort-value", title: "Sort Value Order", component: SortValue },
   { id: "events", title: "Events", component: Events },
   { id: "methods", title: "Programmatic Methods", component: Methods },
+  { id: "feature-playground", title: "Feature Playground", component: FeaturePlayground },
 ];
 
 const activeExample = ref(examples[0].id);
