@@ -29,6 +29,11 @@ interface Example {
 const examples: Example[] = [
   { id: "basic", title: "Basic", component: Basic },
   { id: "multiple", title: "Multiple Select", component: MultipleSelect },
+  {
+    id: "feature-playground",
+    title: "Feature Playground",
+    component: FeaturePlayground,
+  },
   { id: "nested", title: "Nested Options", component: NestedOptions },
   { id: "disabled", title: "Disabled Options", component: DisabledOptions },
   { id: "custom-labels", title: "Custom Labels", component: CustomLabels },
@@ -49,7 +54,6 @@ const examples: Example[] = [
   { id: "sort-value", title: "Sort Value Order", component: SortValue },
   { id: "events", title: "Events", component: Events },
   { id: "methods", title: "Programmatic Methods", component: Methods },
-  { id: "feature-playground", title: "Feature Playground", component: FeaturePlayground },
 ];
 
 const activeExample = ref(examples[0].id);

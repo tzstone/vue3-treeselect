@@ -25,8 +25,8 @@ function loadOptions({ action, searchQuery, callback }: any) {
           opt.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
           (opt.children &&
             opt.children.some((child: any) =>
-              child.label.toLowerCase().includes(searchQuery.toLowerCase())
-            ))
+              child.label.toLowerCase().includes(searchQuery.toLowerCase()),
+            )),
       );
       callback(null, filtered);
     }, 500);
@@ -45,10 +45,12 @@ const treeselectProps = computed(() => ({
 }));
 
 const activeFeaturesList = computed(() => {
-  return Object.entries(features)
-    .filter(([_, value]) => value)
-    .map(([key]) => key)
-    .join(", ") || "none";
+  return (
+    Object.entries(features)
+      .filter(([_, value]) => value)
+      .map(([key]) => key)
+      .join(", ") || "none"
+  );
 });
 </script>
 
@@ -62,35 +64,35 @@ const activeFeaturesList = computed(() => {
 
     <div class="checkbox-group">
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.multiple" />
+        <input v-model="features.multiple" type="checkbox" />
         <span>Multiple</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.flat" />
+        <input v-model="features.flat" type="checkbox" />
         <span>Flat Mode</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.searchable" />
+        <input v-model="features.searchable" type="checkbox" />
         <span>Searchable</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.async" />
+        <input v-model="features.async" type="checkbox" />
         <span>Async Search</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.clearable" />
+        <input v-model="features.clearable" type="checkbox" />
         <span>Clearable</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.disableBranchNodes" />
+        <input v-model="features.disableBranchNodes" type="checkbox" />
         <span>Disable Branch Nodes</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.showCount" />
+        <input v-model="features.showCount" type="checkbox" />
         <span>Show Count</span>
       </label>
       <label class="checkbox-item">
-        <input type="checkbox" v-model="features.searchNested" />
+        <input v-model="features.searchNested" type="checkbox" />
         <span>Search Nested</span>
       </label>
     </div>
@@ -101,7 +103,11 @@ const activeFeaturesList = computed(() => {
         :options="options"
         v-bind="treeselectProps"
         :load-options="features.async ? loadOptions : undefined"
-        :placeholder="features.multiple ? 'Select multiple options...' : 'Select an option...'"
+        :placeholder="
+          features.multiple
+            ? 'Select multiple options...'
+            : 'Select an option...'
+        "
       />
     </div>
 
