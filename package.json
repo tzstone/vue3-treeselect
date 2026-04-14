@@ -1,7 +1,7 @@
 {
   "type": "module",
-  "name": "vue3-treeselect",
-  "version": "1.0.0",
+  "name": "@tzstone/vue3-treeselect",
+  "version": "1.0.1",
   "description": "A multi-select component with nested options support for Vue 3",
   "keywords": [
     "vue",
@@ -12,15 +12,15 @@
     "nested",
     "dropdown"
   ],
-  "author": "Riophae Lee <riophae@gmail.com>",
+  "author": "tzstone",
   "license": "MIT",
   "homepage": "https://vue-treeselect.js.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/riophae/vue-treeselect.git"
+    "url": "git+https://github.com/tzstone/vue3-treeselect.git"
   },
   "bugs": {
-    "url": "https://github.com/riophae/vue-treeselect/issues"
+    "url": "https://github.com/tzstone/vue3-treeselect/issues"
   },
   "main": "./dist/vue3-treeselect.umd.cjs",
   "module": "./dist/vue3-treeselect.js",
@@ -31,7 +31,7 @@
       "require": "./dist/vue3-treeselect.umd.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./dist/vue3-treeselect.css": "./dist/vue3-treeselect.css"
   },
   "files": [
     "dist"
@@ -43,6 +43,7 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
+    "@tzstone/vue3-treeselect": "^1.0.0",
     "fuzzysearch": "^1.0.3"
   },
   "devDependencies": {
@@ -62,6 +63,7 @@
     "sass": "^1.99.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.8",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.4",
     "vue": "^3.5.32",
     "vue-tsc": "^3.2.6"
